@@ -11,7 +11,6 @@
 body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 #app { display:flex; flex-direction:column; height:100vh; min-height:650px; position:relative; }
 
-/* HEADER */
 #header {
   background:linear-gradient(135deg,#0d2137,#1a3a5c);
   padding:10px 16px; display:flex; align-items:center;
@@ -25,7 +24,6 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 .live-badge { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; }
 #pulse-dot { width:10px; height:10px; border-radius:50%; background:#00e676; box-shadow:0 0 8px #00e676; animation:pulse 1.5s infinite; }
 
-/* FILTERS */
 #filters {
   background:#0d1f35; padding:8px 16px;
   display:flex; gap:8px; flex-wrap:wrap; align-items:center;
@@ -36,13 +34,11 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 #sbox { background:#112840; border:1px solid #1e4a7a; color:#e0f0ff; padding:4px 12px; border-radius:20px; font-size:12px; outline:none; width:170px; }
 #sbox::placeholder { color:#4a7a9b; }
 
-/* MAIN */
 #main { display:flex; flex:1; overflow:hidden; }
 #map { flex:1; z-index:1; }
 
-/* SIDEBAR */
 #sidebar {
-  width:300px; background:#0d1f35;
+  width:310px; background:#0d1f35;
   border-left:1px solid #1e4a7a;
   display:flex; flex-direction:column;
   overflow:hidden; flex-shrink:0;
@@ -57,7 +53,7 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 #rlist::-webkit-scrollbar { width:4px; }
 #rlist::-webkit-scrollbar-thumb { background:#1e4a7a; border-radius:2px; }
 
-/* CARDS */
+/* KART */
 .rcard {
   background:#112840; border:1px solid #1e4a7a;
   border-radius:8px; padding:10px; margin-bottom:8px;
@@ -70,9 +66,19 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 .ftag { background:#1565c0; color:#b3d9ff; padding:2px 7px; border-radius:10px; font-size:11px; font-weight:600; }
 .ftag.ht { background:#b71c1c; color:#ffcdd2; }
 .tbadge { font-size:10px; color:#7ab3d4; white-space:nowrap; }
-.lname { font-size:12px; font-weight:600; color:#e0f0ff; margin-bottom:3px; }
-.rnote { font-size:11px; color:#7ab3d4; line-height:1.4; }
-.sbadge { display:inline-block; margin-top:5px; font-size:10px; color:#4a7a9b; border:1px solid #1e4a7a; padding:1px 6px; border-radius:8px; }
+.lname { font-size:12px; font-weight:600; color:#e0f0ff; margin-bottom:4px; }
+.rnote { font-size:11px; color:#7ab3d4; line-height:1.4; margin-bottom:5px; }
+
+/* OLTA & YEM SATIRI */
+.tackle-row { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:5px; }
+.tackle-tag {
+  display:flex; align-items:center; gap:3px;
+  padding:2px 7px; border-radius:10px; font-size:10px; font-weight:600;
+}
+.rod-tag { background:#1a3a2a; border:1px solid #2d6a4f; color:#74c69d; }
+.bait-tag { background:#2a1a0a; border:1px solid #6a3d1a; color:#f4a261; }
+
+.sbadge { display:inline-block; font-size:10px; color:#4a7a9b; border:1px solid #1e4a7a; padding:1px 6px; border-radius:8px; }
 .hbar { display:flex; gap:2px; margin-top:5px; }
 .hdot { width:8px; height:8px; border-radius:50%; background:#1e4a7a; }
 .hdot.on { background:#ff6b35; box-shadow:0 0 4px #ff6b35; }
@@ -83,10 +89,15 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 .frow { display:flex; gap:6px; margin-bottom:6px; }
 .fi { background:#112840; border:1px solid #1e4a7a; color:#e0f0ff; padding:5px 8px; border-radius:6px; font-size:11px; flex:1; outline:none; }
 .fi::placeholder { color:#4a7a9b; }
-.sbtn { background:#1565c0; color:#fff; border:none; padding:7px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; width:100%; }
+.fselect {
+  background:#112840; border:1px solid #1e4a7a; color:#e0f0ff;
+  padding:5px 8px; border-radius:6px; font-size:11px; flex:1; outline:none;
+  appearance:none; cursor:pointer;
+}
+.flabel { font-size:10px; color:#7ab3d4; margin-bottom:3px; display:block; }
+.sbtn { background:#1565c0; color:#fff; border:none; padding:7px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; width:100%; margin-top:2px; }
 .sbtn:hover { background:#1976d2; }
 
-/* STATS */
 #statsbar {
   background:#091525; padding:6px 16px;
   display:flex; gap:16px; flex-wrap:wrap; align-items:center;
@@ -94,7 +105,6 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 }
 .sv { color:#4fc3f7; font-weight:600; }
 
-/* LOADING */
 #loader {
   position:absolute; inset:0;
   background:rgba(10,22,40,.92);
@@ -103,14 +113,13 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 }
 .spin { width:42px; height:42px; border:3px solid #1e4a7a; border-top-color:#4fc3f7; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:14px; }
 
-/* POPUP */
 .leaflet-popup-content-wrapper { background:#0d2137 !important; border:1px solid #1e4a7a !important; color:#e0f0ff !important; border-radius:10px !important; box-shadow:0 4px 20px rgba(0,0,0,.6) !important; }
 .leaflet-popup-tip { background:#0d2137 !important; }
 .pt { font-size:13px; font-weight:700; color:#4fc3f7; margin-bottom:5px; }
-.pf { font-size:12px; color:#b3d9ff; margin-bottom:4px; }
+.pf { font-size:12px; color:#b3d9ff; margin-bottom:3px; }
 .pm { font-size:11px; color:#7ab3d4; }
+.ptackle { display:flex; gap:5px; flex-wrap:wrap; margin:5px 0; }
 
-/* ANIMATIONS */
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
 @keyframes radarPing { 0%{transform:scale(1);opacity:.9} 100%{transform:scale(3.2);opacity:0} }
 @keyframes spin { to{transform:rotate(360deg)} }
@@ -122,14 +131,12 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 <body>
 <div id="app">
 
-  <!-- YÜKLEME EKRANI -->
   <div id="loader">
     <div class="spin"></div>
     <div style="color:#4fc3f7;font-size:14px;margin-bottom:6px">Balık noktaları yükleniyor...</div>
     <div style="color:#7ab3d4;font-size:11px">Türkiye geneli taranıyor</div>
   </div>
 
-  <!-- HEADER -->
   <div id="header">
     <div class="logo">
       <div class="logo-icon">🎣</div>
@@ -151,17 +158,18 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
     </div>
   </div>
 
-  <!-- FİLTRELER -->
   <div id="filters">
-    <input id="sbox" placeholder="🔍 Yer veya balık ara..." oninput="renderAll()">
+    <input id="sbox" placeholder="🔍 Yer, balık veya olta ara..." oninput="renderAll()">
     <button class="fbtn active" onclick="setF('all',this)">Tümü</button>
     <button class="fbtn" onclick="setF('deniz',this)">🌊 Deniz</button>
     <button class="fbtn" onclick="setF('göl',this)">🏞️ Göl</button>
     <button class="fbtn" onclick="setF('nehir',this)">🌀 Baraj/Nehir</button>
     <button class="fbtn" onclick="setF('hot',this)">🔥 Aktif</button>
+    <button class="fbtn" onclick="setF('spin',this)">🌀 Spin</button>
+    <button class="fbtn" onclick="setF('lrf',this)">🪶 LRF</button>
+    <button class="fbtn" onclick="setF('surf',this)">🌊 Surf</button>
   </div>
 
-  <!-- ANA ALAN -->
   <div id="main">
     <div id="map"></div>
     <div id="sidebar">
@@ -175,16 +183,46 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
       <div id="formpanel">
         <h4>➕ Rapor Ekle</h4>
         <div class="frow">
-          <input class="fi" id="floc" placeholder="Lokasyon adı">
-          <input class="fi" id="ffish" placeholder="Balık türü">
+          <div style="flex:1">
+            <span class="flabel">Lokasyon</span>
+            <input class="fi" id="floc" placeholder="Örn: Sapanca Gölü" style="width:100%">
+          </div>
+          <div style="flex:1">
+            <span class="flabel">Balık Türü</span>
+            <input class="fi" id="ffish" placeholder="Örn: Sazan, Lüfer" style="width:100%">
+          </div>
         </div>
-        <input class="fi" id="fnote" placeholder="Not (isteğe bağlı)" style="width:100%;margin-bottom:6px">
+        <div class="frow">
+          <div style="flex:1">
+            <span class="flabel">Olta Türü</span>
+            <select class="fselect" id="frod">
+              <option value="">Seçiniz...</option>
+              <option value="Spin">🌀 Spin</option>
+              <option value="LRF">🪶 LRF</option>
+              <option value="Surf">🏄 Surf</option>
+              <option value="Feeder">🎯 Feeder</option>
+              <option value="Olta">🎣 Olta (Genel)</option>
+              <option value="Zıpkın">🤿 Zıpkın</option>
+              <option value="Fly">🪰 Fly (Sinek)</option>
+              <option value="Bolentino">⚓ Bolentino</option>
+              <option value="Jigging">⚡ Jigging</option>
+              <option value="Trolling">🚤 Trolling</option>
+            </select>
+          </div>
+          <div style="flex:1">
+            <span class="flabel">Kullanılan Yem</span>
+            <input class="fi" id="fbait" placeholder="Örn: Mepps, solucan" style="width:100%">
+          </div>
+        </div>
+        <div style="margin-bottom:6px">
+          <span class="flabel">Not</span>
+          <input class="fi" id="fnote" placeholder="Ek bilgi (isteğe bağlı)" style="width:100%">
+        </div>
         <button class="sbtn" onclick="submitR()">📤 Rapor Gönder</button>
       </div>
     </div>
   </div>
 
-  <!-- STATS -->
   <div id="statsbar">
     <span>📍 Aktif: <span class="sv" id="sactive">—</span></span>
     <span>🐟 Toplam: <span class="sv" id="stotal">—</span></span>
@@ -196,227 +234,219 @@ body { font-family:'Segoe UI',sans-serif; background:#0a1628; color:#e0f0ff; }
 
 </div>
 <script>
-// ── GITHUB AYARLARI (hiphopcem için hazır) ────────────────────────
 const DATA_URL = "https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
 
-// ── DEMO VERİ (GitHub erişilemezse kullanılır) ────────────────────
+// ROD renkleri
+const ROD_COLOR = {
+  "Spin":     {bg:"#1a2a3a", border:"#2d6a9f", color:"#74b9ff"},
+  "LRF":      {bg:"#1a2a1a", border:"#2d6a4f", color:"#74c69d"},
+  "Surf":     {bg:"#1a1a3a", border:"#4a3d9f", color:"#a29bfe"},
+  "Feeder":   {bg:"#2a1a2a", border:"#6a3d8f", color:"#d68bfc"},
+  "Olta":     {bg:"#1a2a2a", border:"#2d7a7a", color:"#74d9d9"},
+  "Zıpkın":  {bg:"#2a1a1a", border:"#8f3d3d", color:"#fc8b8b"},
+  "Fly":      {bg:"#2a2a1a", border:"#8f7a2d", color:"#fcd98b"},
+  "Bolentino":{bg:"#1a2a2a", border:"#2d6a5a", color:"#74c9b9"},
+  "Jigging":  {bg:"#2a1a2a", border:"#7a3d8f", color:"#e08bfc"},
+  "Trolling": {bg:"#1a2a1a", border:"#4a7a3d", color:"#8bfc8b"},
+};
+
+function rodTag(rod) {
+  if (!rod) return '';
+  const c = ROD_COLOR[rod] || {bg:"#1a2a2a",border:"#2d5a6a",color:"#7ab3d4"};
+  return `<span class="tackle-tag rod-tag" style="background:${c.bg};border-color:${c.border};color:${c.color}">🎣 ${rod}</span>`;
+}
+function baitTag(bait) {
+  if (!bait) return '';
+  return `<span class="tackle-tag bait-tag">🪱 ${bait}</span>`;
+}
+
 const DEMO = [
-  {id:"d01",lat:41.15,lng:28.80,loc:"Büyükçekmece Gölü",fish:["Sazan","Turna"],note:"Sabah erken saatlerde harika avlanma. Sazan çok bol.",heat:5,type:"göl",time:"2s önce",source:"Demo",hot:true},
-  {id:"d02",lat:40.98,lng:29.14,loc:"Bostancı Sahili",fish:["Lüfer","İstavrit"],note:"Lüfer girişi başladı, akşam üstü çok aktif.",heat:4,type:"deniz",time:"45dk önce",source:"Demo",hot:true},
-  {id:"d03",lat:40.65,lng:30.40,loc:"Sapanca Gölü",fish:["Alabalık","Sazan","Yayın"],note:"Sabah 6-9 arası alabalık çok aktif. Solucan iyi.",heat:5,type:"göl",time:"55dk önce",source:"Demo",hot:true},
-  {id:"d04",lat:38.40,lng:27.10,loc:"İzmir Körfezi - Urla",fish:["Çipura","Levrek","Karagöz"],note:"Sabah çipura harika tuttu. Kalamaki iyi çalışıyor.",heat:5,type:"deniz",time:"30dk önce",source:"Demo",hot:true},
-  {id:"d05",lat:38.05,lng:27.30,loc:"Kuşadası Körfezi",fish:["Lüfer","Palamut"],note:"Palamut girişi başladı! Zıpkın ile de tutuldu.",heat:5,type:"deniz",time:"1s önce",source:"Demo",hot:true},
-  {id:"d06",lat:37.78,lng:38.28,loc:"Atatürk Barajı",fish:["Yayın","Sazan","Sudak"],note:"Dev yayın sezonu açık. Tekne ile gidilmeli.",heat:5,type:"nehir",time:"2s önce",source:"Demo",hot:true},
-  {id:"d07",lat:41.00,lng:39.72,loc:"Trabzon - Yomra Sahili",fish:["Hamsi","Istavrit"],note:"Hamsi sürüsü geldi! Kepçe ile bile tutuluyor.",heat:5,type:"deniz",time:"15dk önce",source:"Demo",hot:true},
-  {id:"d08",lat:40.20,lng:26.40,loc:"Çanakkale Boğazı",fish:["Palamut","Lüfer","Kolyoz"],note:"Göç dönemi. Palamut akını devam ediyor.",heat:5,type:"deniz",time:"1s önce",source:"Demo",hot:true},
-  {id:"d09",lat:39.80,lng:32.70,loc:"Mogan Gölü - Ankara",fish:["Sazan","Sudak"],note:"Sudak aktif, sürpriz yaptı.",heat:4,type:"göl",time:"1s önce",source:"Demo",hot:false},
-  {id:"d10",lat:38.70,lng:39.50,loc:"Keban Barajı",fish:["Yayın","Sudak"],note:"Sudak ve yayın. Dip olta.",heat:4,type:"nehir",time:"3s önce",source:"Demo",hot:false},
-  {id:"d11",lat:41.18,lng:29.07,loc:"Beykoz Sahili",fish:["Kalkan","Barbun"],note:"Dip olta ile barbun kolay tutuluyor.",heat:4,type:"deniz",time:"2s önce",source:"Demo",hot:false},
-  {id:"d12",lat:36.88,lng:30.70,loc:"Antalya Körfezi - Lara",fish:["Levrek","Kefal"],note:"Akşam levrek aktif. Lara sahili.",heat:4,type:"deniz",time:"40dk önce",source:"Demo",hot:false},
-  {id:"d13",lat:37.05,lng:27.45,loc:"Bodrum - Yalıkavak",fish:["Çipura","Sargoz"],note:"Yalıkavak iskelesi. Sargoz aktif.",heat:3,type:"deniz",time:"2s önce",source:"Demo",hot:false},
-  {id:"d14",lat:40.50,lng:31.60,loc:"Abant Gölü",fish:["Alabalık"],note:"Doğal alabalık. Sinek oltasıyla harika.",heat:3,type:"göl",time:"4s önce",source:"Demo",hot:false},
-  {id:"d15",lat:41.67,lng:26.57,loc:"Ergene Nehri - Edirne",fish:["Sazan","Yayın","Turna"],note:"Yayın sezonu açık. Canlı yem ile başarılı.",heat:4,type:"nehir",time:"2s önce",source:"Demo",hot:false},
-  {id:"d16",lat:39.90,lng:41.25,loc:"Tortum Gölü - Erzurum",fish:["Alabalık"],note:"Dağ alabalığı. Soğuk su balığı.",heat:3,type:"göl",time:"6s önce",source:"Demo",hot:false},
-  {id:"d17",lat:41.26,lng:36.35,loc:"Samsun - Terme Nehri",fish:["Kefal","Sazan"],note:"Tatlı su-tuzlu su geçişi aktif.",heat:3,type:"nehir",time:"4s önce",source:"Demo",hot:false},
-  {id:"d18",lat:37.10,lng:36.20,loc:"Seyhan Barajı - Adana",fish:["Yayın","Sazan"],note:"Yayın sezonu iyi gidiyor.",heat:4,type:"nehir",time:"3s önce",source:"Demo",hot:false},
-  {id:"d19",lat:40.76,lng:29.92,loc:"İzmit Körfezi - Karamürsel",fish:["Çipura","Levrek"],note:"Kafes yanlarında levrek aktif.",heat:3,type:"deniz",time:"3s önce",source:"Demo",hot:false},
-  {id:"d20",lat:39.95,lng:32.85,loc:"Eymir Gölü",fish:["Sazan","Kızılkanat"],note:"Kızılkanat sürü halinde geliyor.",heat:2,type:"göl",time:"5s önce",source:"Demo",hot:false},
+  {id:"d01",lat:41.15,lng:28.80,loc:"Büyükçekmece Gölü",fish:["Sazan","Turna"],rod:"Feeder",bait:"Mısır, solucan",note:"Sabah erken saatlerde harika avlanma.",heat:5,type:"göl",time:"2s önce",source:"Demo",hot:true},
+  {id:"d02",lat:40.98,lng:29.14,loc:"Bostancı Sahili",fish:["Lüfer","İstavrit"],rod:"Spin",bait:"Mepps No:3, kaşık",note:"Lüfer girişi başladı, akşam üstü aktif.",heat:4,type:"deniz",time:"45dk önce",source:"Demo",hot:true},
+  {id:"d03",lat:40.65,lng:30.40,loc:"Sapanca Gölü",fish:["Alabalık","Sazan","Yayın"],rod:"Spin",bait:"Rapala wobbler, solucan",note:"Sabah 6-9 arası alabalık aktif.",heat:5,type:"göl",time:"55dk önce",source:"Demo",hot:true},
+  {id:"d04",lat:38.40,lng:27.10,loc:"İzmir Körfezi - Urla",fish:["Çipura","Levrek","Karagöz"],rod:"LRF",bait:"Berkley Gulp, micro jig",note:"Sabah çipura harika tuttu.",heat:5,type:"deniz",time:"30dk önce",source:"Demo",hot:true},
+  {id:"d05",lat:38.05,lng:27.30,loc:"Kuşadası Körfezi",fish:["Lüfer","Palamut"],rod:"Surf",bait:"Çoklu iğne takımı, olta balığı",note:"Palamut girişi başladı!",heat:5,type:"deniz",time:"1s önce",source:"Demo",hot:true},
+  {id:"d06",lat:37.78,lng:38.28,loc:"Atatürk Barajı",fish:["Yayın","Sazan","Sudak"],rod:"Jigging",bait:"Canlı sazan, büyük silikon",note:"Dev yayın sezonu açık. Tekne gerekli.",heat:5,type:"nehir",time:"2s önce",source:"Demo",hot:true},
+  {id:"d07",lat:41.00,lng:39.72,loc:"Trabzon - Yomra Sahili",fish:["Hamsi","Istavrit"],rod:"Olta",bait:"Çoklu iğne takımı",note:"Hamsi sürüsü geldi! Kepçe ile bile tutuluyor.",heat:5,type:"deniz",time:"15dk önce",source:"Demo",hot:true},
+  {id:"d08",lat:40.20,lng:26.40,loc:"Çanakkale Boğazı",fish:["Palamut","Lüfer","Kolyoz"],rod:"Trolling",bait:"Rapala CD-11, çukur kaşık",note:"Göç dönemi. Palamut akını devam ediyor.",heat:5,type:"deniz",time:"1s önce",source:"Demo",hot:true},
+  {id:"d09",lat:39.80,lng:32.70,loc:"Mogan Gölü - Ankara",fish:["Sazan","Sudak"],rod:"Feeder",bait:"Boilie, mısır",note:"Sudak aktif sürpriz yaptı.",heat:4,type:"göl",time:"1s önce",source:"Demo",hot:false},
+  {id:"d10",lat:38.70,lng:39.50,loc:"Keban Barajı",fish:["Yayın","Sudak"],rod:"Jigging",bait:"Büyük silikon, canlı yem",note:"Sudak ve yayın. Dip olta.",heat:4,type:"nehir",time:"3s önce",source:"Demo",hot:false},
+  {id:"d11",lat:41.18,lng:29.07,loc:"Beykoz Sahili",fish:["Kalkan","Barbun"],rod:"Olta",bait:"Solucan, deniz kurdu",note:"Dip olta ile barbun kolay tutuluyor.",heat:4,type:"deniz",time:"2s önce",source:"Demo",hot:false},
+  {id:"d12",lat:36.88,lng:30.70,loc:"Antalya Körfezi - Lara",fish:["Levrek","Kefal"],rod:"Spin",bait:"Yüzey lure, popper",note:"Akşam levrek aktif.",heat:4,type:"deniz",time:"40dk önce",source:"Demo",hot:false},
+  {id:"d13",lat:37.05,lng:27.45,loc:"Bodrum - Yalıkavak",fish:["Çipura","Sargoz"],rod:"LRF",bait:"Micro jig 5g, silikon",note:"Yalıkavak iskelesi. Sargoz aktif.",heat:3,type:"deniz",time:"2s önce",source:"Demo",hot:false},
+  {id:"d14",lat:40.50,lng:31.60,loc:"Abant Gölü",fish:["Alabalık"],rod:"Fly",bait:"Elk Hair Caddis, Adams sinek",note:"Doğal alabalık. Sinek oltasıyla harika.",heat:3,type:"göl",time:"4s önce",source:"Demo",hot:false},
+  {id:"d15",lat:41.67,lng:26.57,loc:"Ergene Nehri - Edirne",fish:["Sazan","Yayın","Turna"],rod:"Feeder",bait:"Canlı balık, pellet",note:"Yayın sezonu açık.",heat:4,type:"nehir",time:"2s önce",source:"Demo",hot:false},
+  {id:"d16",lat:39.90,lng:41.25,loc:"Tortum Gölü - Erzurum",fish:["Alabalık"],rod:"Spin",bait:"Küçük kaşık, mepps",note:"Dağ alabalığı. Soğuk su.",heat:3,type:"göl",time:"6s önce",source:"Demo",hot:false},
+  {id:"d17",lat:41.26,lng:36.35,loc:"Samsun - Terme Nehri",fish:["Kefal","Sazan"],rod:"Olta",bait:"Ekmek, solucan",note:"Tatlı su-tuzlu su geçişi aktif.",heat:3,type:"nehir",time:"4s önce",source:"Demo",hot:false},
+  {id:"d18",lat:37.10,lng:36.20,loc:"Seyhan Barajı - Adana",fish:["Yayın","Sazan"],rod:"Jigging",bait:"Canlı sazan, büyük twister",note:"Yayın sezonu iyi gidiyor.",heat:4,type:"nehir",time:"3s önce",source:"Demo",hot:false},
+  {id:"d19",lat:40.76,lng:29.92,loc:"İzmit Körfezi - Karamürsel",fish:["Çipura","Levrek"],rod:"LRF",bait:"Ajing jig, Gulp",note:"Kafes yanlarında levrek aktif.",heat:3,type:"deniz",time:"3s önce",source:"Demo",hot:false},
+  {id:"d20",lat:39.95,lng:32.85,loc:"Eymir Gölü",fish:["Sazan","Kızılkanat"],rod:"Feeder",bait:"Ekmek, kırmızı solucan",note:"Kızılkanat sürü halinde.",heat:2,type:"göl",time:"5s önce",source:"Demo",hot:false},
 ];
 
-// ── DURUM ─────────────────────────────────────────────────────────
-let REPORTS = [];
-let activeF = 'all';
-let markers = {};
-let map;
-let csecs = 10800;
-let userR = [];
-try { userR = JSON.parse(localStorage.getItem('fishReports') || '[]'); } catch(e){}
+let REPORTS=[]; let activeF='all'; let markers={}; let map; let csecs=10800;
+let userR=[];
+try { userR=JSON.parse(localStorage.getItem('fishReports')||'[]'); } catch(e){}
 
-// ── HARİTA ────────────────────────────────────────────────────────
-function initMap() {
-  map = L.map('map', { center:[39.0,35.0], zoom:6 });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution:'© OpenStreetMap © CartoDB',
-    subdomains:'abcd', maxZoom:19
-  }).addTo(map);
+function initMap(){
+  map=L.map('map',{center:[39.0,35.0],zoom:6});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {attribution:'© OSM © CartoDB',subdomains:'abcd',maxZoom:19}).addTo(map);
 }
 
-// ── VERİ YÜKLE ────────────────────────────────────────────────────
-async function loadData() {
-  try {
-    const res = await fetch(DATA_URL + '?nocache=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    REPORTS = [...(data.reports || []), ...userR];
-    if (data.last_updated) {
-      const d = new Date(data.last_updated);
-      document.getElementById('lastup').textContent =
-        d.toLocaleString('tr-TR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+async function loadData(){
+  try{
+    const res=await fetch(DATA_URL+'?nocache='+Date.now());
+    if(!res.ok) throw 0;
+    const data=await res.json();
+    REPORTS=[...(data.reports||[]),...userR];
+    if(data.last_updated){
+      const d=new Date(data.last_updated);
+      document.getElementById('lastup').textContent=
+        d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
     }
-    document.getElementById('livelabel').textContent = 'CANLI';
-    document.getElementById('livelabel').style.color = '#00e676';
-    document.getElementById('pulse-dot').style.background = '#00e676';
-    document.getElementById('pulse-dot').style.boxShadow = '0 0 8px #00e676';
-  } catch(e) {
-    REPORTS = [...DEMO, ...userR];
-    document.getElementById('lastup').textContent = 'Demo mod';
-    document.getElementById('livelabel').textContent = 'DEMO';
-    document.getElementById('livelabel').style.color = '#ffa726';
-    document.getElementById('pulse-dot').style.background = '#ffa726';
-    document.getElementById('pulse-dot').style.boxShadow = '0 0 8px #ffa726';
+    document.getElementById('livelabel').textContent='CANLI';
+    document.getElementById('livelabel').style.color='#00e676';
+    document.getElementById('pulse-dot').style.background='#00e676';
+    document.getElementById('pulse-dot').style.boxShadow='0 0 8px #00e676';
+  }catch(e){
+    REPORTS=[...DEMO,...userR];
+    document.getElementById('lastup').textContent='Demo mod';
+    document.getElementById('livelabel').textContent='DEMO';
+    document.getElementById('livelabel').style.color='#ffa726';
+    document.getElementById('pulse-dot').style.background='#ffa726';
+    document.getElementById('pulse-dot').style.boxShadow='0 0 8px #ffa726';
   }
-  document.getElementById('loader').style.display = 'none';
-  renderAll();
-  updateStats();
+  document.getElementById('loader').style.display='none';
+  renderAll(); updateStats();
 }
 
-// ── MARKER ────────────────────────────────────────────────────────
-function getIcon(r) {
-  const C = { deniz:'#29b6f6', göl:'#66bb6a', nehir:'#ffa726' };
-  const c = C[r.type] || '#e0f0ff';
-  const s = r.hot ? 20 : 13;
-  const glow = r.hot ? `box-shadow:0 0 12px ${c},0 0 24px ${c}60;` : '';
-  const ping = r.hot
-    ? `<div style="position:absolute;top:-5px;left:-5px;width:${s+10}px;height:${s+10}px;
-        border-radius:50%;border:2px solid ${c};
-        animation:radarPing 2s ease-out infinite;"></div>` : '';
+function getIcon(r){
+  const C={deniz:'#29b6f6',göl:'#66bb6a',nehir:'#ffa726'};
+  const c=C[r.type]||'#e0f0ff'; const s=r.hot?20:13;
+  const g=r.hot?`box-shadow:0 0 12px ${c},0 0 24px ${c}60;`:'';
+  const p=r.hot?`<div style="position:absolute;top:-5px;left:-5px;width:${s+10}px;height:${s+10}px;border-radius:50%;border:2px solid ${c};animation:radarPing 2s ease-out infinite;"></div>`:'';
   return L.divIcon({
-    className: '',
-    html: `<div style="position:relative;width:${s}px;height:${s}px;">
-      ${ping}
-      <div style="width:${s}px;height:${s}px;border-radius:50%;
-        background:${c};${glow}
-        border:2px solid rgba(255,255,255,.3);
-        display:flex;align-items:center;justify-content:center;
-        font-size:${Math.floor(s*.6)}px;">🐟</div>
-    </div>`,
-    iconSize:[s,s], iconAnchor:[s/2,s/2]
+    className:'',
+    html:`<div style="position:relative;width:${s}px;height:${s}px;">${p}<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};${g}border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:${Math.floor(s*.6)}px;">🐟</div></div>`,
+    iconSize:[s,s],iconAnchor:[s/2,s/2]
   });
 }
 
-// ── FİLTRE ────────────────────────────────────────────────────────
-function getFiltered() {
-  const q = document.getElementById('sbox').value.toLowerCase();
-  return REPORTS.filter(r => {
-    if (activeF === 'hot') return r.hot;
-    if (activeF !== 'all' && r.type !== activeF) return false;
-    if (q) return r.loc.toLowerCase().includes(q) ||
-                   (r.fish||[]).some(f => f.toLowerCase().includes(q));
+function getFiltered(){
+  const q=document.getElementById('sbox').value.toLowerCase();
+  const rodFilters=['spin','lrf','surf'];
+  return REPORTS.filter(r=>{
+    if(activeF==='hot') return r.hot;
+    if(rodFilters.includes(activeF)) return (r.rod||'').toLowerCase()===activeF;
+    if(activeF!=='all'&&r.type!==activeF) return false;
+    if(q) return r.loc.toLowerCase().includes(q)||
+                   (r.fish||[]).some(f=>f.toLowerCase().includes(q))||
+                   (r.rod||'').toLowerCase().includes(q)||
+                   (r.bait||'').toLowerCase().includes(q);
     return true;
   });
 }
 
-// ── RENDER ────────────────────────────────────────────────────────
-function renderAll() {
-  if (!map) return;
-  Object.values(markers).forEach(m => map.removeLayer(m));
-  markers = {};
-  const list = getFiltered();
-
-  list.forEach(r => {
-    const m = L.marker([r.lat, r.lng], { icon: getIcon(r) }).addTo(map);
+function renderAll(){
+  if(!map) return;
+  Object.values(markers).forEach(m=>map.removeLayer(m)); markers={};
+  const list=getFiltered();
+  list.forEach(r=>{
+    const m=L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
+    const tackleHtml=`
+      <div class="ptackle">
+        ${r.rod?`<span style="background:#1a2a3a;border:1px solid #2d6a9f;color:#74b9ff;padding:2px 7px;border-radius:10px;font-size:10px;">🎣 ${r.rod}</span>`:''}
+        ${r.bait?`<span style="background:#2a1a0a;border:1px solid #6a3d1a;color:#f4a261;padding:2px 7px;border-radius:10px;font-size:10px;">🪱 ${r.bait}</span>`:''}
+      </div>`;
     m.bindPopup(`
       <div class="pt">📍 ${r.loc}</div>
       <div class="pf">🐟 ${(r.fish||[]).join(', ')}</div>
+      ${tackleHtml}
       <div class="pm" style="margin-bottom:5px">${r.note}</div>
       <div style="display:flex;justify-content:space-between">
         <span class="pm">${r.time}</span>
         <span class="pm">📡 ${r.source}</span>
       </div>
-      ${r.url ? `<a href="${r.url}" target="_blank" style="font-size:11px;color:#4fc3f7;display:block;margin-top:5px">🔗 Kaynağa git</a>` : ''}
-    `, { maxWidth:250 });
-    markers[r.id] = m;
+      ${r.url?`<a href="${r.url}" target="_blank" style="font-size:11px;color:#4fc3f7;display:block;margin-top:4px">🔗 Kaynağa git</a>`:''}
+    `,{maxWidth:260});
+    markers[r.id]=m;
   });
-
   renderList(list);
-  document.getElementById('rcount').textContent = list.length + ' rapor';
+  document.getElementById('rcount').textContent=list.length+' rapor';
 }
 
-function renderList(list) {
-  const el = document.getElementById('rlist');
-  el.innerHTML = '';
-  if (!list.length) {
-    el.innerHTML = '<div style="padding:20px;text-align:center;color:#4a7a9b;font-size:12px">Bu filtrede rapor bulunamadı.</div>';
+function renderList(list){
+  const el=document.getElementById('rlist'); el.innerHTML='';
+  if(!list.length){
+    el.innerHTML='<div style="padding:20px;text-align:center;color:#4a7a9b;font-size:12px">Bu filtrede rapor bulunamadı.</div>';
     return;
   }
-  list.slice().sort((a,b) => (b.heat||0) - (a.heat||0)).forEach(r => {
-    const d = document.createElement('div');
-    d.className = 'rcard' + (r.hot ? ' hot' : '');
-    const dots = Array.from({length:5},(_,i) =>
-      `<div class="hdot${i < (r.heat||0) ? ' on' : ''}"></div>`).join('');
-    d.innerHTML = `
+  list.slice().sort((a,b)=>(b.heat||0)-(a.heat||0)).forEach(r=>{
+    const d=document.createElement('div');
+    d.className='rcard'+(r.hot?' hot':'');
+    const dots=Array.from({length:5},(_,i)=>`<div class="hdot${i<(r.heat||0)?' on':''}"></div>`).join('');
+    d.innerHTML=`
       <div class="ctop">
-        <div class="ftags">
-          ${(r.fish||[]).map((f,i) =>
-            `<span class="ftag${i===0&&r.hot?' ht':''}">${f}</span>`).join('')}
-        </div>
+        <div class="ftags">${(r.fish||[]).map((f,i)=>`<span class="ftag${i===0&&r.hot?' ht':''}">${f}</span>`).join('')}</div>
         <span class="tbadge">${r.time||''}</span>
       </div>
       <div class="lname">📍 ${r.loc}</div>
       <div class="rnote">${r.note}</div>
+      <div class="tackle-row">
+        ${rodTag(r.rod)}
+        ${baitTag(r.bait)}
+      </div>
       <div class="hbar">${dots}</div>
       <span class="sbadge">📡 ${r.source}</span>`;
-    d.onclick = () => {
-      map.flyTo([r.lat, r.lng], 11, {duration:1.2});
-      setTimeout(() => markers[r.id] && markers[r.id].openPopup(), 1300);
-    };
+    d.onclick=()=>{map.flyTo([r.lat,r.lng],11,{duration:1.2});setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1300);};
     el.appendChild(d);
   });
 }
 
-function setF(f, btn) {
-  activeF = f;
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
+function setF(f,btn){
+  activeF=f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderAll();
 }
 
-function updateStats() {
-  document.getElementById('sactive').textContent = REPORTS.filter(r => r.hot).length;
-  document.getElementById('stotal').textContent = REPORTS.length;
+function updateStats(){
+  document.getElementById('sactive').textContent=REPORTS.filter(r=>r.hot).length;
+  document.getElementById('stotal').textContent=REPORTS.length;
 }
 
-// ── KULLANICI RAPORU ──────────────────────────────────────────────
-function submitR() {
-  const loc  = document.getElementById('floc').value.trim();
-  const fish = document.getElementById('ffish').value.trim();
-  const note = document.getElementById('fnote').value.trim();
-  if (!loc || !fish) { alert('Lokasyon ve balık türü zorunludur!'); return; }
-
-  const nr = {
-    id: 'u' + Date.now(),
-    lat: 37 + Math.random()*4,
-    lng: 28 + Math.random()*12,
-    loc, fish: fish.split(',').map(f => f.trim()),
-    note: note || 'Kullanıcı raporu.',
-    heat: 3, type: 'deniz',
-    time: 'Az önce',
-    timestamp: new Date().toISOString(),
-    source: '👤 Kullanıcı', hot: false,
+function submitR(){
+  const loc=document.getElementById('floc').value.trim();
+  const fish=document.getElementById('ffish').value.trim();
+  const rod=document.getElementById('frod').value;
+  const bait=document.getElementById('fbait').value.trim();
+  const note=document.getElementById('fnote').value.trim();
+  if(!loc||!fish){alert('Lokasyon ve balık türü zorunludur!');return;}
+  const nr={
+    id:'u'+Date.now(),
+    lat:37+Math.random()*4, lng:28+Math.random()*12,
+    loc, fish:fish.split(',').map(f=>f.trim()),
+    rod:rod||'', bait:bait||'',
+    note:note||'Kullanıcı raporu.',
+    heat:3, type:'deniz', time:'Az önce',
+    timestamp:new Date().toISOString(),
+    source:'👤 Kullanıcı', hot:false,
   };
   userR.unshift(nr);
-  try { localStorage.setItem('fishReports', JSON.stringify(userR.slice(0,20))); } catch(e){}
+  try{localStorage.setItem('fishReports',JSON.stringify(userR.slice(0,20)));}catch(e){}
   REPORTS.unshift(nr);
-  document.getElementById('floc').value = '';
-  document.getElementById('ffish').value = '';
-  document.getElementById('fnote').value = '';
-  renderAll();
-  updateStats();
+  ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('frod').value='';
+  renderAll(); updateStats();
 }
 
-// ── SAYAÇ ─────────────────────────────────────────────────────────
-setInterval(() => {
+setInterval(()=>{
   csecs--;
-  if (csecs <= 0) { csecs = 10800; loadData(); }
-  const h = Math.floor(csecs/3600);
-  const m = Math.floor((csecs%3600)/60);
-  const s = csecs % 60;
-  document.getElementById('cdtimer').textContent =
-    h + ':' + m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
-}, 1000);
+  if(csecs<=0){csecs=10800;loadData();}
+  const h=Math.floor(csecs/3600),m=Math.floor((csecs%3600)/60),s=csecs%60;
+  document.getElementById('cdtimer').textContent=h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
+},1000);
 
-// ── BAŞLAT ────────────────────────────────────────────────────────
-window.onload = () => { initMap(); loadData(); };
+window.onload=()=>{initMap();loadData();};
 </script>
 </body>
 </html>
