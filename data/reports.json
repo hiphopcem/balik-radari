@@ -1,24 +1,177 @@
 {
-  "last_updated": "2024-01-01T00:00:00Z",
-  "total": 0,
-  "reports": []
+  "last_updated": "2026-03-21T22:18:06.220633+00:00",
+  "total": 10,
+  "reports": [
+    {
+      "id": "fb01",
+      "lat": 41.15,
+      "lng": 28.8,
+      "loc": "Büyükçekmece Gölü",
+      "fish": [
+        "Sazan",
+        "Turna"
+      ],
+      "note": "Sabah erken saatlerde harika. Sazan bolluk.",
+      "heat": 5,
+      "type": "göl",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb02",
+      "lat": 40.98,
+      "lng": 29.14,
+      "loc": "Bostancı Sahili",
+      "fish": [
+        "Lüfer",
+        "İstavrit"
+      ],
+      "note": "Lüfer girişi başladı, akşam üstü aktif.",
+      "heat": 4,
+      "type": "deniz",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb03",
+      "lat": 40.65,
+      "lng": 30.4,
+      "loc": "Sapanca Gölü",
+      "fish": [
+        "Alabalık",
+        "Sazan"
+      ],
+      "note": "Sabah 6-9 arası alabalık aktif.",
+      "heat": 5,
+      "type": "göl",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb04",
+      "lat": 38.4,
+      "lng": 27.1,
+      "loc": "İzmir Körfezi",
+      "fish": [
+        "Çipura",
+        "Levrek"
+      ],
+      "note": "Sabah çipura iyi tuttu.",
+      "heat": 5,
+      "type": "deniz",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb05",
+      "lat": 37.78,
+      "lng": 38.28,
+      "loc": "Atatürk Barajı",
+      "fish": [
+        "Yayın",
+        "Sazan",
+        "Sudak"
+      ],
+      "note": "Dev yayın sezonu açık.",
+      "heat": 5,
+      "type": "nehir",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb06",
+      "lat": 41.0,
+      "lng": 39.72,
+      "loc": "Trabzon Sahili",
+      "fish": [
+        "Hamsi",
+        "Istavrit"
+      ],
+      "note": "Hamsi sürüsü geldi!",
+      "heat": 5,
+      "type": "deniz",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb07",
+      "lat": 40.2,
+      "lng": 26.4,
+      "loc": "Çanakkale Boğazı",
+      "fish": [
+        "Palamut",
+        "Lüfer"
+      ],
+      "note": "Palamut akını var.",
+      "heat": 5,
+      "type": "deniz",
+      "hot": true,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb08",
+      "lat": 39.8,
+      "lng": 32.7,
+      "loc": "Mogan Gölü",
+      "fish": [
+        "Sazan",
+        "Sudak"
+      ],
+      "note": "Sudak aktif.",
+      "heat": 4,
+      "type": "göl",
+      "hot": false,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb09",
+      "lat": 38.7,
+      "lng": 39.5,
+      "loc": "Keban Barajı",
+      "fish": [
+        "Yayın",
+        "Sudak"
+      ],
+      "note": "Dip olta iyi.",
+      "heat": 4,
+      "type": "nehir",
+      "hot": false,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    },
+    {
+      "id": "fb10",
+      "lat": 36.88,
+      "lng": 30.7,
+      "loc": "Antalya Körfezi",
+      "fish": [
+        "Levrek",
+        "Kefal"
+      ],
+      "note": "Akşam levrek aktif.",
+      "heat": 4,
+      "type": "deniz",
+      "hot": false,
+      "source": "Demo",
+      "timestamp": "2026-03-21T22:18:06.220633+00:00",
+      "time": "Az önce"
+    }
+  ]
 }
-```
-
-En alta "Commit changes" butonuna tıkla, kaydet.
-
----
-
-## ADIM 2 — scraper.py dosyasını yükle
-
-"Add file" → "Create new file" → dosya adı: `scraper.py`
-
-İndirdiğin `scraper.py` dosyasını aç, içindeki tüm kodu kopyala, yapıştır. Kaydet.
-
----
-
-## ADIM 3 — GitHub Actions workflow dosyasını oluştur
-
-"Add file" → "Create new file" → dosya adı:
-```
-.github/workflows/scrape.yml
