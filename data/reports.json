@@ -1,0 +1,24 @@
+{
+  "last_updated": "2024-01-01T00:00:00Z",
+  "total": 0,
+  "reports": []
+}
+```
+
+En alta "Commit changes" butonuna tıkla, kaydet.
+
+---
+
+## ADIM 2 — scraper.py dosyasını yükle
+
+"Add file" → "Create new file" → dosya adı: `scraper.py`
+
+İndirdiğin `scraper.py` dosyasını aç, içindeki tüm kodu kopyala, yapıştır. Kaydet.
+
+---
+
+## ADIM 3 — GitHub Actions workflow dosyasını oluştur
+
+"Add file" → "Create new file" → dosya adı:
+```
+.github/workflows/scrape.yml
