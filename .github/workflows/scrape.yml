@@ -1,4 +1,4 @@
-name: Balık Radarı - Otomatik Güncelleme
+name: Balik Radari Guncelleme
 
 on:
   schedule:
@@ -9,50 +9,30 @@ permissions:
   contents: write
 
 jobs:
-  scrape-and-update:
+  scrape:
     runs-on: ubuntu-latest
     steps:
-      - name: Repo'yu klonla
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Python kur
+      - name: Python Kur
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
-      - name: Bağımlılıkları yükle
+      - name: Kutuphaneleri Yukle
         run: pip install requests beautifulsoup4 lxml
 
-      - name: Scraper'ı çalıştır
+      - name: Scraper Calistir
         run: python scraper.py
 
-      - name: Commit et
+      - name: Git Ayarla
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Balık Radarı Bot"
+          git config user.email "bot@github.com"
+          git config user.name "BalikBot"
+
+      - name: Commit ve Push
+        run: |
           git add data/reports.json
-          git diff --staged --quiet || git commit -m "🐟 Otomatik güncelleme - $(date +'%Y-%m-%d %H:%M UTC')"
-
-      - name: Push et
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-```
-
-5. "Commit changes" tıkla, kaydet.
-
----
-
-Yapıştırınca şöyle görünmeli:
-```
-balik-radari/
-├── .github/
-│   └── workflows/
-│       └── scrape.yml  ✅
-├── data/
-│   └── reports.json
-└── scraper.py
+          git diff --staged --quiet || git commit -m "Otomatik guncelleme"
+          git push
