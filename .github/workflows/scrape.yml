@@ -1,0 +1,58 @@
+name: Balık Radarı - Otomatik Güncelleme
+
+on:
+  schedule:
+    - cron: '0 0,3,6,9,12,15,18,21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo'yu klonla
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Bağımlılıkları yükle
+        run: pip install requests beautifulsoup4 lxml
+
+      - name: Scraper'ı çalıştır
+        run: python scraper.py
+
+      - name: Commit et
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Balık Radarı Bot"
+          git add data/reports.json
+          git diff --staged --quiet || git commit -m "🐟 Otomatik güncelleme - $(date +'%Y-%m-%d %H:%M UTC')"
+
+      - name: Push et
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+```
+
+5. "Commit changes" tıkla, kaydet.
+
+---
+
+Yapıştırınca şöyle görünmeli:
+```
+balik-radari/
+├── .github/
+│   └── workflows/
+│       └── scrape.yml  ✅
+├── data/
+│   └── reports.json
+└── scraper.py
