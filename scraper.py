@@ -90,7 +90,7 @@ LOCATIONS = {
     "burgazada":             (40.87700, 29.06400),
     "kınalıada":             (40.90000, 29.03100),
     "adalar":                (40.87170, 29.10920),
-    "istanbul boğazı":       (41.08000, 29.05000),
+    "istanbul boğazı":       (41.08000, 29.05000),"rumeli hisarı":         (41.08500, 29.05400), "garipçe":               (41.21000, 29.08000), "karadeniz boğaz":       (41.21000, 29.09000),
     "boğaziçi":              (41.08000, 29.05000),
     "istanbul":              (41.00820, 28.97840),
     "izmit körfezi":         (40.74000, 29.85000),
@@ -407,6 +407,9 @@ Her satır ayrı lokasyon. Uydurma yapma.""",
                     continue
 
                 fish = [f.strip().title() for f in fish_str.split(",") if f.strip()]
+                # "Yok" veya boş balık bilgisi olanları atla
+if not fish_str or fish_str.strip().lower() in ["yok","bilgi yok","—","-","belirtilmemiş"]:
+    continue
                 if not fish: continue
 
                 ts  = now_iso()
