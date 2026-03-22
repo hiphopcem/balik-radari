@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Türkiye Balık Radarı - Scraper v9
+Türkiye Balık Radarı - Scraper v10
 - Gemini 2.0 Flash ile akıllı tarama
 - Sadece son 48 saat
 - 7 il: İstanbul, Tekirdağ, Edirne, Kocaeli, Yalova, Bursa, Balıkesir
@@ -34,12 +34,12 @@ def normalize(s):
     return s
 
 def clean_gemini(s):
-    """Gemini'nin markdown yıldızları ve parantez açıklamalarını temizle."""
     s = re.sub(r'\*+', '', s)
     s = re.sub(r'\([^)]*\)', '', s)
     return s.strip()
 
 LOCATIONS = {
+    # İSTANBUL — Meşhur balık tutma noktaları
     "galata köprüsü avrupa": (41.01600, 28.97150),
     "galata köprüsü asya":   (41.01640, 28.97700),
     "galata köprüsü":        (41.01620, 28.97420),
@@ -51,12 +51,14 @@ LOCATIONS = {
     "fener":                 (41.03100, 28.95100),
     "ayvansaray":            (41.03700, 28.94300),
     "eyüp":                  (41.04900, 28.93300),
+    "yenikapı sahili":       (41.00500, 28.94900),
     "yenikapı":              (41.00500, 28.94900),
     "kumkapı":               (41.00400, 28.96400),
     "yedikule":              (40.99800, 28.92700),
     "florya":                (40.97130, 28.79860),
     "yeşilköy":              (40.97280, 28.81660),
     "bakırköy":              (40.97920, 28.87010),
+    "avcılar sahili":        (40.97930, 28.72190),
     "avcılar":               (40.97930, 28.72190),
     "büyükçekmece gölü":     (41.06000, 28.59000),
     "büyükçekmece":          (41.01970, 28.57730),
@@ -64,6 +66,7 @@ LOCATIONS = {
     "küçükçekmece":          (41.01300, 28.77670),
     "silivri":               (41.07260, 28.24840),
     "kilyos":                (41.24970, 29.01570),
+    "riva":                  (41.18500, 29.31000),
     "şile":                  (41.17780, 29.61030),
     "ağva":                  (41.09800, 29.99940),
     "garipçe":               (41.21000, 29.08000),
@@ -102,8 +105,10 @@ LOCATIONS = {
     "kınalıada":             (40.90000, 29.03100),
     "adalar":                (40.87170, 29.10920),
     "istanbul boğazı":       (41.08000, 29.05000),
+    "boğaz girişi":          (41.08000, 29.05000),
     "boğaziçi":              (41.08000, 29.05000),
     "istanbul":              (41.00820, 28.97840),
+    # KOCAELİ
     "izmit körfezi":         (40.74000, 29.85000),
     "karamürsel":            (40.69440, 29.60750),
     "gölcük":                (40.65220, 29.83040),
@@ -112,9 +117,11 @@ LOCATIONS = {
     "darıca":                (40.76600, 29.37400),
     "izmit":                 (40.76540, 29.94080),
     "kocaeli":               (40.76540, 29.94080),
+    # YALOVA
     "çınarcık":              (40.64150, 29.12250),
     "armutlu":               (40.52780, 28.83200),
     "yalova":                (40.65490, 29.27470),
+    # BURSA
     "uluabat gölü":          (40.16680, 28.62000),
     "iznik gölü":            (40.43300, 29.55000),
     "iznik":                 (40.42700, 29.72000),
@@ -122,11 +129,13 @@ LOCATIONS = {
     "mudanya":               (40.37660, 28.88240),
     "orhangazi":             (40.49200, 29.31100),
     "bursa":                 (40.18260, 29.06650),
+    # TEKİRDAĞ
     "marmara ereğlisi":      (40.96800, 27.95900),
     "şarköy":                (40.61210, 27.11030),
     "mürefte":               (40.67400, 27.25600),
     "hoşköy":                (40.74400, 27.17300),
     "tekirdağ":              (40.97810, 27.51170),
+    # EDİRNE
     "meriç nehri":           (41.18000, 26.40000),
     "tunca nehri":           (41.70000, 26.55000),
     "ergene nehri":          (41.62000, 26.72000),
@@ -134,14 +143,17 @@ LOCATIONS = {
     "enez":                  (40.72820, 26.08110),
     "keşan":                 (40.85600, 26.63950),
     "edirne":                (41.67710, 26.55570),
+    # BALIKESİR
     "manyas gölü":           (40.20000, 27.97000),
     "marmara adası":         (40.60000, 27.57900),
     "avşa adası":            (40.51940, 27.59170),
     "erdek":                 (40.39750, 27.79580),
     "bandırma":              (40.35000, 27.97700),
     "balıkesir":             (39.64840, 27.88260),
+    # SAPANCA
     "sapanca gölü":          (40.72000, 30.20000),
     "sapanca":               (40.69320, 30.27050),
+    # MARMARA
     "marmara denizi":        (40.65000, 27.90000),
     "marmara":               (40.65000, 27.90000),
 }
@@ -163,6 +175,7 @@ VALID_REGIONS = [
     "heybeliada","burgazada","kınalıada","florya","yeşilköy","bakırköy",
     "avcılar","sirkeci","fener","ayvansaray","eyüp","yenikapı","kumkapı",
     "yedikule","diliskelesi","garipçe","poyrazköy","fenerbahçe","moda",
+    "riva","rumeli hisarı","kanlıca","büyükdere",
 ]
 
 FISHING_WORDS = [
@@ -361,37 +374,35 @@ def scrape_with_gemini():
 
     prompts = [
         f"""Sen bir balıkçılık asistanısın. Bugün {today} tarihinde İstanbul'da şu noktalarda balık tutuldu mu?
-Galata Köprüsü, Eminönü, Karaköy, Sarayburnu, Haliç, Rumeli Hisarı, Sarıyer, Rumeli Kavağı, Rumeli Feneri, Büyükdere, Tarabya, Bebek, Beykoz, Anadolu Kavağı, Paşabahçe, Bostancı, Kadıköy, Büyükçekmece, Şile, Kilyos, Adalar.
+Galata Köprüsü, Eminönü, Karaköy, Sarayburnu, Kumkapı, Yenikapı, Haliç, Rumeli Hisarı, Sarıyer, Rumeli Kavağı, Rumeli Feneri, Büyükdere, Tarabya, Bebek, Beykoz, Anadolu Kavağı, Paşabahçe, Bostancı, Kadıköy, Moda, Fenerbahçe, Büyükçekmece, Şile, Kilyos, Riva, Ağva, Adalar, Büyükada, Avcılar, Silivri.
 
-ÖNEMLI: Sadece gerçekten balık tutulan veya aktif olan noktaları yaz. Balık tutulmayan yerleri YAZMA.
+ÖNEMLI: Sadece gerçekten balık tutulan veya bu mevsimde aktif olan noktaları yaz. Balık tutulmayan yerleri YAZMA.
 
-Her bulgu için SADECE şu formatı kullan:
+Her bulgu için SADECE şu formatı kullan, başka hiçbir şey yazma, markdown kullanma:
 LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem adı] | NOT: [kısa bilgi]
 
 Örnek:
-LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma
+LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma""",
 
-Markdown kullanma, yıldız işareti koyma. Düz metin yaz.""",
+        f"""Sen bir balıkçılık asistanısın. Bugün {today} tarihinde şu bölgelerde aktif balık noktaları hangileri?
+Kocaeli: İzmit Körfezi, Karamürsel, Gölcük, Gebze, Darıca, Hereke, Diliskelesi
+Yalova: Çınarcık, Armutlu
+Bursa: Gemlik, Mudanya, Orhangazi, İznik Gölü, Uluabat Gölü
+Tekirdağ: Şarköy, Mürefte, Marmara Ereğlisi, Hoşköy
+Balıkesir: Erdek, Bandırma, Marmara Adası, Avşa Adası, Manyas Gölü
+Edirne: Meriç Nehri, Ergene Nehri, Tunca Nehri
+Sapanca Gölü
 
-        f"""Sen bir balıkçılık asistanısın. Bugün {today} tarihinde şu bölgelerde balık durumu nedir?
-Kocaeli (İzmit Körfezi, Karamürsel, Gölcük, Gebze, Darıca),
-Yalova (Çınarcık, Armutlu),
-Bursa (Gemlik, Mudanya, Orhangazi, İznik Gölü, Uluabat Gölü),
-Tekirdağ (Şarköy, Mürefte, Marmara Ereğlisi, Hoşköy),
-Balıkesir (Erdek, Bandırma, Marmara Adası, Avşa Adası, Manyas Gölü),
-Edirne (Meriç Nehri, Ergene Nehri, Tunca Nehri),
-Sapanca Gölü.
+ÖNEMLI: Sadece aktif ve balık tutulan noktaları yaz. Markdown kullanma, yıldız koyma.
 
-ÖNEMLI: Sadece gerçekten balık tutulan veya aktif olan noktaları yaz. Balık tutulmayan yerleri YAZMA.
-
-Her bulgu için SADECE şu formatı kullan (markdown yok, yıldız yok):
+Her bulgu için:
 LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]""",
 
-        f"""Sen bir balıkçılık asistanısın. Marmara Denizi ve İstanbul çevresinde bu mevsimde hangi balıklar aktif ve nerede tutuluyor?
-Lüfer, palamut, kolyoz, çipura, levrek, kefal, hamsi, istavrit, kalkan, barbun hangi noktalarda var?
-Spin, LRF, Surf, Feeder, Jigging teknikleri için bu bölgede tavsiyeler neler?
+        f"""Sen bir balıkçılık asistanısın. Marmara Denizi ve İstanbul çevresinde {today} tarihinde hangi balıklar aktif?
+Lüfer, palamut, kolyoz, çipura, levrek, kefal, hamsi, istavrit, kalkan, barbun, uskumru hangi noktalarda tutuluyor?
+Spin, LRF, Surf, Feeder, Jigging teknikleri için bu mevsimde en iyi noktalar ve yemler neler?
 
-ÖNEMLI: Sadece aktif olan noktaları yaz. Markdown kullanma, yıldız işareti koyma.
+Sadece aktif noktaları yaz. Markdown kullanma.
 
 Her bulgu için:
 LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]""",
@@ -425,7 +436,6 @@ LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [
                 if not loc_hint:
                     continue
 
-                # Balık yok veya bilgi yok ise atla
                 if not fish_str or normalize(fish_str) in [normalize(w) for w in YOK_WORDS]:
                     print(f"    — {loc_hint}: balık yok, atlandı")
                     continue
@@ -619,7 +629,7 @@ FALLBACK = [
 
 def main():
     print("=" * 65)
-    print(f"🎣 Balık Radarı v9 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"🎣 Balık Radarı v10 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"   Gemini: {'✓' if GEMINI_KEY else '✗'} | Max yaş: {MAX_AGE_HOURS} saat")
     print("=" * 65)
 
