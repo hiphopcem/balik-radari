@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
-Türkiye Balık Radarı - Scraper v10
-- Gemini 2.0 Flash ile akıllı tarama
-- Sadece son 48 saat
-- 7 il: İstanbul, Tekirdağ, Edirne, Kocaeli, Yalova, Bursa, Balıkesir
+Sihirli Zoka Radar - Akıllı Balık Takip Sistemi v11
+Bölgeler: İstanbul, Tekirdağ, Edirne, Çanakkale, Kocaeli, Yalova, Bursa, Balıkesir (Ege dahil)
 """
 
 import os, json, time, hashlib, random, requests, re
@@ -23,6 +21,8 @@ HEADERS = {
     "Accept-Language": "tr-TR,tr;q=0.9",
 }
 
+SOURCE_NAME = "Sihirli Zoka Radar"
+
 YOK_WORDS = ["yok", "bilgi yok", "bilgi bulunamadı", "belirsiz", "belirtilmemiş",
              "bulunamadı", "mevcut değil", "-", "—", "yok.", "yok,"]
 
@@ -39,7 +39,7 @@ def clean_gemini(s):
     return s.strip()
 
 LOCATIONS = {
-    # İSTANBUL — Meşhur balık tutma noktaları
+    # ── İSTANBUL — Tarihi Yarımada & Haliç ──────────────────────
     "galata köprüsü avrupa": (41.01600, 28.97150),
     "galata köprüsü asya":   (41.01640, 28.97700),
     "galata köprüsü":        (41.01620, 28.97420),
@@ -55,6 +55,7 @@ LOCATIONS = {
     "yenikapı":              (41.00500, 28.94900),
     "kumkapı":               (41.00400, 28.96400),
     "yedikule":              (40.99800, 28.92700),
+    # ── İSTANBUL — Avrupa Sahili ────────────────────────────────
     "florya":                (40.97130, 28.79860),
     "yeşilköy":              (40.97280, 28.81660),
     "bakırköy":              (40.97920, 28.87010),
@@ -69,18 +70,21 @@ LOCATIONS = {
     "riva":                  (41.18500, 29.31000),
     "şile":                  (41.17780, 29.61030),
     "ağva":                  (41.09800, 29.99940),
+    # ── İSTANBUL — Boğaz Avrupa ─────────────────────────────────
     "garipçe":               (41.21000, 29.08000),
-    "rumeli hisarı":         (41.08500, 29.05400),
     "rumeli feneri":         (41.22500, 29.10750),
     "rumeli kavağı":         (41.19870, 29.06220),
     "büyükdere":             (41.14800, 29.05670),
     "sarıyer":               (41.16650, 29.05300),
     "tarabya":               (41.12680, 29.05690),
+    "yeniköy":               (41.11100, 29.05780),
     "bebek":                 (41.07850, 29.04360),
+    "rumeli hisarı":         (41.08500, 29.05400),
     "arnavutköy":            (41.06720, 29.03680),
     "ortaköy":               (41.05330, 29.02690),
     "beşiktaş":              (41.04300, 29.00600),
     "kabataş":               (41.03470, 29.00450),
+    # ── İSTANBUL — Boğaz Anadolu ────────────────────────────────
     "anadolu feneri":        (41.21940, 29.15900),
     "anadolu kavağı":        (41.19300, 29.08200),
     "poyrazköy":             (41.20800, 29.13300),
@@ -90,6 +94,7 @@ LOCATIONS = {
     "anadolu hisarı":        (41.08330, 29.07360),
     "çengelköy":             (41.06200, 29.05900),
     "üsküdar":               (41.02270, 29.01510),
+    # ── İSTANBUL — Anadolu Sahili ───────────────────────────────
     "kadıköy":               (40.99020, 29.02320),
     "moda":                  (40.98400, 29.02800),
     "fenerbahçe":            (40.96800, 29.05400),
@@ -99,16 +104,19 @@ LOCATIONS = {
     "pendik":                (40.87620, 29.23300),
     "tuzla":                 (40.81480, 29.29600),
     "gebze":                 (40.80240, 29.43000),
+    # ── İSTANBUL — Adalar ───────────────────────────────────────
     "büyükada":              (40.87170, 29.12400),
     "heybeliada":            (40.88300, 29.09400),
     "burgazada":             (40.87700, 29.06400),
     "kınalıada":             (40.90000, 29.03100),
     "adalar":                (40.87170, 29.10920),
+    # ── İSTANBUL — Genel ────────────────────────────────────────
     "istanbul boğazı":       (41.08000, 29.05000),
     "boğaz girişi":          (41.08000, 29.05000),
     "boğaziçi":              (41.08000, 29.05000),
     "istanbul":              (41.00820, 28.97840),
-    # KOCAELİ
+
+    # ── KOCAELİ ─────────────────────────────────────────────────
     "izmit körfezi":         (40.74000, 29.85000),
     "karamürsel":            (40.69440, 29.60750),
     "gölcük":                (40.65220, 29.83040),
@@ -117,11 +125,13 @@ LOCATIONS = {
     "darıca":                (40.76600, 29.37400),
     "izmit":                 (40.76540, 29.94080),
     "kocaeli":               (40.76540, 29.94080),
-    # YALOVA
+
+    # ── YALOVA ──────────────────────────────────────────────────
     "çınarcık":              (40.64150, 29.12250),
     "armutlu":               (40.52780, 28.83200),
     "yalova":                (40.65490, 29.27470),
-    # BURSA
+
+    # ── BURSA ───────────────────────────────────────────────────
     "uluabat gölü":          (40.16680, 28.62000),
     "iznik gölü":            (40.43300, 29.55000),
     "iznik":                 (40.42700, 29.72000),
@@ -129,13 +139,22 @@ LOCATIONS = {
     "mudanya":               (40.37660, 28.88240),
     "orhangazi":             (40.49200, 29.31100),
     "bursa":                 (40.18260, 29.06650),
-    # TEKİRDAĞ
+
+    # ── TEKİRDAĞ — Marmara ──────────────────────────────────────
     "marmara ereğlisi":      (40.96800, 27.95900),
     "şarköy":                (40.61210, 27.11030),
     "mürefte":               (40.67400, 27.25600),
     "hoşköy":                (40.74400, 27.17300),
     "tekirdağ":              (40.97810, 27.51170),
-    # EDİRNE
+    "barbaros":              (40.82000, 27.45000),
+
+    # ── TEKİRDAĞ — Ege Girişi (Saros Körfezi) ───────────────────
+    "saros körfezi":         (40.55000, 26.60000),
+    "erikli":                (40.62000, 26.75000),
+    "mecidiye":              (40.60000, 26.68000),
+    "ganos":                 (40.62000, 27.02000),
+
+    # ── EDİRNE ──────────────────────────────────────────────────
     "meriç nehri":           (41.18000, 26.40000),
     "tunca nehri":           (41.70000, 26.55000),
     "ergene nehri":          (41.62000, 26.72000),
@@ -143,39 +162,108 @@ LOCATIONS = {
     "enez":                  (40.72820, 26.08110),
     "keşan":                 (40.85600, 26.63950),
     "edirne":                (41.67710, 26.55570),
-    # BALIKESİR
+    "ipsala":                (40.91790, 26.38450),
+    # ── EDİRNE — Ege Kıyısı (Enez çevresi) ─────────────────────
+    "enez sahili":           (40.72500, 26.09000),
+    "gala gölü":             (40.79000, 26.18000),
+    "dalyan enez":           (40.72000, 26.08000),
+
+    # ── ÇANAKKALE ───────────────────────────────────────────────
+    "çanakkale boğazı":      (40.15000, 26.40000),
+    "çanakkale":             (40.15460, 26.40860),
+    "gelibolu":              (40.41660, 26.67580),
+    "lapseki":               (40.34600, 26.68500),
+    "eceabat":               (40.18600, 26.35700),
+    "kilitbahir":            (40.14500, 26.38600),
+    "kepez":                 (40.09000, 26.39000),
+    "nara":                  (40.22000, 26.37000),
+    "abide":                 (40.24000, 26.30000),
+    # ── ÇANAKKALE — Ege ─────────────────────────────────────────
+    "ayvacık":               (39.59700, 26.40600),
+    "küçükkuyu":             (39.54600, 26.61700),
+    "assos":                 (39.48900, 26.33700),
+    "behramkale":            (39.48900, 26.33700),
+    "babakale":              (39.48000, 26.05000),
+    "geyikli":               (39.84000, 26.16000),
+    "ezine":                 (39.78600, 26.34200),
+    "bozcaada":              (39.83200, 26.06400),
+    "gökçeada":              (40.17800, 25.90000),
+    "tavşan adaları":        (39.95000, 26.05000),
+    # ── ÇANAKKALE — Marmara Girişi ──────────────────────────────
+    "biga":                  (40.22900, 27.24200),
+    "karabiga":              (40.38900, 27.30600),
+    "yenice çanakkale":      (39.93000, 27.25000),
+
+    # ── BALIKESİR — Marmara ─────────────────────────────────────
     "manyas gölü":           (40.20000, 27.97000),
     "marmara adası":         (40.60000, 27.57900),
     "avşa adası":            (40.51940, 27.59170),
+    "ekinlik adası":         (40.54700, 27.53500),
     "erdek":                 (40.39750, 27.79580),
     "bandırma":              (40.35000, 27.97700),
+    "gönen":                 (40.10060, 27.65020),
+    "edincik":               (40.34640, 27.87200),
+    # ── BALIKESİR — Ege ─────────────────────────────────────────
+    "ayvalık":               (39.31760, 26.69630),
+    "alibey adası":          (39.34000, 26.65000),
+    "cunda adası":           (39.34000, 26.65000),
+    "burhaniye":             (39.50130, 26.97650),
+    "ören":                  (39.47000, 27.04000),
+    "edremit":               (39.59430, 27.02380),
+    "edremit körfezi":       (39.48000, 26.80000),
+    "akçay":                 (39.57000, 26.92000),
+    "altınoluk":             (39.56000, 26.74000),
+    "gömeç":                 (39.45600, 26.84000),
     "balıkesir":             (39.64840, 27.88260),
-    # SAPANCA
+
+    # ── SAPANCA ─────────────────────────────────────────────────
     "sapanca gölü":          (40.72000, 30.20000),
     "sapanca":               (40.69320, 30.27050),
-    # MARMARA
+
+    # ── MARMARA DENİZİ ──────────────────────────────────────────
     "marmara denizi":        (40.65000, 27.90000),
     "marmara":               (40.65000, 27.90000),
+
+    # ── EGE DENİZİ (Genel) ──────────────────────────────────────
+    "ege denizi":            (39.50000, 25.50000),
+    "kuzey ege":             (40.00000, 26.00000),
 }
 
 VALID_REGIONS = [
-    "istanbul","tekirdağ","edirne","kocaeli","yalova","bursa","balıkesir",
-    "sapanca","izmit","gebze","gemlik","mudanya","erdek","bandırma",
-    "şarköy","marmara","boğaz","boğaziçi","haliç","galata","eminönü",
-    "karaköy","sarıyer","beykoz","bostancı","kadıköy","büyükçekmece",
-    "küçükçekmece","silivri","şile","kilyos","ağva","adalar","büyükada",
-    "çınarcık","armutlu","iznik","uluabat","orhangazi",
-    "meriç","ergene","tunca","uzunköprü","enez","keşan",
-    "karamürsel","gölcük","hereke","darıca",
-    "mürefte","hoşköy","marmara ereğlisi",
-    "manyas","marmara adası","avşa",
-    "sarayburnu","rumeli","bebek","tarabya","büyükdere","paşabahçe",
-    "anadolu","beşiktaş","ortaköy","arnavutköy","kabataş","üsküdar",
-    "çengelköy","kanlıca","pendik","kartal","maltepe","tuzla",
-    "heybeliada","burgazada","kınalıada","florya","yeşilköy","bakırköy",
-    "avcılar","sirkeci","fener","ayvansaray","eyüp","yenikapı","kumkapı",
-    "yedikule","diliskelesi","garipçe","poyrazköy","fenerbahçe","moda",
-    "riva","rumeli hisarı","kanlıca","büyükdere",
+    # İstanbul
+    "istanbul","boğaz","boğaziçi","haliç","galata","eminönü","karaköy",
+    "sarıyer","beykoz","bostancı","kadıköy","büyükçekmece","küçükçekmece",
+    "silivri","şile","kilyos","ağva","adalar","büyükada","sarayburnu",
+    "rumeli","bebek","tarabya","büyükdere","paşabahçe","anadolu",
+    "beşiktaş","ortaköy","arnavutköy","kabataş","üsküdar","çengelköy",
+    "kanlıca","pendik","kartal","maltepe","tuzla","heybeliada","burgazada",
+    "kınalıada","florya","yeşilköy","bakırköy","avcılar","sirkeci","fener",
+    "ayvansaray","eyüp","yenikapı","kumkapı","yedikule","diliskelesi",
+    "garipçe","poyrazköy","fenerbahçe","moda","riva","gebze","darıca",
+    # Kocaeli
+    "kocaeli","izmit","karamürsel","gölcük","hereke",
+    # Yalova
+    "yalova","çınarcık","armutlu",
+    # Bursa
+    "bursa","gemlik","mudanya","iznik","uluabat","orhangazi",
+    # Tekirdağ
+    "tekirdağ","şarköy","mürefte","hoşköy","marmara ereğlisi","barbaros",
+    "saros","erikli","ganos",
+    # Edirne
+    "edirne","meriç","ergene","tunca","uzunköprü","enez","keşan","ipsala",
+    "gala gölü",
+    # Çanakkale
+    "çanakkale","gelibolu","lapseki","eceabat","kilitbahir","kepez","nara",
+    "ayvacık","küçükkuyu","assos","behramkale","babakale","geyikli","ezine",
+    "bozcaada","gökçeada","tavşan","biga","karabiga",
+    # Balıkesir
+    "balıkesir","erdek","bandırma","manyas","marmara adası","avşa",
+    "ekinlik","gönen","edincik","ayvalık","alibey","cunda","burhaniye",
+    "ören","edremit","akçay","altınoluk","gömeç",
+    # Sapanca
+    "sapanca",
+    # Genel
+    "marmara","ege",
 ]
 
 FISHING_WORDS = [
@@ -197,6 +285,7 @@ FISH_KW = [
     "barbun","kefal","alabalık","yayın","sudak","turna","karagöz","sargoz",
     "kolyoz","uskumru","orkinos","mercan","isparoz","kızılkanat","tekir",
     "izmarit","çinekop","torik","tirsi","sardalya","minekop","mezgit",
+    "lahos","grida","fangri","sinarit","lagos","dil balığı",
 ]
 
 ROD_MAP = {
@@ -258,12 +347,9 @@ def time_ago(dt_str):
     try:
         dt = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
         diff = int((datetime.now(timezone.utc) - dt).total_seconds())
-        if diff < 60:
-            return "Az önce"
-        if diff < 3600:
-            return f"{diff//60}dk önce"
-        if diff < 86400:
-            return f"{diff//3600}s önce"
+        if diff < 60:    return "Az önce"
+        if diff < 3600:  return f"{diff//60}dk önce"
+        if diff < 86400: return f"{diff//3600}s önce"
         return f"{diff//86400}g önce"
     except Exception:
         return "Bilinmiyor"
@@ -347,7 +433,7 @@ def build_report(title, body, source, url="", hint="", pub_date=None):
         "type":      classify_type(text, loc),
         "time":      time_ago(ts),
         "timestamp": ts,
-        "source":    source,
+        "source":    SOURCE_NAME,
         "url":       url,
         "hot":       len(fish) >= 2,
     }
@@ -369,7 +455,7 @@ def ask_gemini(prompt):
         return ""
 
 def scrape_with_gemini():
-    print("🤖 Gemini ile akıllı tarama...")
+    print("🤖 Akıllı tarama başlıyor...")
     today = datetime.now().strftime("%d %B %Y")
 
     prompts = [
@@ -377,40 +463,39 @@ def scrape_with_gemini():
 Galata Köprüsü, Eminönü, Karaköy, Sarayburnu, Kumkapı, Yenikapı, Haliç, Rumeli Hisarı, Sarıyer, Rumeli Kavağı, Rumeli Feneri, Büyükdere, Tarabya, Bebek, Beykoz, Anadolu Kavağı, Paşabahçe, Bostancı, Kadıköy, Moda, Fenerbahçe, Büyükçekmece, Şile, Kilyos, Riva, Ağva, Adalar, Büyükada, Avcılar, Silivri.
 
 ÖNEMLI: Sadece gerçekten balık tutulan veya bu mevsimde aktif olan noktaları yaz. Balık tutulmayan yerleri YAZMA.
+Markdown kullanma, yıldız işareti koyma. Düz metin yaz.
 
-Her bulgu için SADECE şu formatı kullan, başka hiçbir şey yazma, markdown kullanma:
-LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem adı] | NOT: [kısa bilgi]
-
-Örnek:
-LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma""",
+Her bulgu için SADECE şu formatı kullan:
+LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem adı] | NOT: [kısa bilgi]""",
 
         f"""Sen bir balıkçılık asistanısın. Bugün {today} tarihinde şu bölgelerde aktif balık noktaları hangileri?
-Kocaeli: İzmit Körfezi, Karamürsel, Gölcük, Gebze, Darıca, Hereke, Diliskelesi
+Kocaeli: İzmit Körfezi, Karamürsel, Gölcük, Gebze, Darıca, Hereke
 Yalova: Çınarcık, Armutlu
 Bursa: Gemlik, Mudanya, Orhangazi, İznik Gölü, Uluabat Gölü
-Tekirdağ: Şarköy, Mürefte, Marmara Ereğlisi, Hoşköy
-Balıkesir: Erdek, Bandırma, Marmara Adası, Avşa Adası, Manyas Gölü
-Edirne: Meriç Nehri, Ergene Nehri, Tunca Nehri
+Tekirdağ: Şarköy, Mürefte, Marmara Ereğlisi, Hoşköy, Saros Körfezi, Erikli
+Balıkesir (Marmara): Erdek, Bandırma, Marmara Adası, Avşa Adası, Manyas Gölü
+Balıkesir (Ege): Ayvalık, Cunda Adası, Burhaniye, Edremit, Akçay, Altınoluk, Ören
+Edirne: Meriç Nehri, Ergene Nehri, Tunca Nehri, Enez, Gala Gölü
+Çanakkale (Boğaz): Gelibolu, Lapseki, Eceabat, Kepez
+Çanakkale (Ege): Bozcaada, Gökçeada, Ayvacık, Küçükkuyu, Assos, Babakale, Ezine
 Sapanca Gölü
 
 ÖNEMLI: Sadece aktif ve balık tutulan noktaları yaz. Markdown kullanma, yıldız koyma.
-
 Her bulgu için:
 LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]""",
 
-        f"""Sen bir balıkçılık asistanısın. Marmara Denizi ve İstanbul çevresinde {today} tarihinde hangi balıklar aktif?
-Lüfer, palamut, kolyoz, çipura, levrek, kefal, hamsi, istavrit, kalkan, barbun, uskumru hangi noktalarda tutuluyor?
-Spin, LRF, Surf, Feeder, Jigging teknikleri için bu mevsimde en iyi noktalar ve yemler neler?
+        f"""Sen bir balıkçılık asistanısın. {today} tarihinde Marmara, Ege ve Çanakkale Boğazı'nda hangi balıklar aktif?
+Lüfer, palamut, kolyoz, çipura, levrek, kefal, hamsi, istavrit, kalkan, barbun, uskumru, lahos, grida, sinarit hangi noktalarda tutuluyor?
+Spin, LRF, Surf, Feeder, Jigging, Trolling, Bolentino teknikleri için bu mevsimde en iyi noktalar ve yemler neler?
 
 Sadece aktif noktaları yaz. Markdown kullanma.
-
 Her bulgu için:
 LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]""",
     ]
 
     all_reports = []
     for i, prompt in enumerate(prompts):
-        print(f"  Gemini sorgu {i+1}/{len(prompts)}...")
+        print(f"  Sorgu {i+1}/{len(prompts)}...")
         response = ask_gemini(prompt)
         if not response:
             time.sleep(3)
@@ -473,7 +558,7 @@ LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [
                     "type":      classify_type(full_text, loc),
                     "time":      "Az önce",
                     "timestamp": ts,
-                    "source":    "Gemini AI",
+                    "source":    SOURCE_NAME,
                     "url":       "",
                     "hot":       len(fish) >= 2,
                 })
@@ -485,19 +570,21 @@ LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [
 
         time.sleep(4)
 
-    print(f"  ✓ Gemini: {len(all_reports)} rapor")
+    print(f"  ✓ Toplam: {len(all_reports)} rapor")
     return all_reports
 
 def scrape_google_news():
-    print("📰 Google News taranıyor...")
+    print("📰 Haberler taranıyor...")
     queries = [
         "galata köprüsü balık", "eminönü karaköy balık",
         "boğaz lüfer palamut", "sarıyer beykoz balık",
         "bostancı kadıköy balık", "büyükçekmece şile balık",
         "istanbul balıkçılık", "kocaeli izmit körfezi balık",
-        "yalova gemlik mudanya balık", "tekirdağ şarköy balık",
-        "edirne meriç balık", "balıkesir erdek bandırma balık",
-        "sapanca gölü balık", "marmara denizi lüfer çipura",
+        "yalova gemlik mudanya balık", "tekirdağ şarköy saros balık",
+        "edirne meriç enez balık", "balıkesir erdek ayvalık balık",
+        "çanakkale bozcaada gökçeada balık", "çanakkale boğazı balık",
+        "sapanca gölü balık", "marmara ege denizi lüfer çipura",
+        "edremit körfezi balık", "küçükkuyu assos balık",
     ]
     results = []
     seen = set()
@@ -528,23 +615,23 @@ def scrape_google_news():
                 continue
             desc = d.get_text(strip=True) if d else ""
             link = l.get_text(strip=True) if l else ""
-            rep = build_report(title, desc, "Google Haberler", link, q, pub_date)
+            rep = build_report(title, desc, SOURCE_NAME, link, q, pub_date)
             if rep:
                 results.append(rep)
                 fresh += 1
         if fresh > 0:
-            print(f"  ✓ '{q[:35]}' → {fresh} rapor")
+            print(f"  ✓ '{q[:40]}' → {fresh} rapor")
         time.sleep(1.2)
-    print(f"  ✓ Google News toplam: {len(results)} rapor")
+    print(f"  ✓ Haberler toplam: {len(results)} rapor")
     return results
 
 def scrape_rss():
-    print("📡 RSS feedler taranıyor...")
+    print("📡 Kaynaklar taranıyor...")
     feeds = [
-        ("https://www.hurriyet.com.tr/rss/gundem",               "Hürriyet"),
-        ("https://www.sabah.com.tr/rss/yasam.xml",               "Sabah"),
-        ("https://www.milliyet.com.tr/rss/rssNew/gundemRss.xml", "Milliyet"),
-        ("https://www.aa.com.tr/tr/rss/default?cat=yasam",       "AA"),
+        ("https://www.hurriyet.com.tr/rss/gundem",               SOURCE_NAME),
+        ("https://www.sabah.com.tr/rss/yasam.xml",               SOURCE_NAME),
+        ("https://www.milliyet.com.tr/rss/rssNew/gundemRss.xml", SOURCE_NAME),
+        ("https://www.aa.com.tr/tr/rss/default?cat=yasam",       SOURCE_NAME),
     ]
     results = []
     for url, src in feeds:
@@ -568,19 +655,19 @@ def scrape_rss():
             if rep:
                 results.append(rep)
         time.sleep(0.8)
-    print(f"  ✓ RSS: {len(results)} rapor")
+    print(f"  ✓ Kaynaklar toplam: {len(results)} rapor")
     return results
 
 def scrape_telegram():
-    print("📲 Telegram kanalları taranıyor...")
+    print("📲 Sosyal medya taranıyor...")
     channels = [
-        ("balikcilar_istanbul",  "Telegram: Balıkçılar İstanbul"),
-        ("marmara_balik",        "Telegram: Marmara Balık"),
-        ("bogaz_balik",          "Telegram: Boğaz Balık"),
-        ("lufer_palamut",        "Telegram: Lüfer Palamut"),
-        ("galata_koprusu_balik", "Telegram: Galata Köprüsü"),
-        ("spin_lrf_istanbul",    "Telegram: Spin LRF İstanbul"),
-        ("istanbul_fishing",     "Telegram: İstanbul Fishing"),
+        ("balikcilar_istanbul",  SOURCE_NAME),
+        ("marmara_balik",        SOURCE_NAME),
+        ("bogaz_balik",          SOURCE_NAME),
+        ("lufer_palamut",        SOURCE_NAME),
+        ("galata_koprusu_balik", SOURCE_NAME),
+        ("spin_lrf_istanbul",    SOURCE_NAME),
+        ("istanbul_fishing",     SOURCE_NAME),
     ]
     results = []
     for ch, src in channels:
@@ -598,39 +685,42 @@ def scrape_telegram():
             if rep:
                 results.append(rep)
                 found += 1
-        if found > 0:
-            print(f"  ✓ {ch}: {found} rapor")
         time.sleep(1.5)
-    print(f"  ✓ Telegram toplam: {len(results)} rapor")
+    print(f"  ✓ Sosyal medya toplam: {len(results)} rapor")
     return results
 
 FALLBACK = [
-    {"id":"f01","lat":41.01620,"lng":28.97420,"loc":"Galata Köprüsü","fish":["Lüfer","Kolyoz","Kefal"],"rod":"Olta","bait":"Çoklu iğne, hamsi","note":"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.","heat":5,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f02","lat":41.01650,"lng":28.97300,"loc":"Eminönü","fish":["Kefal","İstavrit"],"rod":"Olta","bait":"Ekmek, solucan","note":"Eminönü rıhtımında kefal aktif.","heat":4,"type":"deniz","hot":False,"source":"Demo"},
-    {"id":"f03","lat":41.02250,"lng":28.97400,"loc":"Karaköy","fish":["Lüfer","Levrek"],"rod":"Spin","bait":"Küçük kaşık","note":"Karaköy iskelesi. Sabah lüfer çıktı.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f04","lat":41.01330,"lng":28.98170,"loc":"Sarayburnu","fish":["Kolyoz","Palamut","Lüfer"],"rod":"Trolling","bait":"Çukur kaşık","note":"Sarayburnu açıklarında palamut akını.","heat":5,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f05","lat":41.19870,"lng":29.06220,"loc":"Rumeli Kavağı","fish":["Palamut","Lüfer","Torik"],"rod":"Trolling","bait":"CD-11 Rapala","note":"Rumeli Kavağı. Torik ve palamut aktif.","heat":5,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f06","lat":41.16650,"lng":29.05300,"loc":"Sarıyer","fish":["Lüfer","Palamut"],"rod":"Spin","bait":"Mepps No:3","note":"Sarıyer açıkları. Lüfer girişi başladı.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f07","lat":41.12180,"lng":29.10140,"loc":"Beykoz","fish":["Kalkan","Barbun"],"rod":"Olta","bait":"Deniz kurdu","note":"Beykoz sahili. Dip olta ile barbun bol.","heat":4,"type":"deniz","hot":False,"source":"Demo"},
-    {"id":"f08","lat":40.96070,"lng":29.09000,"loc":"Bostancı","fish":["Lüfer","İstavrit"],"rod":"Spin","bait":"Kaşık","note":"Bostancı sahili akşam lüfer girişi.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f09","lat":41.06000,"lng":28.59000,"loc":"Büyükçekmece Gölü","fish":["Sazan","Turna","Kefal"],"rod":"Feeder","bait":"Mısır, solucan","note":"Büyükçekmece Gölü sazan sezonu açık.","heat":5,"type":"göl","hot":True,"source":"Demo"},
-    {"id":"f10","lat":40.74000,"lng":29.85000,"loc":"İzmit Körfezi","fish":["Çipura","Levrek"],"rod":"LRF","bait":"Gulp, micro jig","note":"İzmit körfezi çipura aktif.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f11","lat":40.65490,"lng":29.27470,"loc":"Yalova","fish":["Kefal","Levrek"],"rod":"Olta","bait":"Solucan","note":"Yalova iskelesi. Kefal bol.","heat":3,"type":"deniz","hot":False,"source":"Demo"},
-    {"id":"f12","lat":40.43150,"lng":29.16250,"loc":"Gemlik","fish":["Çipura","Levrek","Karagöz"],"rod":"LRF","bait":"Silikon, micro jig","note":"Gemlik limanı sabah çipura harika.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f13","lat":40.97810,"lng":27.51170,"loc":"Tekirdağ","fish":["Lüfer","Palamut","Kolyoz"],"rod":"Surf","bait":"Çoklu iğne takımı","note":"Tekirdağ sahili. Palamut geçişi var.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f14","lat":40.61210,"lng":27.11030,"loc":"Şarköy","fish":["Çipura","Levrek","Barbun"],"rod":"LRF","bait":"Berkley Gulp","note":"Şarköy açıkları çok aktif.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f15","lat":41.67710,"lng":26.55570,"loc":"Edirne - Meriç","fish":["Sazan","Yayın","Turna"],"rod":"Feeder","bait":"Boilie, canlı balık","note":"Meriç nehrinde yayın sezonu.","heat":4,"type":"nehir","hot":True,"source":"Demo"},
-    {"id":"f16","lat":40.72000,"lng":30.20000,"loc":"Sapanca Gölü","fish":["Alabalık","Sazan","Yayın"],"rod":"Spin","bait":"Rapala, solucan","note":"Sapanca sabah alabalık harika.","heat":5,"type":"göl","hot":True,"source":"Demo"},
-    {"id":"f17","lat":40.39750,"lng":27.79580,"loc":"Erdek","fish":["Çipura","Karagöz","Sargoz"],"rod":"LRF","bait":"Micro jig","note":"Erdek açıkları mükemmel.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f18","lat":40.43300,"lng":29.55000,"loc":"İznik Gölü","fish":["Sazan","Levrek","Sudak"],"rod":"Feeder","bait":"Pellet, mısır","note":"İznik gölü sazan sezonu açık.","heat":4,"type":"göl","hot":False,"source":"Demo"},
-    {"id":"f19","lat":40.96800,"lng":27.95900,"loc":"Marmara Ereğlisi","fish":["Lüfer","Kolyoz"],"rod":"Surf","bait":"Çoklu iğne","note":"Marmara Ereğlisi sahili lüfer aktif.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
-    {"id":"f20","lat":40.60000,"lng":27.57900,"loc":"Marmara Adası","fish":["Çipura","Levrek","Sargoz"],"rod":"LRF","bait":"Micro jig","note":"Marmara adası çipura bol.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
+    {"id":"f01","lat":41.01620,"lng":28.97420,"loc":"Galata Köprüsü","fish":["Lüfer","Kolyoz","Kefal"],"rod":"Olta","bait":"Çoklu iğne, hamsi","note":"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f02","lat":41.01650,"lng":28.97300,"loc":"Eminönü","fish":["Kefal","İstavrit"],"rod":"Olta","bait":"Ekmek, solucan","note":"Eminönü rıhtımında kefal aktif.","heat":4,"type":"deniz","hot":False,"source":SOURCE_NAME},
+    {"id":"f03","lat":41.02250,"lng":28.97400,"loc":"Karaköy","fish":["Lüfer","Levrek"],"rod":"Spin","bait":"Küçük kaşık","note":"Karaköy iskelesi. Sabah lüfer çıktı.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f04","lat":41.01330,"lng":28.98170,"loc":"Sarayburnu","fish":["Kolyoz","Palamut","Lüfer"],"rod":"Trolling","bait":"Çukur kaşık","note":"Sarayburnu açıklarında palamut akını.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f05","lat":41.19870,"lng":29.06220,"loc":"Rumeli Kavağı","fish":["Palamut","Lüfer","Torik"],"rod":"Trolling","bait":"CD-11 Rapala","note":"Rumeli Kavağı. Torik ve palamut aktif.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f06","lat":41.16650,"lng":29.05300,"loc":"Sarıyer","fish":["Lüfer","Palamut"],"rod":"Spin","bait":"Mepps No:3","note":"Sarıyer açıkları. Lüfer girişi başladı.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f07","lat":41.12180,"lng":29.10140,"loc":"Beykoz","fish":["Kalkan","Barbun"],"rod":"Olta","bait":"Deniz kurdu","note":"Beykoz sahili. Dip olta ile barbun bol.","heat":4,"type":"deniz","hot":False,"source":SOURCE_NAME},
+    {"id":"f08","lat":40.96070,"lng":29.09000,"loc":"Bostancı","fish":["Lüfer","İstavrit"],"rod":"Spin","bait":"Kaşık","note":"Bostancı sahili akşam lüfer girişi.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f09","lat":41.06000,"lng":28.59000,"loc":"Büyükçekmece Gölü","fish":["Sazan","Turna","Kefal"],"rod":"Feeder","bait":"Mısır, solucan","note":"Büyükçekmece Gölü sazan sezonu açık.","heat":5,"type":"göl","hot":True,"source":SOURCE_NAME},
+    {"id":"f10","lat":40.74000,"lng":29.85000,"loc":"İzmit Körfezi","fish":["Çipura","Levrek"],"rod":"LRF","bait":"Gulp, micro jig","note":"İzmit körfezi çipura aktif.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f11","lat":40.43150,"lng":29.16250,"loc":"Gemlik","fish":["Çipura","Levrek","Karagöz"],"rod":"LRF","bait":"Silikon, micro jig","note":"Gemlik limanı sabah çipura harika.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f12","lat":40.97810,"lng":27.51170,"loc":"Tekirdağ","fish":["Lüfer","Palamut","Kolyoz"],"rod":"Surf","bait":"Çoklu iğne takımı","note":"Tekirdağ sahili. Palamut geçişi var.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f13","lat":40.61210,"lng":27.11030,"loc":"Şarköy","fish":["Çipura","Levrek","Barbun"],"rod":"LRF","bait":"Berkley Gulp","note":"Şarköy açıkları çok aktif.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f14","lat":40.55000,"lng":26.60000,"loc":"Saros Körfezi","fish":["Çipura","Levrek","Sargoz"],"rod":"LRF","bait":"Micro jig","note":"Saros körfezi temiz su, çipura bol.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f15","lat":40.72820,"lng":26.08110,"loc":"Enez","fish":["Kefal","Levrek","Çipura"],"rod":"Surf","bait":"Solucan, lure","note":"Enez sahili. Meriç ağzı aktif.","heat":4,"type":"deniz","hot":False,"source":SOURCE_NAME},
+    {"id":"f16","lat":40.15460,"lng":26.40860,"loc":"Çanakkale","fish":["Lüfer","Palamut","Kolyoz"],"rod":"Trolling","bait":"Rapala","note":"Çanakkale Boğazı göç dönemi aktif.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f17","lat":39.83200,"lng":26.06400,"loc":"Bozcaada","fish":["Çipura","Levrek","Sargoz","Lahos"],"rod":"LRF","bait":"Micro jig, gulp","note":"Bozcaada etrafı berrak su, çipura bol.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f18","lat":40.17800,"lng":25.90000,"loc":"Gökçeada","fish":["Çipura","Levrek","Lahos","Grida"],"rod":"Jigging","bait":"Silikon, jig","note":"Gökçeada dipten güzel balıklar tutuluyor.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f19","lat":39.54600,"lng":26.61700,"loc":"Küçükkuyu","fish":["Çipura","Levrek","Barbun"],"rod":"LRF","bait":"Gulp, micro jig","note":"Küçükkuyu kıyıları çok aktif.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f20","lat":39.31760,"lng":26.69630,"loc":"Ayvalık","fish":["Çipura","Levrek","Sargoz","Karagöz"],"rod":"LRF","bait":"Micro jig, silikon","note":"Ayvalık adaları etrafı harika.","heat":5,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f21","lat":39.56000,"lng":26.74000,"loc":"Altınoluk","fish":["Çipura","Barbun","Levrek"],"rod":"Surf","bait":"Solucan, deniz kurdu","note":"Altınoluk sahili temiz su.","heat":3,"type":"deniz","hot":False,"source":SOURCE_NAME},
+    {"id":"f22","lat":40.41660,"lng":26.67580,"loc":"Gelibolu","fish":["Lüfer","Kolyoz","Palamut"],"rod":"Surf","bait":"Çoklu iğne","note":"Gelibolu boğaz girişi aktif.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
+    {"id":"f23","lat":41.67710,"lng":26.55570,"loc":"Edirne - Meriç","fish":["Sazan","Yayın","Turna"],"rod":"Feeder","bait":"Boilie, canlı balık","note":"Meriç nehrinde yayın sezonu.","heat":4,"type":"nehir","hot":True,"source":SOURCE_NAME},
+    {"id":"f24","lat":40.72000,"lng":30.20000,"loc":"Sapanca Gölü","fish":["Alabalık","Sazan","Yayın"],"rod":"Spin","bait":"Rapala, solucan","note":"Sapanca sabah alabalık harika.","heat":5,"type":"göl","hot":True,"source":SOURCE_NAME},
+    {"id":"f25","lat":40.60000,"lng":27.57900,"loc":"Marmara Adası","fish":["Çipura","Levrek","Sargoz"],"rod":"LRF","bait":"Micro jig","note":"Marmara adası çipura bol.","heat":4,"type":"deniz","hot":True,"source":SOURCE_NAME},
 ]
 
 def main():
     print("=" * 65)
-    print(f"🎣 Balık Radarı v10 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"   Gemini: {'✓' if GEMINI_KEY else '✗'} | Max yaş: {MAX_AGE_HOURS} saat")
+    print(f"🎣 Sihirli Zoka Radar v11 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"   Akıllı Tarama: {'✓' if GEMINI_KEY else '✗'} | Max yaş: {MAX_AGE_HOURS} saat")
     print("=" * 65)
 
     existing = []
@@ -677,7 +767,7 @@ def main():
         r["time"] = time_ago(r["timestamp"])
 
     if len(new_reports) < 5:
-        print("⚠ Yeterli veri yok — demo veri ekleniyor...")
+        print("⚠ Yeterli veri yok — standart raporlar yükleniyor...")
         for r in FALLBACK:
             r["timestamp"] = ts
             r["time"] = "Az önce"
