@@ -146,6 +146,14 @@ VALID_REGIONS = [
     "karamürsel","gölcük","hereke","darıca",
     "mürefte","hoşköy","marmara ereğlisi",
     "manyas","marmara adası","avşa",
+    # Eksik olanlar eklendi
+    "sarayburnu","rumeli","bebek","tarabya","büyükdere","paşabahçe",
+    "anadolu","hisarı","kavağı","feneri","beşiktaş","ortaköy",
+    "arnavutköy","kabataş","üsküdar","çengelköy","kanlıca",
+    "pendik","kartal","maltepe","tuzla","heybeliada","burgazada",
+    "kınalıada","florya","yeşilköy","bakırköy","avcılar","tekirdağ",
+    "sirkeci","fener","ayvansaray","eyüp","yenikapı","kumkapı",
+    "yedikule","gebze","darıca","diliskelesi","hereke",
 ]
 
 FISHING_WORDS = [
@@ -251,6 +259,11 @@ def extract_bait(text):
     return ", ".join([b.title() for b in BAIT_KW if normalize(b) in tn][:2])
 
 def find_location(text):
+    # Markdown yıldızları ve parantez içindeki açıklamaları temizle
+    import re
+    text = re.sub(r'\*+', '', text)
+    text = re.sub(r'\([^)]*\)', '', text)
+    text = text.strip()
     tn = normalize(text)
     best, best_coords, best_len = None, None, 0
     for name, coords in LOCATIONS.items():
