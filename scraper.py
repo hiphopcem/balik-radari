@@ -16,7 +16,7 @@ OUTPUT_FILE = "data/reports.json"
 MAX_REPORTS = 200
 MAX_AGE_HOURS = 48  # 48 saatten eski raporlar silinir
 GEMINI_KEY  = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_URL  = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent"
+GEMINI_URL  = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
