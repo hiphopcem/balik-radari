@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Türkiye Balık Radarı - Scraper v7
-- Sadece son 48 saatin haberleri tutulur, eskiler silinir
-- Gemini ile lokasyon doğrulaması yapılır
+Türkiye Balık Radarı - Scraper v8
+- Türkçe karakter toleranslı lokasyon eşleştirme
+- Gemini 2.0 Flash ile akıllı tarama
+- Sadece son 48 saat, bölge dışı haberler yok
 - 7 il: İstanbul, Tekirdağ, Edirne, Kocaeli, Yalova, Bursa, Balıkesir
 """
 
@@ -10,13 +11,12 @@ import os, json, time, hashlib, random, requests
 from datetime import datetime, timezone, timedelta
 from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
-import xml.etree.ElementTree as ET
 
-OUTPUT_FILE = "data/reports.json"
-MAX_REPORTS = 200
-MAX_AGE_HOURS = 48  # 48 saatten eski raporlar silinir
-GEMINI_KEY  = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_URL  = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+OUTPUT_FILE  = "data/reports.json"
+MAX_REPORTS  = 200
+MAX_AGE_HOURS = 48
+GEMINI_KEY   = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_URL   = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -24,11 +24,14 @@ HEADERS = {
     "Accept-Language": "tr-TR,tr;q=0.9",
 }
 
-# ════════════════════════════════════════════════════════════════════
-# LOKASYONLAR — Uzun isim öncelikli sıralama
-# ════════════════════════════════════════════════════════════════════
+def normalize(s):
+    s = str(s).lower()
+    for k, v in {"ı":"i","ğ":"g","ü":"u","ş":"s","ö":"o","ç":"c",
+                 "İ":"i","Ğ":"g","Ü":"u","Ş":"s","Ö":"o","Ç":"c"}.items():
+        s = s.replace(k, v)
+    return s
+
 LOCATIONS = {
-    # İSTANBUL — Tarihi & meşhur noktalar
     "galata köprüsü avrupa": (41.01600, 28.97150),
     "galata köprüsü asya":   (41.01640, 28.97700),
     "galata köprüsü":        (41.01620, 28.97420),
@@ -55,7 +58,6 @@ LOCATIONS = {
     "kilyos":                (41.24970, 29.01570),
     "şile":                  (41.17780, 29.61030),
     "ağva":                  (41.09800, 29.99940),
-    # Boğaz Avrupa
     "rumeli feneri":         (41.22500, 29.10750),
     "rumeli kavağı":         (41.19870, 29.06220),
     "büyükdere":             (41.14800, 29.05670),
@@ -65,7 +67,6 @@ LOCATIONS = {
     "arnavutköy":            (41.06720, 29.03680),
     "ortaköy":               (41.05330, 29.02690),
     "beşiktaş":              (41.04300, 29.00600),
-    # Boğaz Anadolu
     "anadolu feneri":        (41.21940, 29.15900),
     "anadolu kavağı":        (41.19300, 29.08200),
     "poyrazköy":             (41.20800, 29.13300),
@@ -75,8 +76,8 @@ LOCATIONS = {
     "anadolu hisarı":        (41.08330, 29.07360),
     "çengelköy":             (41.06200, 29.05900),
     "üsküdar":               (41.02270, 29.01510),
-    # Anadolu sahil
     "kadıköy":               (40.99020, 29.02320),
+    "moda":                  (40.98400, 29.02800),
     "fenerbahçe":            (40.96800, 29.05400),
     "bostancı":              (40.96070, 29.09000),
     "maltepe":               (40.93410, 29.13500),
@@ -84,17 +85,14 @@ LOCATIONS = {
     "pendik":                (40.87620, 29.23300),
     "tuzla":                 (40.81480, 29.29600),
     "gebze":                 (40.80240, 29.43000),
-    # Adalar
     "büyükada":              (40.87170, 29.12400),
     "heybeliada":            (40.88300, 29.09400),
     "burgazada":             (40.87700, 29.06400),
     "kınalıada":             (40.90000, 29.03100),
     "adalar":                (40.87170, 29.10920),
-    # İstanbul genel (en düşük öncelik)
     "istanbul boğazı":       (41.08000, 29.05000),
     "boğaziçi":              (41.08000, 29.05000),
     "istanbul":              (41.00820, 28.97840),
-    # KOCAELİ
     "izmit körfezi":         (40.74000, 29.85000),
     "karamürsel":            (40.69440, 29.60750),
     "gölcük":                (40.65220, 29.83040),
@@ -103,11 +101,9 @@ LOCATIONS = {
     "darıca":                (40.76600, 29.37400),
     "izmit":                 (40.76540, 29.94080),
     "kocaeli":               (40.76540, 29.94080),
-    # YALOVA
     "çınarcık":              (40.64150, 29.12250),
     "armutlu":               (40.52780, 28.83200),
     "yalova":                (40.65490, 29.27470),
-    # BURSA
     "uluabat gölü":          (40.16680, 28.62000),
     "iznik gölü":            (40.43300, 29.55000),
     "iznik":                 (40.42700, 29.72000),
@@ -115,13 +111,11 @@ LOCATIONS = {
     "mudanya":               (40.37660, 28.88240),
     "orhangazi":             (40.49200, 29.31100),
     "bursa":                 (40.18260, 29.06650),
-    # TEKİRDAĞ
     "marmara ereğlisi":      (40.96800, 27.95900),
     "şarköy":                (40.61210, 27.11030),
     "mürefte":               (40.67400, 27.25600),
     "hoşköy":                (40.74400, 27.17300),
     "tekirdağ":              (40.97810, 27.51170),
-    # EDİRNE
     "meriç nehri":           (41.18000, 26.40000),
     "tunca nehri":           (41.70000, 26.55000),
     "ergene nehri":          (41.62000, 26.72000),
@@ -129,18 +123,16 @@ LOCATIONS = {
     "enez":                  (40.72820, 26.08110),
     "keşan":                 (40.85600, 26.63950),
     "edirne":                (41.67710, 26.55570),
-    # BALIKESİR
     "manyas gölü":           (40.20000, 27.97000),
     "marmara adası":         (40.60000, 27.57900),
     "avşa adası":            (40.51940, 27.59170),
     "erdek":                 (40.39750, 27.79580),
     "bandırma":              (40.35000, 27.97700),
     "balıkesir":             (39.64840, 27.88260),
-    # SAPANCA
     "sapanca gölü":          (40.72000, 30.20000),
     "sapanca":               (40.69320, 30.27050),
-    # MARMARA
     "marmara denizi":        (40.65000, 27.90000),
+    "marmara":               (40.65000, 27.90000),
 }
 
 VALID_REGIONS = [
@@ -148,7 +140,7 @@ VALID_REGIONS = [
     "sapanca","izmit","gebze","gemlik","mudanya","erdek","bandırma",
     "şarköy","marmara","boğaz","boğaziçi","haliç","galata","eminönü",
     "karaköy","sarıyer","beykoz","bostancı","kadıköy","büyükçekmece",
-    "küçükçekmece","silivri","şile","kilyos","ağva","adalar",
+    "küçükçekmece","silivri","şile","kilyos","ağva","adalar","büyükada",
     "çınarcık","armutlu","iznik","uluabat","orhangazi",
     "meriç","ergene","tunca","uzunköprü","enez","keşan",
     "karamürsel","gölcük","hereke","darıca",
@@ -161,7 +153,7 @@ FISHING_WORDS = [
     "kefal","istavrit","kolyoz","barbun","kalkan","alabalık","yayın",
     "sudak","turna","karagöz","spin","lrf","surf","feeder","jigging",
     "balıkçı","avlandı","tutuldu","tuttu","oltaya","mepps","rapala",
-    "kaşık","silikon","jig","wobbler","popper","fishing","av raporu",
+    "kaşık","silikon","jig","wobbler","popper","fishing","av raporu","balık avı",
 ]
 
 NOISE_WORDS = [
@@ -214,29 +206,17 @@ def now_iso():
     return datetime.now(timezone.utc).isoformat()
 
 def parse_rss_date(date_str):
-    """RSS tarihini parse et."""
-    if not date_str:
-        return None
-    formats = [
-        "%a, %d %b %Y %H:%M:%S %z",
-        "%a, %d %b %Y %H:%M:%S %Z",
-        "%Y-%m-%dT%H:%M:%S%z",
-    ]
-    for fmt in formats:
-        try:
-            return datetime.strptime(date_str.strip(), fmt)
-        except:
-            continue
+    if not date_str: return None
+    for fmt in ["%a, %d %b %Y %H:%M:%S %z","%a, %d %b %Y %H:%M:%S %Z","%Y-%m-%dT%H:%M:%S%z"]:
+        try: return datetime.strptime(date_str.strip(), fmt)
+        except: continue
     return None
 
 def is_recent(date_str, max_hours=MAX_AGE_HOURS):
-    """Haber son MAX_AGE_HOURS saat içinde mi?"""
     dt = parse_rss_date(date_str)
-    if not dt:
-        return True  # Tarih yoksa dahil et
+    if not dt: return True
     now = datetime.now(timezone.utc)
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+    if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
     return (now - dt).total_seconds() < max_hours * 3600
 
 def time_ago(dt_str):
@@ -250,46 +230,43 @@ def time_ago(dt_str):
     except: return "Bilinmiyor"
 
 def is_valid(text):
-    tl = text.lower()
-    if any(n in tl for n in NOISE_WORDS): return False
-    if not any(f in tl for f in FISHING_WORDS): return False
-    if not any(r in tl for r in VALID_REGIONS): return False
+    tn = normalize(text)
+    if any(normalize(n) in tn for n in NOISE_WORDS): return False
+    if not any(normalize(f) in tn for f in FISHING_WORDS): return False
+    if not any(normalize(r) in tn for r in VALID_REGIONS): return False
     return True
 
 def extract_fish(text):
-    tl = text.lower()
-    return list(dict.fromkeys([f.title() for f in FISH_KW if f in tl]))[:4] or ["Belirtilmemiş"]
+    tn = normalize(text)
+    return list(dict.fromkeys([f.title() for f in FISH_KW if normalize(f) in tn]))[:4] or ["Belirtilmemiş"]
 
 def extract_rod(text):
-    tl = text.lower()
+    tn = normalize(text)
     for rod, kws in ROD_MAP.items():
-        if any(kw in tl for kw in kws): return rod
+        if any(normalize(kw) in tn for kw in kws): return rod
     return ""
 
 def extract_bait(text):
-    tl = text.lower()
-    return ", ".join([b.title() for b in BAIT_KW if b in tl][:2])
+    tn = normalize(text)
+    return ", ".join([b.title() for b in BAIT_KW if normalize(b) in tn][:2])
 
 def find_location(text):
-    """En uzun eşleşen lokasyonu döndür — yanlış koordinat atamasını önler."""
-    tl = text.lower()
+    tn = normalize(text)
     best, best_coords, best_len = None, None, 0
     for name, coords in LOCATIONS.items():
-        if name in tl and len(name) > best_len:
+        nn = normalize(name)
+        if nn in tn and len(name) > best_len:
             best, best_coords, best_len = name, coords, len(name)
     return best, best_coords
 
 def classify_type(text, loc):
-    tl = (text+" "+(loc or "")).lower()
-    if any(w in tl for w in ["nehir","irmak","dere","meriç","ergene","tunca"]): return "nehir"
-    if any(w in tl for w in ["göl","gölü"]): return "göl"
+    tn = normalize(text + " " + (loc or ""))
+    if any(w in tn for w in ["nehir","irmak","dere","meric","ergene","tunca"]): return "nehir"
+    if any(w in tn for w in ["gol","golu"]): return "göl"
     return "deniz"
 
 def build_report(title, body, source, url="", hint="", pub_date=None):
-    # Tarih kontrolü — eski haberleri atla
-    if pub_date and not is_recent(pub_date):
-        return None
-
+    if pub_date and not is_recent(pub_date): return None
     text = " ".join([title, body, hint])
     if not is_valid(text): return None
     fish = extract_fish(text)
@@ -297,17 +274,13 @@ def build_report(title, body, source, url="", hint="", pub_date=None):
     loc, coords = find_location(text)
     if not coords and hint: loc, coords = find_location(hint)
     if not coords: return None
-
-    # RSS yayın tarihi varsa onu kullan, yoksa şimdiki zamanı
     if pub_date:
         dt = parse_rss_date(pub_date)
         ts = dt.astimezone(timezone.utc).isoformat() if dt else now_iso()
     else:
         ts = now_iso()
-
     lat = round(coords[0] + random.uniform(-0.002, 0.002), 6)
     lng = round(coords[1] + random.uniform(-0.002, 0.002), 6)
-
     return {
         "id":        make_id(title+(loc or "")),
         "lat":       lat, "lng": lng,
@@ -325,17 +298,13 @@ def build_report(title, body, source, url="", hint="", pub_date=None):
         "hot":       len(fish) >= 2,
     }
 
-# ════════════════════════════════════════════════════════════════════
-# GEMİNİ API
-# ════════════════════════════════════════════════════════════════════
 def ask_gemini(prompt):
-    if not GEMINI_KEY:
-        return ""
+    if not GEMINI_KEY: return ""
     try:
         url = f"{GEMINI_URL}?key={GEMINI_KEY}"
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.2, "maxOutputTokens": 3000},
+            "generationConfig": {"temperature": 0.1, "maxOutputTokens": 4000},
         }
         r = requests.post(url, json=payload, timeout=60)
         r.raise_for_status()
@@ -349,36 +318,41 @@ def scrape_with_gemini():
     today = datetime.now().strftime("%d %B %Y")
 
     prompts = [
-        f"""Bugün {today} tarihinde İstanbul'da şu noktalarda balık tutuldu mu?
-Galata Köprüsü, Eminönü, Karaköy, Sarayburnu, Haliç, Boğaziçi, Sarıyer, Rumeli Kavağı, Bebek, Beykoz, Bostancı, Kadıköy, Büyükçekmece, Şile, Kilyos.
-İnternette Türkçe forumlarda, sosyal medyada, haberlerde BU GÜNKÜ bilgileri ara.
+        f"""Sen bir balıkçılık asistanısın. Bugün {today} tarihinde İstanbul'da şu noktalarda balık tutuldu mu?
+Galata Köprüsü, Eminönü, Karaköy, Sarayburnu, Haliç, İstanbul Boğazı, Sarıyer, Rumeli Kavağı, Rumeli Feneri, Büyükdere, Tarabya, Bebek, Beykoz, Anadolu Kavağı, Paşabahçe, Bostancı, Kadıköy, Büyükçekmece, Şile, Kilyos, Adalar.
 
-Her bulgu için TAM OLARAK şu formatı kullan:
+İnternette Türkçe forumlarda, sosyal medyada, haberlerde bugünkü veya dünkü bilgileri bul.
+
+Her bulgu için SADECE şu formatı kullan, başka hiçbir şey yazma:
 LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem adı] | NOT: [kısa bilgi]
 
-Eğer bugün bilgi bulamazsan dünkü bilgileri yaz. Uydurma yapma.""",
+Örnek:
+LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma
 
-        f"""Bugün {today} tarihinde şu bölgelerde balık tutuldu mu?
-Kocaeli (İzmit Körfezi, Karamürsel, Gölcük), Yalova (Çınarcık, Armutlu), 
-Bursa (Gemlik, Mudanya, İznik Gölü, Uluabat Gölü),
-Tekirdağ (Şarköy, Mürefte, Marmara Ereğlisi),
-Balıkesir (Erdek, Bandırma, Marmara Adası),
-Edirne (Meriç, Ergene, Tunca nehirleri),
+Her satır bir lokasyon olsun. Uydurma yapma, sadece gerçek bilgi yaz.""",
+
+        f"""Sen bir balıkçılık asistanısın. Bugün {today} tarihinde şu bölgelerde balık durumu nedir?
+Kocaeli (İzmit Körfezi, Karamürsel, Gölcük, Gebze, Darıca),
+Yalova (Çınarcık, Armutlu),
+Bursa (Gemlik, Mudanya, Orhangazi, İznik Gölü, Uluabat Gölü),
+Tekirdağ (Şarköy, Mürefte, Marmara Ereğlisi, Hoşköy),
+Balıkesir (Erdek, Bandırma, Marmara Adası, Avşa Adası, Manyas Gölü),
+Edirne (Meriç Nehri, Ergene Nehri, Tunca Nehri),
 Sapanca Gölü.
-İnternette Türkçe kaynaklarda BU GÜNKÜ bilgileri ara.
 
-Her bulgu için:
-LOKASYON: [tam yer adı] | BALIK: [balık türleri] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]
+Her bulgu için SADECE şu formatı kullan:
+LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]
 
-Uydurma yapma, sadece gerçek bulduklarını yaz.""",
+Her lokasyon için ayrı satır. Uydurma yapma.""",
 
-        f"""Bugün {today} Marmara Denizi ve İstanbul çevresinde hangi balıklar aktif?
-Lüfer, palamut, kolyoz, çipura, levrek, hamsi sezonu hakkında 
-Türkçe forumlarda, balıkçılık sitelerinde, sosyal medyada ne yazıyor?
-Hangi noktalarda aktif olduğunu da belirt.
+        f"""Sen bir balıkçılık asistanısın. Marmara Denizi ve İstanbul çevresinde şu an hangi balıklar aktif?
+Lüfer, palamut, kolyoz, çipura, levrek, kefal, hamsi, istavrit, kalkan, barbun hangi noktalarda tutuluyor?
+Spin, LRF, Surf, Feeder, Jigging teknikleri için güncel bilgi ver.
 
-Her bulgu için:
-LOKASYON: [yer] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]""",
+Her bulgu için SADECE şu formatı kullan:
+LOKASYON: [tam yer adı] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]
+
+Her satır ayrı lokasyon. Uydurma yapma.""",
     ]
 
     all_reports = []
@@ -389,7 +363,7 @@ LOKASYON: [yer] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]"""
             time.sleep(3); continue
 
         lines = [l.strip() for l in response.split("\n") if "LOKASYON:" in l and "BALIK:" in l]
-        print(f"    → {len(lines)} rapor satırı")
+        print(f"    → {len(lines)} rapor satırı bulundu")
 
         for line in lines:
             try:
@@ -399,27 +373,30 @@ LOKASYON: [yer] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]"""
                         k, v = p.split(":", 1)
                         parts[k.strip()] = v.strip()
 
-                loc_hint = parts.get("LOKASYON","")
-                fish_str = parts.get("BALIK","")
-                rod_str  = parts.get("OLTA","")
-                bait_str = parts.get("YEM","")
-                note_str = parts.get("NOT","")
+                loc_hint = parts.get("LOKASYON","").strip()
+                fish_str = parts.get("BALIK","").strip()
+                rod_str  = parts.get("OLTA","").strip()
+                bait_str = parts.get("YEM","").strip()
+                note_str = parts.get("NOT","").strip()
 
                 if not loc_hint or not fish_str: continue
 
                 full_text = f"{loc_hint} {fish_str} {rod_str} {bait_str} {note_str}"
-                loc, coords = find_location(full_text.lower())
+                loc, coords = find_location(full_text)
                 if not coords:
-                    loc, coords = find_location(loc_hint.lower())
-                if not coords: continue
+                    loc, coords = find_location(loc_hint)
+                if not coords:
+                    print(f"    ⚠ Lokasyon bulunamadı: {loc_hint}")
+                    continue
 
-                # Bölge kontrolü
-                if not any(r in loc_hint.lower() for r in VALID_REGIONS): continue
+                if not any(normalize(r) in normalize(loc_hint) for r in VALID_REGIONS):
+                    print(f"    ⚠ Bölge dışı: {loc_hint}")
+                    continue
 
                 fish = [f.strip().title() for f in fish_str.split(",") if f.strip()]
                 if not fish: continue
 
-                ts = now_iso()
+                ts  = now_iso()
                 lat = round(coords[0] + random.uniform(-0.002, 0.002), 6)
                 lng = round(coords[1] + random.uniform(-0.002, 0.002), 6)
 
@@ -439,8 +416,9 @@ LOKASYON: [yer] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]"""
                     "url":       "",
                     "hot":       len(fish) >= 2,
                 })
+                print(f"    ✓ {loc_hint} → {fish_str}")
             except Exception as e:
-                print(f"    ⚠ {e}")
+                print(f"    ⚠ Satır hatası: {e}")
                 continue
 
         time.sleep(4)
@@ -448,74 +426,51 @@ LOKASYON: [yer] | BALIK: [türler] | OLTA: [olta] | YEM: [yem] | NOT: [bilgi]"""
     print(f"  ✓ Gemini: {len(all_reports)} rapor")
     return all_reports
 
-# ════════════════════════════════════════════════════════════════════
-# GOOGLE NEWS RSS — Sadece güncel haberler
-# ════════════════════════════════════════════════════════════════════
 def scrape_google_news():
-    print("📰 Google News taranıyor (son 48 saat)...")
+    print("📰 Google News taranıyor...")
     queries = [
-        "galata köprüsü balık tutma",
-        "eminönü karaköy balık",
-        "boğaz lüfer palamut kolyoz",
-        "sarıyer rumeli kavağı balık",
-        "beykoz anadolu kavağı balık",
-        "bostancı kadıköy balık",
-        "büyükçekmece şile kilyos balık",
-        "istanbul lüfer sezonu",
-        "istanbul balıkçılık raporu",
-        "kocaeli izmit körfezi balık",
-        "yalova gemlik mudanya balık",
-        "tekirdağ şarköy marmara balık",
-        "edirne meriç ergene balık",
-        "balıkesir erdek bandırma balık",
-        "sapanca gölü iznik gölü balık",
-        "marmara denizi çipura levrek lüfer",
-        "spin lrf surf istanbul boğaz",
+        "galata köprüsü balık","eminönü karaköy balık",
+        "boğaz lüfer palamut","sarıyer beykoz balık",
+        "bostancı kadıköy balık","büyükçekmece şile balık",
+        "istanbul balıkçılık","kocaeli izmit körfezi balık",
+        "yalova gemlik mudanya balık","tekirdağ şarköy balık",
+        "edirne meriç balık","balıkesir erdek bandırma balık",
+        "sapanca gölü balık","marmara denizi lüfer çipura",
     ]
     results, seen = [], set()
     for q in queries:
-        # Google News'e "son 1 gün" parametresi ekle
         url = f"https://news.google.com/rss/search?q={quote_plus(q)}+when:2d&hl=tr&gl=TR&ceid=TR:tr"
         r = safe_get(url)
         if not r: time.sleep(1); continue
         try:    soup = BeautifulSoup(r.content, "xml")
         except: soup = BeautifulSoup(r.content, "lxml-xml")
-        items = soup.find_all("item")
         fresh = 0
-        for item in items[:10]:
-            t = item.find("title")
-            d = item.find("description")
-            l = item.find("link")
+        for item in soup.find_all("item")[:10]:
+            t   = item.find("title")
+            d   = item.find("description")
+            l   = item.find("link")
             pub = item.find("pubDate")
             if not t: continue
             title = t.get_text(strip=True)
             if title in seen: continue
             seen.add(title)
             pub_date = pub.get_text(strip=True) if pub else None
-            # Tarih kontrolü
-            if pub_date and not is_recent(pub_date, 48):
-                continue
+            if pub_date and not is_recent(pub_date, 48): continue
             desc = d.get_text(strip=True) if d else ""
             link = l.get_text(strip=True) if l else ""
             rep = build_report(title, desc, "Google Haberler", link, q, pub_date)
-            if rep:
-                results.append(rep)
-                fresh += 1
-        print(f"  '{q[:40]}' → {fresh} güncel")
+            if rep: results.append(rep); fresh += 1
+        if fresh > 0: print(f"  ✓ '{q[:35]}' → {fresh} rapor")
         time.sleep(1.2)
-    print(f"  ✓ Google News: {len(results)} rapor")
+    print(f"  ✓ Google News toplam: {len(results)} rapor")
     return results
 
-# ════════════════════════════════════════════════════════════════════
-# RSS FEEDLER
-# ════════════════════════════════════════════════════════════════════
 def scrape_rss():
     print("📡 RSS feedler taranıyor...")
     feeds = [
         ("https://www.hurriyet.com.tr/rss/gundem",               "Hürriyet"),
         ("https://www.sabah.com.tr/rss/yasam.xml",               "Sabah"),
         ("https://www.milliyet.com.tr/rss/rssNew/gundemRss.xml", "Milliyet"),
-        ("https://www.trthaber.com/trthaber.rss",                "TRT Haber"),
         ("https://www.aa.com.tr/tr/rss/default?cat=yasam",       "AA"),
     ]
     results = []
@@ -525,8 +480,8 @@ def scrape_rss():
         try:    soup = BeautifulSoup(r.content, "xml")
         except: soup = BeautifulSoup(r.content, "lxml-xml")
         for item in soup.find_all("item")[:30]:
-            t = item.find("title")
-            d = item.find("description")
+            t   = item.find("title")
+            d   = item.find("description")
             pub = item.find("pubDate")
             if not t: continue
             title    = t.get_text(strip=True)
@@ -538,9 +493,6 @@ def scrape_rss():
     print(f"  ✓ RSS: {len(results)} rapor")
     return results
 
-# ════════════════════════════════════════════════════════════════════
-# TELEGRAM PUBLIC
-# ════════════════════════════════════════════════════════════════════
 def scrape_telegram():
     print("📲 Telegram kanalları taranıyor...")
     channels = [
@@ -558,18 +510,17 @@ def scrape_telegram():
         if not r: continue
         soup = BeautifulSoup(r.text, "html.parser")
         msgs = soup.select(".tgme_widget_message_text")
+        found = 0
         for msg in msgs[:20]:
             text = msg.get_text(strip=True)
             if len(text) < 20: continue
             rep = build_report(text[:200], "", src)
-            if rep: results.append(rep)
+            if rep: results.append(rep); found += 1
+        if found > 0: print(f"  ✓ {ch}: {found} rapor")
         time.sleep(1.5)
-    print(f"  ✓ Telegram: {len(results)} rapor")
+    print(f"  ✓ Telegram toplam: {len(results)} rapor")
     return results
 
-# ════════════════════════════════════════════════════════════════════
-# FALLBACK — her zaman güncel
-# ════════════════════════════════════════════════════════════════════
 FALLBACK = [
     {"id":"f01","lat":41.01620,"lng":28.97420,"loc":"Galata Köprüsü","fish":["Lüfer","Kolyoz","Kefal"],"rod":"Olta","bait":"Çoklu iğne, hamsi","note":"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.","heat":5,"type":"deniz","hot":True,"source":"Demo"},
     {"id":"f02","lat":41.01650,"lng":28.97300,"loc":"Eminönü","fish":["Kefal","İstavrit"],"rod":"Olta","bait":"Ekmek, solucan","note":"Eminönü rıhtımında kefal aktif.","heat":4,"type":"deniz","hot":False,"source":"Demo"},
@@ -593,16 +544,12 @@ FALLBACK = [
     {"id":"f20","lat":40.60000,"lng":27.57900,"loc":"Marmara Adası","fish":["Çipura","Levrek","Sargoz"],"rod":"LRF","bait":"Micro jig","note":"Marmara adası çipura bol.","heat":4,"type":"deniz","hot":True,"source":"Demo"},
 ]
 
-# ════════════════════════════════════════════════════════════════════
-# ANA FONKSİYON
-# ════════════════════════════════════════════════════════════════════
 def main():
     print("="*65)
-    print(f"🎣 Balık Radarı v7 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"🎣 Balık Radarı v8 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"   Gemini: {'✓' if GEMINI_KEY else '✗'} | Max yaş: {MAX_AGE_HOURS} saat")
     print("="*65)
 
-    # Mevcut veriyi yükle
     existing = []
     if os.path.exists(OUTPUT_FILE):
         try:
@@ -612,23 +559,21 @@ def main():
         except Exception as e:
             print(f"⚠ {e}")
 
-    # ÖNEMLİ: Eski raporları temizle
+    # Demo verileri ve eski raporları temizle
     cutoff = datetime.now(timezone.utc) - timedelta(hours=MAX_AGE_HOURS)
     existing_fresh = []
     for r in existing:
         try:
+            if r.get("source","") == "Demo": continue
             ts = r.get("timestamp","")
-            if ts:
-                dt = datetime.fromisoformat(ts.replace("Z","+00:00"))
-                if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
-                if dt > cutoff:
-                    existing_fresh.append(r)
-        except:
-            existing_fresh.append(r)  # Tarih yoksa tut
+            if not ts: continue
+            dt = datetime.fromisoformat(ts.replace("Z","+00:00"))
+            if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
+            if dt > cutoff: existing_fresh.append(r)
+        except: pass
 
-    print(f"🧹 Temizlik sonrası: {len(existing_fresh)} rapor kaldı ({len(existing)-len(existing_fresh)} silindi)")
+    print(f"🧹 Temizlik: {len(existing_fresh)} rapor kaldı ({len(existing)-len(existing_fresh)} silindi)")
 
-    # Yeni veri topla
     new_reports = []
     if GEMINI_KEY:
         new_reports += scrape_with_gemini()
@@ -636,14 +581,13 @@ def main():
     new_reports += scrape_rss()
     new_reports += scrape_telegram()
 
-    print(f"\n📊 Yeni (filtreden geçen): {len(new_reports)}")
+    print(f"\n📊 Yeni rapor: {len(new_reports)}")
 
     ts = now_iso()
     for r in new_reports:
         if "timestamp" not in r: r["timestamp"] = ts
         r["time"] = time_ago(r["timestamp"])
 
-    # Yeterli veri yoksa fallback ekle
     if len(new_reports) < 5:
         print("⚠ Yeterli veri yok — demo veri ekleniyor...")
         for r in FALLBACK:
@@ -651,7 +595,6 @@ def main():
             r["time"] = "Az önce"
         new_reports = FALLBACK + new_reports
 
-    # Birleştir
     all_map = {r["id"]: r for r in existing_fresh}
     added = 0
     for r in new_reports:
