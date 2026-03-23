@@ -181,13 +181,14 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 .leaflet-popup-content-wrapper{background:rgba(3,14,26,.98)!important;border:1px solid var(--b2)!important;border-radius:10px!important;box-shadow:0 8px 30px rgba(0,0,0,.8)!important;padding:0!important;}
 .leaflet-popup-tip-container{display:none;}
 .leaflet-popup-content{margin:0!important;}
-.pi{padding:13px 15px;min-width:200px;}
+.wxpop .leaflet-popup-content-wrapper{min-width:260px;}
+.pi{padding:13px 15px;min-width:240px;}
 .pl{font-family:'Orbitron',monospace;font-size:12px;color:var(--c1);margin-bottom:7px;letter-spacing:1px;font-weight:700;}
 .pf{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:7px;}
 .pt2{background:rgba(0,200,248,.1);border:1px solid rgba(0,200,248,.2);color:var(--c1);padding:2px 6px;border-radius:3px;font-size:11px;font-weight:700;}
 .ptk{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
-.pn{font-size:12px;color:var(--txt2);line-height:1.5;margin-bottom:7px;}
-.pf2{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);font-weight:600;}
+.pn{font-size:12px;color:var(--txt2);line-height:1.5;margin-bottom:4px;}
+.pf2{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);font-weight:600;margin-top:6px;}
 
 /* Masaüstü: çok hafif ping animasyonu */
 @keyframes softPing{0%{opacity:.4;transform:scale(1);}80%{opacity:0;transform:scale(2.2);}100%{opacity:0;transform:scale(2.2);}}
@@ -409,17 +410,24 @@ function addMarker(r){
   const th = r.rod ? `<span class="tk r">🎣 ${r.rod}</span>` : '';
   const tb = r.bait ? `<span class="tk b">🪱 ${r.bait}</span>` : '';
   const ts = timeAgo(r.timestamp);
-  const popup = `<div class="pi">
+
+  // Popup içeriği — hava verisi için id ile oluştur
+  const pid = 'pop_'+r.id;
+  const popup = `<div class="pi" id="${pid}">
     <div class="pl">📍 ${r.loc}</div>
     <div class="pf">${(r.fish||[]).map(f=>`<span class="pt2">${f}</span>`).join('')}</div>
     ${th||tb?`<div class="ptk">${th}${tb}</div>`:''}
     <div class="pn">${r.note||''}</div>
+    <div class="pw" id="wx_${r.id}">
+      <div style="color:var(--txt3);font-size:10px;text-align:center;padding:6px 0;">
+        ⏳ Hava verisi yükleniyor...
+      </div>
+    </div>
     <div class="pf2"><span>${ts}</span><span>${r.source||''}</span></div>
   </div>`;
 
   let m;
   if(isMob){
-    // Canvas CircleMarker — çok hafif, animasyon yok
     const radius = r.hot ? 9 : 5;
     m = L.circleMarker([r.lat,r.lng],{
       radius,
@@ -432,8 +440,122 @@ function addMarker(r){
     m = L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
   }
 
-  m.bindPopup(popup,{maxWidth:250});
+  const lp = L.popup({maxWidth:280, className:'wxpop'}).setContent(popup);
+  m.bindPopup(lp);
+
+  // Popup açılınca hava verisini çek
+  m.on('popupopen', function(){
+    fetchWeather(r.lat, r.lng, r.id, r.type);
+  });
+
   markers[r.id] = m;
+}
+
+// ── METEOROLOJİ — Open-Meteo API (ücretsiz, kayıtsız) ───────────
+const wxCache = {}; // koordinat bazlı önbellek
+
+async function fetchWeather(lat, lng, rid, type){
+  const key = Math.round(lat*100)/100 + ',' + Math.round(lng*100)/100;
+
+  // Önbellekte varsa direkt göster (10 dakika geçerli)
+  if(wxCache[key] && Date.now() - wxCache[key].ts < 600000){
+    renderWeather(rid, wxCache[key].data, type);
+    return;
+  }
+
+  try{
+    // Hava + deniz verisi aynı anda çek
+    const [wxRes, marRes] = await Promise.all([
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure,weather_code&wind_speed_unit=kmh&timezone=Europe/Istanbul`),
+      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&current=wave_height,sea_surface_temperature&timezone=Europe/Istanbul`)
+    ]);
+
+    const wx  = await wxRes.json();
+    const mar = await marRes.json();
+
+    const data = {
+      temp:      wx.current?.temperature_2m,
+      wind:      wx.current?.wind_speed_10m,
+      windDir:   wx.current?.wind_direction_10m,
+      pressure:  wx.current?.surface_pressure,
+      wcode:     wx.current?.weather_code,
+      seaTemp:   mar.current?.sea_surface_temperature,
+      waveH:     mar.current?.wave_height,
+    };
+
+    wxCache[key] = { data, ts: Date.now() };
+    renderWeather(rid, data, type);
+
+  }catch(e){
+    const el = document.getElementById('wx_'+rid);
+    if(el) el.innerHTML = '<div style="color:var(--txt3);font-size:10px;text-align:center;padding:4px 0;">Hava verisi alınamadı</div>';
+  }
+}
+
+function windDirTR(deg){
+  if(deg===null||deg===undefined) return '—';
+  const dirs = ['K','KD','D','GD','G','GB','B','KB'];
+  return dirs[Math.round(deg/45) % 8];
+}
+
+function windArrow(deg){
+  if(deg===null||deg===undefined) return '';
+  const arrows = ['↑','↗','→','↘','↓','↙','←','↖'];
+  return arrows[Math.round(deg/45) % 8];
+}
+
+function weatherEmoji(code){
+  if(code===null||code===undefined) return '🌤️';
+  if(code===0) return '☀️';
+  if(code<=2)  return '🌤️';
+  if(code<=3)  return '☁️';
+  if(code<=48) return '🌫️';
+  if(code<=57) return '🌧️';
+  if(code<=67) return '🌧️';
+  if(code<=77) return '❄️';
+  if(code<=82) return '🌦️';
+  if(code<=86) return '🌨️';
+  if(code<=99) return '⛈️';
+  return '🌤️';
+}
+
+function renderWeather(rid, d, type){
+  const el = document.getElementById('wx_'+rid);
+  if(!el) return;
+
+  const isSea = type === 'deniz';
+
+  const rows = [
+    { icon:'🌡️', label:'Hava',     val: d.temp!==null&&d.temp!==undefined ? Math.round(d.temp)+'°C' : '—' },
+    { icon:'🌬️', label:'Rüzgar',   val: d.wind!==null&&d.wind!==undefined ? Math.round(d.wind)+' km/s '+windArrow(d.windDir)+' '+windDirTR(d.windDir) : '—' },
+    { icon:'📊', label:'Basınç',   val: d.pressure!==null&&d.pressure!==undefined ? Math.round(d.pressure)+' hPa' : '—' },
+    isSea ? { icon:'🌊', label:'Deniz',   val: d.seaTemp!==null&&d.seaTemp!==undefined ? Math.round(d.seaTemp)+'°C' : '—' } : null,
+    isSea ? { icon:'〰️', label:'Dalga',   val: d.waveH!==null&&d.waveH!==undefined ? d.waveH.toFixed(1)+' m' : '—' } : null,
+  ].filter(Boolean);
+
+  el.innerHTML = `
+    <div style="
+      margin:8px 0 4px;
+      background:rgba(0,200,248,0.05);
+      border:1px solid rgba(0,200,248,0.12);
+      border-radius:8px;
+      padding:8px 10px;
+    ">
+      <div style="font-size:10px;color:var(--txt3);letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:5px;">
+        ${weatherEmoji(d.wcode)} <span style="font-family:'Orbitron',monospace;">ANLИК HAVA</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        ${rows.map(r=>`
+          <div style="display:flex;align-items:center;gap:5px;">
+            <span style="font-size:13px;">${r.icon}</span>
+            <div>
+              <div style="font-size:9px;color:var(--txt3);">${r.label}</div>
+              <div style="font-size:12px;font-weight:700;color:var(--txt);">${r.val}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
 }
 
 // ── ZAMAN FORMATLAMA ─────────────────────────────────────────────
