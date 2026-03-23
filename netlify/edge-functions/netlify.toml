@@ -5,12 +5,14 @@
 [[edge_functions]]
   path = "/approve"
   function = "approve"
-```
 
----
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Type = "text/html; charset=UTF-8"
 
-## 4. EmailJS Şablonunu Güncelle
-
-EmailJS dashboard → template → Body'ye şunu ekle:
-```
-✅ ONAYLA: https://balik-radari.netlify.app/approve?token=sihirlizoka2024&loc={{loc}}&fish={{fish}}&rod={{rod}}&bait={{bait}}&note={{note}}&lat={{lat}}&lng={{lng}}&type={{type}}
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Content-Type = "application/json; charset=UTF-8"
+    Access-Control-Allow-Origin = "*"
