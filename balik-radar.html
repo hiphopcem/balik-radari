@@ -9,7 +9,13 @@
 <script>emailjs.init('RCuzQNqIGsKgv06Cg');</script>
 <script>
 (function(){
-  var ALLOWED = ['www.sihirlizoka.com','sihirlizoka.com','balik-radari.netlify.app','localhost','127.0.0.1'];
+  var ALLOWED = [
+    'www.sihirlizoka.com',
+    'sihirlizoka.com',
+    'hiphopcem.github.io',
+    'localhost',
+    '127.0.0.1'
+  ];
   function getHost(u){ try{ return new URL(u).hostname; }catch(e){ return ''; } }
   var host    = window.location.hostname;
   var refHost = getHost(document.referrer);
@@ -820,6 +826,12 @@ function submitR(){
     lat:    foundLat.toFixed(5),
     lng:    foundLng.toFixed(5),
     type:   foundType,
+    // URL encode edilmiş veriler — onay linki için
+    eloc:   encodeURIComponent(loc),
+    efish:  encodeURIComponent(fish),
+    erod:   encodeURIComponent(rod || 'Belirtilmemiş'),
+    ebait:  encodeURIComponent(bait || 'Belirtilmemiş'),
+    enote:  encodeURIComponent(note || '—'),
   })
   .then(function(){
     btn.textContent = '✅ Rapor Gönderildi!';
