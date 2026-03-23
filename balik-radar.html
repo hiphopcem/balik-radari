@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="referrer" content="strict-origin">
 <title>Sihirli Zoka Radar</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('RCuzQNqIGsKgv06Cg');</script>
 <script>
 (function(){
   var ALLOWED = ['www.sihirlizoka.com','sihirlizoka.com','balik-radari.netlify.app','localhost','127.0.0.1'];
@@ -715,24 +717,85 @@ function closeDrawer(){
   document.getElementById('overlay').style.display='none';
 }
 function submitR(){
-  const loc=document.getElementById('floc').value.trim();
-  const fish=document.getElementById('ffish').value.trim();
-  if(!loc||!fish){alert('Lokasyon ve balık türü zorunludur!');return;}
-  const nr={
-    id:'u'+Date.now(),lat:39+Math.random()*3,lng:26+Math.random()*5,
-    loc,fish:fish.split(',').map(f=>f.trim()),
-    rod:document.getElementById('frod').value||'',
-    bait:document.getElementById('fbait').value.trim(),
-    note:document.getElementById('fnote').value.trim()||'Kullanıcı raporu.',
-    heat:3,type:'deniz',timestamp:new Date().toISOString(),
-    source:'Sihirli Zoka Radar',hot:false
+  const loc  = document.getElementById('floc').value.trim();
+  const fish = document.getElementById('ffish').value.trim();
+  const rod  = document.getElementById('frod').value;
+  const bait = document.getElementById('fbait').value.trim();
+  const note = document.getElementById('fnote').value.trim();
+
+  if(!loc||!fish){ alert('Lokasyon ve balık türü zorunludur!'); return; }
+
+  // Lokasyon koordinatını bul (bilinen lokasyonlardan)
+  const LOCS = {
+    'galata köprüsü':[41.0162,28.9742],'eminönü':[41.0165,28.9730],
+    'karaköy':[41.0225,28.9740],'sarayburnu':[41.0133,28.9817],
+    'sarıyer':[41.1665,29.0530],'beykoz':[41.1218,29.1014],
+    'kadıköy':[40.9902,29.0232],'bostancı':[40.9607,29.0900],
+    'rumeli kavağı':[41.1987,29.0622],'büyükçekmece':[41.0197,28.5773],
+    'şile':[41.1778,29.6103],'kilyos':[41.2497,29.0157],
+    'bozcaada':[39.8320,26.0640],'gökçeada':[40.1780,25.9000],
+    'ayvalık':[39.3176,26.6963],'çanakkale':[40.1546,26.4086],
+    'sapanca gölü':[40.7200,30.2000],'iznik gölü':[40.4330,29.5500],
+    'tekirdağ':[40.9781,27.5117],'saros körfezi':[40.5500,26.6000],
+    'gemlik':[40.4315,29.1625],'edirne':[41.6771,26.5557],
   };
-  userR.unshift(nr);
-  try{localStorage.setItem('szr',JSON.stringify(userR.slice(0,20)));}catch(e){}
-  REPORTS.unshift(nr);
-  ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('frod').value='';
-  renderAll();updateStats();
+
+  const locKey = loc.toLowerCase().trim();
+  let lat = 0, lng = 0;
+  for(const [k,v] of Object.entries(LOCS)){
+    if(locKey.includes(k)){ lat=v[0]; lng=v[1]; break; }
+  }
+  // Koordinat bulunamazsa rastgele Marmara bölgesi
+  if(!lat){ lat = 40.5 + Math.random()*1.5; lng = 27.5 + Math.random()*3; }
+
+  // Tür tahmini
+  const locLow = loc.toLowerCase();
+  const type = locLow.includes('göl')||locLow.includes('gölü') ? 'göl'
+             : locLow.includes('nehir')||locLow.includes('irmak') ? 'nehir'
+             : 'deniz';
+
+  // Butonu devre dışı bırak
+  const btn = document.querySelector('.sbtn');
+  const origTxt = btn.textContent;
+  btn.textContent = '⏳ Gönderiliyor...';
+  btn.disabled = true;
+
+  // EmailJS ile bildirim gönder
+  emailjs.send('service_yrsyqd2', 'template_rkbvgcv', {
+    loc:    loc,
+    fish:   fish,
+    rod:    rod || 'Belirtilmemiş',
+    bait:   bait || 'Belirtilmemiş',
+    note:   note || '—',
+    time:   new Date().toLocaleString('tr-TR'),
+    device: navigator.userAgent.includes('Mobile') ? 'Mobil' : 'Masaüstü',
+    lat:    lat.toFixed(5),
+    lng:    lng.toFixed(5),
+    type:   type,
+  })
+  .then(function(){
+    btn.textContent = '✅ Rapor Gönderildi!';
+    btn.style.color = 'var(--c2)';
+    btn.style.borderColor = 'var(--c2)';
+    ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('frod').value='';
+    setTimeout(()=>{
+      btn.textContent = origTxt;
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.disabled = false;
+    }, 3000);
+  })
+  .catch(function(err){
+    console.error('Email hatası:', err);
+    btn.textContent = '❌ Hata! Tekrar dene';
+    btn.style.color = 'var(--c3)';
+    setTimeout(()=>{
+      btn.textContent = origTxt;
+      btn.style.color = '';
+      btn.disabled = false;
+    }, 3000);
+  });
 }
 
 // ── SAYAÇ ────────────────────────────────────────────────────────
