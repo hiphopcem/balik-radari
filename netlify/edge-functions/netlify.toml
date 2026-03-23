@@ -1,20 +1,16 @@
 [[edge_functions]]
   path = "/balik-radar.html"
   function = "protect"
-```
 
-→ **"Commit changes"** bas
+[[edge_functions]]
+  path = "/approve"
+  function = "approve"
+```
 
 ---
 
-## 3. Netlify otomatik deploy eder
+## 4. EmailJS Şablonunu Güncelle
 
-GitHub'a commit yapınca Netlify otomatik güncellenir — 1-2 dakika bekle.
-
----
-
-## 4. Test et
-
-Tarayıcıda doğrudan aç:
+EmailJS dashboard → template → Body'ye şunu ekle:
 ```
-https://balik-radari.netlify.app/balik-radar.html
+✅ ONAYLA: https://balik-radari.netlify.app/approve?token=sihirlizoka2024&loc={{loc}}&fish={{fish}}&rod={{rod}}&bait={{bait}}&note={{note}}&lat={{lat}}&lng={{lng}}&type={{type}}
