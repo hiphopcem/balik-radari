@@ -369,20 +369,18 @@ try{ userR=JSON.parse(localStorage.getItem('szr')||'[]'); }catch(e){}
 // Scraper 3 saatte bir çalışıyor (saat 0,3,6,9,12,15,18,21 UTC)
 // last_updated'a göre bir sonraki çalışma zamanını hesapla
 function calcCountdown(lastUpdatedIso){
-  const INTERVAL = 3 * 3600; // 3 saat = saniye
-  if(!lastUpdatedIso){
-    csecs = INTERVAL;
-    return;
-  }
+  const INTERVAL = 3 * 3600;
+  if(!lastUpdatedIso){ csecs = INTERVAL; updateTimer(); return; }
   try{
     const last = new Date(lastUpdatedIso).getTime();
     const now  = Date.now();
-    const elapsed = Math.floor((now - last) / 1000); // geçen saniye
+    const elapsed  = Math.floor((now - last) / 1000);
     const remaining = INTERVAL - (elapsed % INTERVAL);
     csecs = remaining > 0 ? remaining : INTERVAL;
   }catch(e){
     csecs = INTERVAL;
   }
+  updateTimer(); // hemen ekranda göster
 }
 
 function initMap(){
@@ -609,11 +607,18 @@ function submitR(){
   renderAll();updateStats();
 }
 
+// ── SAYAÇ ────────────────────────────────────────────────────────
+function updateTimer(){
+  const h=Math.floor(csecs/3600), m=Math.floor((csecs%3600)/60), s=csecs%60;
+  const el = document.getElementById('cdt');
+  if(el) el.textContent = h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
+}
+
 setInterval(()=>{
-  csecs--;if(csecs<=0){csecs=10800;loadData();}
-  const h=Math.floor(csecs/3600),m=Math.floor((csecs%3600)/60),s=csecs%60;
-  document.getElementById('cdt').textContent=h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
-},1000);
+  csecs--;
+  if(csecs<=0){ csecs=10800; loadData(); }
+  updateTimer();
+}, 1000);
 
 setInterval(updateTheme, 60*1000);
 
