@@ -440,11 +440,22 @@ function addMarker(r){
     m = L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
   }
 
-  const lp = L.popup({maxWidth:280, className:'wxpop'}).setContent(popup);
+  const lp = L.popup({
+    maxWidth:280,
+    className:'wxpop',
+    autoPan: true,
+    autoPanPadding: [30, 80], // üstten 80px boşluk bırak — header/filterbar altına düşmesin
+    keepInView: true
+  }).setContent(popup);
   m.bindPopup(lp);
 
-  // Popup açılınca hava verisini çek
+  // Popup açılınca haritayı ortala + hava verisini çek
   m.on('popupopen', function(){
+    // Popup'ın koordinatına göre haritayı yumuşakça kaydır
+    const px = map.project(m.getLatLng(), map.getZoom());
+    px.y -= 120; // popup'ı biraz aşağıda göster ki başlık görünsün
+    const newLatLng = map.unproject(px, map.getZoom());
+    map.panTo(newLatLng, {animate:true, duration:0.5});
     fetchWeather(r.lat, r.lng, r.id, r.type);
   });
 
@@ -660,11 +671,11 @@ function makeCard(r,i){
     if(isMob){
       closeDrawer();
       map.setView([r.lat,r.lng],12);
-      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),200);
+      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),300);
     } else {
       closeDrawer();
-      map.flyTo([r.lat,r.lng],11,{duration:1.2});
-      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1300);
+      map.flyTo([r.lat,r.lng],11,{duration:1.0});
+      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1100);
     }
   };
   return d;
