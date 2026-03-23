@@ -2,441 +2,463 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sihirli Zoka Radar | Canlı Balık Takip</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sihirli Zoka Radar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
-  --bg-deep:  #020d18;
-  --bg-panel: #040f1e;
-  --bg-card:  #071828;
-  --bg-hover: #0a2035;
-  --accent:   #00d4ff;
-  --accent2:  #00ff88;
-  --accent3:  #ff6b35;
-  --gold:     #f0c040;
-  --border:   rgba(0,212,255,0.15);
-  --border2:  rgba(0,212,255,0.3);
-  --text:     #c8e8f8;
-  --text-dim: #5a8aaa;
-  --text-muted:#2a5570;
+  --bg:    #010c16;
+  --panel: #030e1a;
+  --card:  #061522;
+  --hover: #091e30;
+  --c1:    #00c8f8;
+  --c2:    #00e87a;
+  --c3:    #ff5e2a;
+  --gold:  #f4c430;
+  --b1:    rgba(0,200,248,0.12);
+  --b2:    rgba(0,200,248,0.28);
+  --txt:   #d8eef8;
+  --txt2:  #7aaac8;
+  --txt3:  #3a6a88;
+  --r:     10px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'Exo 2',sans-serif;background:var(--bg-deep);color:var(--text);}
-body::before{
-  content:'';position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
-  background-size:40px 40px;pointer-events:none;z-index:0;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:'Exo 2',sans-serif;color:var(--txt);}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(0,200,248,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,248,0.02) 1px,transparent 1px);
+  background-size:50px 50px;
 }
 #app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;}
-
-/* HEADER */
-#header{
-  background:linear-gradient(180deg,rgba(2,13,24,0.98),rgba(4,15,30,0.95));
-  border-bottom:1px solid var(--border2);
-  padding:0 20px;height:60px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;position:relative;
-  box-shadow:0 4px 30px rgba(0,0,0,0.5);
-}
-#header::after{
-  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--accent),transparent);
-}
-.logo-wrap{display:flex;align-items:center;gap:14px;}
-.logo-icon{
-  width:40px;height:40px;
-  background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(0,255,136,0.1));
-  border:1px solid var(--border2);border-radius:10px;
-  display:flex;align-items:center;justify-content:center;font-size:20px;
-  animation:iconPulse 3s ease-in-out infinite;
-}
-@keyframes iconPulse{
-  0%,100%{box-shadow:0 0 10px rgba(0,212,255,0.3);}
-  50%{box-shadow:0 0 25px rgba(0,212,255,0.6),0 0 50px rgba(0,212,255,0.2);}
-}
-.logo-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--accent);letter-spacing:2px;text-shadow:0 0 20px rgba(0,212,255,0.5);}
-.logo-sub{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
-.live-pill{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);
-  border-radius:20px;padding:5px 14px;
-}
-.live-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation:livePulse 1.5s infinite;}
-@keyframes livePulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.5);}}
-.live-text{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--accent2);letter-spacing:2px;}
-.countdown-label{font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;}
-.countdown-val{font-family:'Orbitron',monospace;font-size:13px;color:var(--accent);letter-spacing:1px;}
-.lu-label{font-size:9px;color:var(--text-muted);letter-spacing:1px;}
-.lu-val{font-family:'Orbitron',monospace;font-size:11px;color:var(--gold);}
-
-/* FILTER BAR */
-#filterbar{
-  background:rgba(4,15,30,0.9);border-bottom:1px solid var(--border);
-  padding:8px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0;
-}
-.search-wrap{position:relative;flex-shrink:0;}
-.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:12px;}
-#sbox{
-  background:rgba(0,212,255,0.05);border:1px solid var(--border);color:var(--text);
-  padding:6px 10px 6px 30px;border-radius:6px;font-size:12px;
-  font-family:'Exo 2',sans-serif;outline:none;width:180px;
-  transition:border-color .2s,box-shadow .2s;
-}
-#sbox:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(0,212,255,0.2);}
-#sbox::placeholder{color:var(--text-muted);}
-.fgroup{display:flex;gap:6px;align-items:center;}
-.fgroup-label{font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-right:2px;}
-.fbtn{
-  background:rgba(0,212,255,0.05);border:1px solid var(--border);color:var(--text-dim);
-  padding:5px 12px;border-radius:5px;font-size:11px;font-family:'Exo 2',sans-serif;
-  cursor:pointer;transition:all .2s;letter-spacing:.5px;
-}
-.fbtn:hover{background:rgba(0,212,255,0.1);border-color:var(--accent);color:var(--accent);}
-.fbtn.active{background:rgba(0,212,255,0.15);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(0,212,255,0.2);}
-.fbtn.fhot.active{background:rgba(255,107,53,0.15);border-color:var(--accent3);color:var(--accent3);box-shadow:0 0 10px rgba(255,107,53,0.2);}
-
-/* MAIN */
-#main{display:flex;flex:1;overflow:hidden;}
+#main{display:flex;flex:1;overflow:hidden;position:relative;}
 #map{flex:1;z-index:1;}
 
-/* SIDEBAR */
+/* ── HEADER ── */
+#hdr{
+  background:linear-gradient(180deg,rgba(1,12,22,.99),rgba(3,14,26,.96));
+  border-bottom:1px solid var(--b2);
+  height:64px;padding:0 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;position:relative;z-index:10;
+  box-shadow:0 3px 25px rgba(0,0,0,.6);
+}
+#hdr::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);
+}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-box{
+  width:44px;height:44px;border-radius:var(--r);
+  background:linear-gradient(135deg,rgba(0,200,248,.18),rgba(0,232,122,.08));
+  border:1px solid var(--b2);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  animation:boxGlow 3s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes boxGlow{0%,100%{box-shadow:0 0 10px rgba(0,200,248,.25);}50%{box-shadow:0 0 22px rgba(0,200,248,.55),0 0 44px rgba(0,200,248,.15);}}
+.logo-t1{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--c1);letter-spacing:2px;text-shadow:0 0 15px rgba(0,200,248,.4);}
+.logo-t2{font-size:11px;color:var(--txt2);letter-spacing:1px;margin-top:1px;}
+
+.hdr-mid{display:flex;align-items:center;gap:16px;}
+.pill{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(0,232,122,.07);border:1px solid rgba(0,232,122,.22);
+  border-radius:24px;padding:7px 16px;
+}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--c2);box-shadow:0 0 9px var(--c2);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.6);}}
+.pill-txt{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;}
+.cd-wrap{text-align:center;}
+.cd-lbl{font-size:11px;color:var(--txt2);letter-spacing:1px;}
+.cd-val{font-family:'Orbitron',monospace;font-size:14px;color:var(--c1);letter-spacing:1px;font-weight:700;}
+.hdr-right{text-align:right;}
+.lu-lbl{font-size:11px;color:var(--txt2);}
+.lu-val{font-family:'Orbitron',monospace;font-size:13px;color:var(--gold);font-weight:700;}
+
+/* ── FILTER BAR ── */
+#fbar{
+  background:rgba(3,14,26,.93);border-bottom:1px solid var(--b1);
+  padding:8px 14px;display:flex;align-items:center;gap:7px;
+  flex-shrink:0;overflow-x:auto;white-space:nowrap;z-index:10;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+#fbar::-webkit-scrollbar{display:none;}
+.sw{position:relative;flex-shrink:0;}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txt2);font-size:13px;pointer-events:none;}
+#sbox{
+  background:var(--b1);border:1px solid var(--b1);color:var(--txt);
+  padding:7px 10px 7px 30px;border-radius:7px;font-size:13px;
+  font-family:'Exo 2',sans-serif;outline:none;width:160px;transition:all .2s;
+}
+#sbox:focus{border-color:var(--c1);box-shadow:0 0 10px rgba(0,200,248,.15);width:180px;}
+#sbox::placeholder{color:var(--txt3);}
+.fb{
+  background:var(--b1);border:1px solid var(--b1);color:var(--txt2);
+  padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;
+  font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;
+}
+.fb:hover{background:rgba(0,200,248,.1);border-color:var(--b2);color:var(--c1);}
+.fb.on{background:rgba(0,200,248,.14);border-color:var(--c1);color:var(--c1);box-shadow:0 0 10px rgba(0,200,248,.18);}
+.fb.hot.on{background:rgba(255,94,42,.14);border-color:var(--c3);color:var(--c3);}
+.sep{width:1px;height:22px;background:var(--b1);flex-shrink:0;}
+
+/* ── SIDEBAR ── */
 #sidebar{
   width:320px;flex-shrink:0;
-  background:rgba(4,15,30,0.97);border-left:1px solid var(--border);
+  background:rgba(3,14,26,.97);border-left:1px solid var(--b1);
   display:flex;flex-direction:column;overflow:hidden;
 }
-.sb-header{
-  padding:12px 16px;border-bottom:1px solid var(--border);
+.sb-hdr{
+  padding:13px 16px;border-bottom:1px solid var(--b1);
   display:flex;justify-content:space-between;align-items:center;
-  background:rgba(0,212,255,0.03);
+  background:rgba(0,200,248,.02);flex-shrink:0;
 }
-.sb-title{font-family:'Orbitron',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
-.sb-count{
-  background:rgba(0,212,255,0.15);border:1px solid var(--border2);
-  color:var(--accent);font-family:'Orbitron',monospace;
-  font-size:10px;padding:2px 8px;border-radius:10px;
+.sb-ttl{font-family:'Orbitron',monospace;font-size:12px;color:var(--c1);letter-spacing:2px;font-weight:700;}
+.sb-cnt{
+  background:rgba(0,200,248,.14);border:1px solid var(--b2);
+  color:var(--c1);font-family:'Orbitron',monospace;
+  font-size:11px;padding:3px 10px;border-radius:12px;font-weight:700;
 }
 #rlist{flex:1;overflow-y:auto;padding:10px;}
 #rlist::-webkit-scrollbar{width:3px;}
-#rlist::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+#rlist::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
 
-/* CARDS */
-.rcard{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;
-  transition:all .25s;position:relative;overflow:hidden;
-  animation:cardIn .3s ease both;
+/* ── CARDS ── */
+.rc{
+  background:var(--card);border:1px solid var(--b1);
+  border-radius:var(--r);padding:13px;margin-bottom:9px;
+  cursor:pointer;transition:all .22s;position:relative;overflow:hidden;
+  animation:cin .3s ease both;
 }
-@keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.rcard::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent);
-  opacity:0;transition:opacity .25s;
-}
-.rcard:hover{background:var(--bg-hover);border-color:var(--border2);transform:translateX(2px);}
-.rcard:hover::before{opacity:1;}
-.rcard.hot{border-left:2px solid var(--accent3);}
-.rcard.hot::after{content:'🔥';position:absolute;top:8px;right:10px;font-size:12px;}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.fish-tags{display:flex;gap:4px;flex-wrap:wrap;flex:1;margin-right:8px;}
-.fish-tag{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);color:var(--accent);padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;}
-.fish-tag.primary{background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.25);color:var(--accent2);}
-.fish-tag.hot-fish{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.25);color:var(--accent3);}
-.time-tag{font-size:9px;color:var(--text-muted);white-space:nowrap;font-family:'Orbitron',monospace;}
-.loc-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
-.loc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.loc-dot.deniz{background:var(--accent);box-shadow:0 0 6px var(--accent);}
-.loc-dot.gol{background:var(--accent2);box-shadow:0 0 6px var(--accent2);}
-.loc-dot.nehir{background:var(--gold);box-shadow:0 0 6px var(--gold);}
-.card-note{font-size:11px;color:var(--text-dim);line-height:1.5;margin-bottom:6px;}
-.tackle-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;}
-.tackle-tag{display:flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;}
-.rod-tag{background:rgba(0,100,60,0.3);border:1px solid rgba(0,200,120,0.2);color:#4dd;}
-.bait-tag{background:rgba(100,60,0,0.3);border:1px solid rgba(200,120,0,0.2);color:#fa6;}
-.heat-row{display:flex;align-items:center;gap:6px;}
-.heat-bar{display:flex;gap:2px;}
-.hdot{width:10px;height:3px;border-radius:2px;background:rgba(255,107,53,0.15);}
-.hdot.on{background:var(--accent3);box-shadow:0 0 4px var(--accent3);}
-.source-tag{font-size:9px;color:var(--text-muted);margin-left:auto;letter-spacing:.5px;}
+@keyframes cin{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+.rc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,248,.28),transparent);opacity:0;transition:.22s;}
+.rc:hover{background:var(--hover);border-color:var(--b2);transform:translateX(3px);}
+.rc:hover::before{opacity:1;}
+.rc.hot{border-left:3px solid var(--c3);}
+.rc.hot::after{content:'🔥';position:absolute;top:9px;right:11px;font-size:14px;}
 
-/* FORM */
-#form-panel{border-top:1px solid var(--border);padding:12px;background:rgba(0,0,0,0.3);flex-shrink:0;}
-.form-title{
-  font-family:'Orbitron',monospace;font-size:10px;
-  color:var(--accent);letter-spacing:2px;margin-bottom:10px;
-  display:flex;align-items:center;gap:8px;
-}
-.form-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
-.frow{display:flex;gap:6px;margin-bottom:6px;}
-.fi{
-  background:rgba(0,212,255,0.05);border:1px solid var(--border);color:var(--text);
-  padding:6px 9px;border-radius:5px;font-size:11px;font-family:'Exo 2',sans-serif;
-  flex:1;outline:none;transition:border-color .2s;
-}
-.fi:focus{border-color:var(--accent);}
-.fi::placeholder{color:var(--text-muted);}
-.fselect{
-  background:rgba(0,212,255,0.05);border:1px solid var(--border);color:var(--text);
-  padding:6px 9px;border-radius:5px;font-size:11px;font-family:'Exo 2',sans-serif;
-  flex:1;outline:none;cursor:pointer;
-}
-.fselect option{background:#071828;}
-.submit-btn{
-  width:100%;padding:8px;
-  background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(0,255,136,0.08));
-  border:1px solid var(--border2);color:var(--accent);
+.ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.ftags{display:flex;gap:4px;flex-wrap:wrap;flex:1;margin-right:8px;}
+.ft{background:rgba(0,200,248,.1);border:1px solid rgba(0,200,248,.2);color:var(--c1);padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;}
+.ft.p{background:rgba(0,232,122,.1);border-color:rgba(0,232,122,.22);color:var(--c2);}
+.ft.h{background:rgba(255,94,42,.12);border-color:rgba(255,94,42,.24);color:var(--c3);}
+.tt{font-size:10px;color:var(--txt2);white-space:nowrap;font-weight:600;}
+
+.ln{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.ld{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ld.d{background:var(--c1);box-shadow:0 0 6px var(--c1);}
+.ld.g{background:var(--c2);box-shadow:0 0 6px var(--c2);}
+.ld.n{background:var(--gold);box-shadow:0 0 6px var(--gold);}
+
+.cn{font-size:12px;color:var(--txt2);line-height:1.55;margin-bottom:6px;}
+.tr{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;}
+.tk{display:flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;}
+.tk.r{background:rgba(0,80,50,.4);border:1px solid rgba(0,180,100,.18);color:#4de;}
+.tk.b{background:rgba(80,40,0,.4);border:1px solid rgba(200,110,0,.18);color:#fca;}
+
+.hr{display:flex;align-items:center;gap:6px;}
+.hb{display:flex;gap:3px;}
+.hd{width:12px;height:3px;border-radius:2px;background:rgba(255,94,42,.12);}
+.hd.on{background:var(--c3);box-shadow:0 0 4px var(--c3);}
+.src{font-size:10px;color:var(--txt3);margin-left:auto;font-weight:600;}
+
+/* ── FORM ── */
+#fp{border-top:1px solid var(--b1);padding:13px;background:rgba(0,0,0,.22);flex-shrink:0;}
+.ftl{font-family:'Orbitron',monospace;font-size:11px;color:var(--c1);letter-spacing:2px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.ftl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b2),transparent);}
+.fr{display:flex;gap:6px;margin-bottom:6px;}
+.fi{background:rgba(0,200,248,.04);border:1px solid var(--b1);color:var(--txt);padding:8px 10px;border-radius:6px;font-size:12px;font-family:'Exo 2',sans-serif;flex:1;outline:none;transition:border-color .2s;}
+.fi:focus{border-color:var(--c1);}
+.fi::placeholder{color:var(--txt3);}
+.fsl{background:rgba(0,200,248,.04);border:1px solid var(--b1);color:var(--txt);padding:8px 10px;border-radius:6px;font-size:12px;font-family:'Exo 2',sans-serif;flex:1;outline:none;cursor:pointer;}
+.fsl option{background:#061522;}
+.sb2{
+  width:100%;padding:9px;margin-top:3px;
+  background:linear-gradient(135deg,rgba(0,200,248,.14),rgba(0,232,122,.07));
+  border:1px solid var(--b2);color:var(--c1);
   font-family:'Orbitron',monospace;font-size:11px;font-weight:700;
-  letter-spacing:2px;border-radius:6px;cursor:pointer;
-  transition:all .2s;margin-top:2px;
+  letter-spacing:2px;border-radius:7px;cursor:pointer;transition:all .2s;
 }
-.submit-btn:hover{background:linear-gradient(135deg,rgba(0,212,255,0.25),rgba(0,255,136,0.15));box-shadow:0 0 15px rgba(0,212,255,0.3);}
+.sb2:hover{box-shadow:0 0 14px rgba(0,200,248,.28);}
 
-/* STATS BAR */
-#statsbar{
-  background:rgba(2,13,24,0.98);border-top:1px solid var(--border);
-  padding:6px 20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;flex-shrink:0;position:relative;
+/* ── STATS BAR ── */
+#sbar{
+  background:rgba(1,12,22,.98);border-top:1px solid var(--b1);
+  padding:7px 16px;display:flex;align-items:center;gap:20px;
+  flex-shrink:0;position:relative;z-index:10;
 }
-#statsbar::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
-.stat-item{display:flex;align-items:center;gap:6px;}
-.stat-label{font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;}
-.stat-val{font-family:'Orbitron',monospace;font-size:12px;color:var(--accent);}
-.stat-val.green{color:var(--accent2);}
-.stat-val.orange{color:var(--accent3);}
-.refresh-btn{
-  margin-left:auto;background:rgba(0,212,255,0.08);border:1px solid var(--border);
-  color:var(--text-dim);padding:3px 12px;border-radius:4px;font-size:10px;
-  font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .2s;
+#sbar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);}
+.si2{display:flex;align-items:center;gap:6px;}
+.sl{font-size:11px;color:var(--txt2);font-weight:600;}
+.sv{font-family:'Orbitron',monospace;font-size:13px;color:var(--c1);font-weight:700;}
+.sv.g{color:var(--c2);}
+.sv.o{color:var(--c3);}
+.rbtn{
+  margin-left:auto;background:var(--b1);border:1px solid var(--b1);
+  color:var(--txt2);padding:5px 14px;border-radius:6px;
+  font-size:12px;font-weight:600;font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .2s;
 }
-.refresh-btn:hover{border-color:var(--accent);color:var(--accent);}
+.rbtn:hover{border-color:var(--c1);color:var(--c1);}
 
-/* LOADER */
-#loader{
-  position:fixed;inset:0;background:var(--bg-deep);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;
-}
-.loader-radar{width:120px;height:120px;border-radius:50%;border:1px solid rgba(0,212,255,0.2);position:relative;margin-bottom:24px;}
-.loader-radar::before,.loader-radar::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,212,255,0.1);}
-.loader-radar::before{transform:scale(0.6);}
-.loader-radar::after{transform:scale(0.3);}
-.loader-sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 70%,rgba(0,212,255,0.3) 100%);animation:sweep 2s linear infinite;}
-@keyframes sweep{to{transform:rotate(360deg);}}
-.loader-dot{position:absolute;top:50%;left:50%;width:6px;height:6px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);box-shadow:0 0 15px var(--accent);}
-.loader-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--accent);letter-spacing:4px;margin-bottom:6px;text-shadow:0 0 20px rgba(0,212,255,0.5);}
-.loader-sub{font-size:11px;color:var(--text-dim);letter-spacing:2px;}
-.loader-bar{width:200px;height:2px;background:rgba(0,212,255,0.1);border-radius:2px;margin-top:20px;overflow:hidden;}
-.loader-bar-fill{height:100%;background:linear-gradient(90deg,transparent,var(--accent));animation:barAnim 1.5s ease-in-out infinite;}
-@keyframes barAnim{0%{width:0;margin-left:0;}50%{width:60%;}100%{width:0;margin-left:100%;}}
+/* ── LOADER ── */
+#ldr{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.lradar{width:110px;height:110px;border-radius:50%;border:1px solid rgba(0,200,248,.18);position:relative;margin-bottom:22px;}
+.lradar::before,.lradar::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,200,248,.09);}
+.lradar::before{transform:scale(.6);}
+.lradar::after{transform:scale(.3);}
+.lswp{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 60%,rgba(0,200,248,.35) 100%);animation:swp 1.8s linear infinite;}
+@keyframes swp{to{transform:rotate(360deg);}}
+.ldot{position:absolute;top:50%;left:50%;width:6px;height:6px;border-radius:50%;background:var(--c1);transform:translate(-50%,-50%);box-shadow:0 0 14px var(--c1);}
+.lt1{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--c1);letter-spacing:4px;margin-bottom:7px;text-shadow:0 0 18px rgba(0,200,248,.5);}
+.lt2{font-size:13px;color:var(--txt2);letter-spacing:2px;font-weight:600;}
+.lbar{width:200px;height:2px;background:rgba(0,200,248,.1);border-radius:1px;margin-top:20px;overflow:hidden;}
+.lbf{height:100%;background:linear-gradient(90deg,transparent,var(--c1));animation:ba 1.4s ease-in-out infinite;}
+@keyframes ba{0%{width:0;margin-left:0;}50%{width:60%;}100%{width:0;margin-left:100%;}}
 
-/* POPUP */
-.leaflet-popup-content-wrapper{background:rgba(4,15,30,0.97)!important;border:1px solid var(--border2)!important;border-radius:10px!important;box-shadow:0 10px 40px rgba(0,0,0,0.7),0 0 20px rgba(0,212,255,0.15)!important;padding:0!important;}
+/* ── POPUP ── */
+.leaflet-popup-content-wrapper{background:rgba(3,14,26,.98)!important;border:1px solid var(--b2)!important;border-radius:12px!important;box-shadow:0 12px 40px rgba(0,0,0,.8),0 0 20px rgba(0,200,248,.12)!important;padding:0!important;}
 .leaflet-popup-tip-container{display:none;}
 .leaflet-popup-content{margin:0!important;}
-.popup-inner{padding:14px 16px;min-width:220px;}
-.popup-loc{font-family:'Orbitron',monospace;font-size:12px;color:var(--accent);margin-bottom:8px;letter-spacing:1px;}
-.popup-fish{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
-.popup-tag{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);color:var(--accent);padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;}
-.popup-tackle{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
-.popup-note{font-size:11px;color:var(--text-dim);line-height:1.5;margin-bottom:8px;}
-.popup-footer{display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);}
+.pi{padding:15px 17px;min-width:220px;}
+.pl{font-family:'Orbitron',monospace;font-size:13px;color:var(--c1);margin-bottom:9px;letter-spacing:1px;font-weight:700;}
+.pf{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px;}
+.pt2{background:rgba(0,200,248,.1);border:1px solid rgba(0,200,248,.2);color:var(--c1);padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;}
+.ptk{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
+.pn{font-size:12px;color:var(--txt2);line-height:1.55;margin-bottom:9px;font-weight:400;}
+.pf2{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);font-weight:600;}
 
-/* ANIMATIONS */
-@keyframes radarPing{0%{transform:scale(1);opacity:.8;}100%{transform:scale(4);opacity:0;}}
-@keyframes hotGlow{0%,100%{filter:brightness(1);}50%{filter:brightness(1.4);}}
-@media(max-width:700px){#sidebar{display:none;}}
+/* ── MOBILE DRAWER ── */
+#dbtn{
+  display:none;position:fixed;bottom:80px;right:16px;z-index:100;
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(0,200,248,.22),rgba(0,232,122,.1));
+  border:1px solid var(--b2);color:var(--c1);
+  font-size:22px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 18px rgba(0,200,248,.22);
+  animation:bp 2.5s ease-in-out infinite;
+  align-items:center;justify-content:center;
+}
+@keyframes bp{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 18px rgba(0,200,248,.22);}50%{box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 28px rgba(0,200,248,.45);}}
+
+#drawer{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(3,14,26,.99);border-top:1px solid var(--b2);
+  border-radius:18px 18px 0 0;max-height:76vh;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 -10px 40px rgba(0,0,0,.7);flex-direction:column;overflow:hidden;
+}
+#drawer.open{transform:translateY(0);}
+.dhandle{width:44px;height:4px;background:var(--b2);border-radius:2px;margin:11px auto 0;flex-shrink:0;cursor:pointer;}
+.dhdr{padding:11px 16px 9px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.dttl{font-family:'Orbitron',monospace;font-size:12px;color:var(--c1);letter-spacing:2px;font-weight:700;}
+.dcls{background:none;border:none;color:var(--txt2);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;}
+#dlist{flex:1;overflow-y:auto;padding:9px;}
+#dlist::-webkit-scrollbar{width:3px;}
+#dlist::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;backdrop-filter:blur(2px);}
+
+/* ── ANIMATIONS ── */
+@keyframes rPing{0%{transform:scale(1);opacity:.8;}100%{transform:scale(4.5);opacity:0;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){#sidebar{width:270px;}.logo-t1{font-size:13px;}}
+@media(max-width:640px){
+  #sidebar{display:none;}
+  #dbtn{display:flex;}
+  #drawer{display:flex;}
+  .logo-t1{font-size:12px;letter-spacing:1px;}
+  .logo-t2{display:none;}
+  .hdr-right{display:none;}
+  .cd-wrap{display:none;}
+  #hdr{height:54px;padding:0 13px;}
+  #fbar{padding:7px 11px;}
+  #sbox{width:130px;}
+  #sbox:focus{width:150px;}
+  #sbar{padding:5px 13px;gap:14px;}
+}
+@media(max-width:380px){
+  .logo-t1{font-size:11px;}
+  .pill-txt{display:none;}
+  #sbox{width:105px;}
+}
 </style>
 </head>
 <body>
 
-<div id="loader">
-  <div class="loader-radar">
-    <div class="loader-sweep"></div>
-    <div class="loader-dot"></div>
+<div id="ldr">
+  <div class="lradar"><div class="lswp"></div><div class="ldot"></div></div>
+  <div class="lt1">SİHİRLİ ZOKA</div>
+  <div class="lt2">CANLI BALIK RADARI</div>
+  <div class="lbar"><div class="lbf"></div></div>
+</div>
+
+<div id="overlay" onclick="closeDrawer()"></div>
+<button id="dbtn" onclick="toggleDrawer()">📋</button>
+
+<div id="drawer">
+  <div class="dhandle" onclick="closeDrawer()"></div>
+  <div class="dhdr">
+    <div class="dttl">RAPORLAR &nbsp;·&nbsp; <span id="dr-cnt">—</span></div>
+    <button class="dcls" onclick="closeDrawer()">✕</button>
   </div>
-  <div class="loader-title">SİHİRLİ ZOKA</div>
-  <div class="loader-sub">CANLI BALIK RADARI BAŞLIYOR</div>
-  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <div id="dlist"><div style="padding:24px;text-align:center;color:var(--txt3);font-size:13px;">Yükleniyor...</div></div>
 </div>
 
 <div id="app">
-  <div id="header">
-    <div class="logo-wrap">
-      <div class="logo-icon">🎣</div>
+  <div id="hdr">
+    <div class="logo">
+      <div class="logo-box">🎣</div>
       <div>
-        <div class="logo-title">SİHİRLİ ZOKA RADAR</div>
-        <div class="logo-sub">Canlı Balık Takip Sistemi</div>
+        <div class="logo-t1">SİHİRLİ ZOKA RADAR</div>
+        <div class="logo-t2">Canlı Balık Takip Sistemi</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:20px;">
-      <div class="live-pill">
-        <div class="live-dot" id="live-dot"></div>
-        <div class="live-text" id="live-label">BAĞLANIYOR</div>
+    <div class="hdr-mid">
+      <div class="pill">
+        <div class="dot" id="ldot"></div>
+        <div class="pill-txt" id="llbl" style="color:var(--c2)">CANLI</div>
       </div>
-      <div style="text-align:center;">
-        <div class="countdown-label">Sonraki Güncelleme</div>
-        <div class="countdown-val" id="cdtimer">3:00:00</div>
+      <div class="cd-wrap">
+        <div class="cd-lbl">Sonraki Güncelleme</div>
+        <div class="cd-val" id="cdt">3:00:00</div>
       </div>
     </div>
-    <div style="text-align:right;">
-      <div class="lu-label">Son Güncelleme</div>
-      <div class="lu-val" id="lastup">—</div>
+    <div class="hdr-right">
+      <div class="lu-lbl">Son Güncelleme</div>
+      <div class="lu-val" id="lup">—</div>
     </div>
   </div>
 
-  <div id="filterbar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
+  <div id="fbar">
+    <div class="sw">
+      <span class="si">🔍</span>
       <input id="sbox" placeholder="Yer veya balık ara..." oninput="renderAll()">
     </div>
-    <div class="fgroup">
-      <span class="fgroup-label">Bölge</span>
-      <button class="fbtn active" onclick="setF('all',this)">Tümü</button>
-      <button class="fbtn" onclick="setF('deniz',this)">🌊 Deniz</button>
-      <button class="fbtn" onclick="setF('göl',this)">🏞 Göl</button>
-      <button class="fbtn" onclick="setF('nehir',this)">🌀 Nehir</button>
-    </div>
-    <div class="fgroup">
-      <span class="fgroup-label">Olta</span>
-      <button class="fbtn" onclick="setF('spin',this)">Spin</button>
-      <button class="fbtn" onclick="setF('lrf',this)">LRF</button>
-      <button class="fbtn" onclick="setF('surf',this)">Surf</button>
-      <button class="fbtn" onclick="setF('jigging',this)">Jigging</button>
-    </div>
-    <button class="fbtn fhot" onclick="setF('hot',this)">🔥 Aktif Noktalar</button>
+    <div class="sep"></div>
+    <button class="fb on" onclick="setF('all',this)">Tümü</button>
+    <button class="fb" onclick="setF('deniz',this)">🌊 Deniz</button>
+    <button class="fb" onclick="setF('göl',this)">🏞 Göl</button>
+    <button class="fb" onclick="setF('nehir',this)">🌀 Nehir</button>
+    <div class="sep"></div>
+    <button class="fb" onclick="setF('spin',this)">Spin</button>
+    <button class="fb" onclick="setF('lrf',this)">LRF</button>
+    <button class="fb" onclick="setF('surf',this)">Surf</button>
+    <button class="fb" onclick="setF('jigging',this)">Jigging</button>
+    <div class="sep"></div>
+    <button class="fb hot" onclick="setF('hot',this)">🔥 Aktif Noktalar</button>
   </div>
 
   <div id="main">
     <div id="map"></div>
     <div id="sidebar">
-      <div class="sb-header">
-        <div class="sb-title">SON RAPORLAR</div>
-        <div class="sb-count" id="rcount">—</div>
+      <div class="sb-hdr">
+        <div class="sb-ttl">SON RAPORLAR</div>
+        <div class="sb-cnt" id="rcnt">—</div>
       </div>
-      <div id="rlist"><div style="padding:30px;text-align:center;color:var(--text-muted);font-size:12px;letter-spacing:1px">YÜKLENİYOR...</div></div>
-      <div id="form-panel">
-        <div class="form-title">RAPOR EKLE</div>
-        <div class="frow">
+      <div id="rlist"><div style="padding:24px;text-align:center;color:var(--txt3);font-size:13px;letter-spacing:1px">YÜKLENİYOR...</div></div>
+      <div id="fp">
+        <div class="ftl">RAPOR EKLE</div>
+        <div class="fr">
           <input class="fi" id="floc" placeholder="Lokasyon adı">
           <input class="fi" id="ffish" placeholder="Balık türü">
         </div>
-        <div class="frow">
-          <select class="fselect" id="frod">
-            <option value="">Olta türü...</option>
+        <div class="fr">
+          <select class="fsl" id="frod">
+            <option value="">Olta türü seçin...</option>
             <option>Spin</option><option>LRF</option><option>Surf</option>
             <option>Feeder</option><option>Jigging</option><option>Trolling</option>
             <option>Fly</option><option>Bolentino</option><option>Zıpkın</option><option>Olta</option>
           </select>
-          <input class="fi" id="fbait" placeholder="Yem">
+          <input class="fi" id="fbait" placeholder="Kullanılan yem">
         </div>
-        <input class="fi" id="fnote" placeholder="Not (isteğe bağlı)" style="width:100%;margin-bottom:6px">
-        <button class="submit-btn" onclick="submitR()">▶ RAPOR GÖNDER</button>
+        <input class="fi" id="fnote" placeholder="Not ekle (isteğe bağlı)" style="width:100%;margin-bottom:6px">
+        <button class="sb2" onclick="submitR()">▶ RAPOR GÖNDER</button>
       </div>
     </div>
   </div>
 
-  <div id="statsbar">
-    <div class="stat-item"><span class="stat-label">Aktif</span><span class="stat-val orange" id="s-active">—</span></div>
-    <div class="stat-item"><span class="stat-label">Toplam</span><span class="stat-val" id="s-total">—</span></div>
-    <div class="stat-item"><span class="stat-label">Kapsama</span><span class="stat-val green">İstanbul · Marmara · Ege · Çanakkale</span></div>
-    <button class="refresh-btn" onclick="loadData()">↻ Yenile</button>
+  <div id="sbar">
+    <div class="si2"><span class="sl">Aktif Nokta:</span><span class="sv o" id="sa">—</span></div>
+    <div class="si2"><span class="sl">Toplam:</span><span class="sv" id="st">—</span></div>
+    <div class="si2" id="kap"><span class="sl">Kapsama:</span><span class="sv g" style="font-size:11px">İstanbul · Marmara · Ege · Çanakkale</span></div>
+    <button class="rbtn" onclick="loadData()">↻ Yenile</button>
   </div>
 </div>
 
-<!-- Leaflet önce yüklenmeli, sonra kod çalışmalı -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const DATA_URL = "https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
-
-const DEMO = [
-  {id:"d01",lat:41.01620,lng:28.97420,loc:"Galata Köprüsü",fish:["Lüfer","Kolyoz","Kefal"],rod:"Olta",bait:"Çoklu iğne, hamsi",note:"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.",heat:5,type:"deniz",time:"Az önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d02",lat:41.01650,lng:28.97300,loc:"Eminönü",fish:["Kefal","İstavrit"],rod:"Olta",bait:"Ekmek, solucan",note:"Eminönü rıhtımında kefal aktif.",heat:4,type:"deniz",time:"45dk önce",source:"Sihirli Zoka Radar",hot:false},
-  {id:"d03",lat:41.02250,lng:28.97400,loc:"Karaköy",fish:["Lüfer","Levrek"],rod:"Spin",bait:"Küçük kaşık",note:"Karaköy iskelesi. Sabah lüfer çıktı.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d04",lat:41.19870,lng:29.06220,loc:"Rumeli Kavağı",fish:["Palamut","Lüfer","Torik"],rod:"Trolling",bait:"CD-11 Rapala",note:"Rumeli Kavağı. Torik ve palamut aktif.",heat:5,type:"deniz",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d05",lat:41.16650,lng:29.05300,loc:"Sarıyer",fish:["Lüfer","Palamut"],rod:"Spin",bait:"Mepps No:3",note:"Sarıyer açıkları. Lüfer girişi başladı.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d06",lat:40.97810,lng:27.51170,loc:"Tekirdağ",fish:["Lüfer","Palamut","Kolyoz"],rod:"Surf",bait:"Çoklu iğne takımı",note:"Tekirdağ sahili. Palamut geçişi var.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d07",lat:39.83200,lng:26.06400,loc:"Bozcaada",fish:["Çipura","Levrek","Sargoz","Lahos"],rod:"LRF",bait:"Micro jig, gulp",note:"Bozcaada etrafı berrak su, çipura bol.",heat:5,type:"deniz",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d08",lat:40.17800,lng:25.90000,loc:"Gökçeada",fish:["Çipura","Levrek","Lahos","Grida"],rod:"Jigging",bait:"Silikon, jig",note:"Gökçeada dipten güzel balıklar tutuluyor.",heat:5,type:"deniz",time:"3s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d09",lat:39.31760,lng:26.69630,loc:"Ayvalık",fish:["Çipura","Levrek","Sargoz"],rod:"LRF",bait:"Micro jig, silikon",note:"Ayvalık adaları etrafı harika.",heat:5,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d10",lat:40.72000,lng:30.20000,loc:"Sapanca Gölü",fish:["Alabalık","Sazan","Yayın"],rod:"Spin",bait:"Rapala, solucan",note:"Sapanca sabah alabalık harika.",heat:5,type:"göl",time:"55dk önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d11",lat:41.06000,lng:28.59000,loc:"Büyükçekmece Gölü",fish:["Sazan","Turna","Kefal"],rod:"Feeder",bait:"Mısır, solucan",note:"Büyükçekmece Gölü sazan sezonu açık.",heat:5,type:"göl",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d12",lat:40.15460,lng:26.40860,loc:"Çanakkale",fish:["Lüfer","Palamut","Kolyoz"],rod:"Trolling",bait:"Rapala",note:"Çanakkale Boğazı göç dönemi aktif.",heat:5,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d13",lat:40.43300,lng:29.55000,loc:"İznik Gölü",fish:["Sazan","Levrek","Sudak"],rod:"Feeder",bait:"Pellet, mısır",note:"İznik gölü sazan sezonu açık.",heat:4,type:"göl",time:"4s önce",source:"Sihirli Zoka Radar",hot:false},
-  {id:"d14",lat:40.55000,lng:26.60000,loc:"Saros Körfezi",fish:["Çipura","Levrek","Sargoz"],rod:"LRF",bait:"Micro jig",note:"Saros körfezi temiz su, çipura bol.",heat:4,type:"deniz",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
-  {id:"d15",lat:41.67710,lng:26.55570,loc:"Edirne - Meriç",fish:["Sazan","Yayın","Turna"],rod:"Feeder",bait:"Boilie, canlı balık",note:"Meriç nehrinde yayın sezonu.",heat:4,type:"nehir",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
+const DATA_URL="https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
+const DEMO=[
+  {id:"d01",lat:41.0162,lng:28.9742,loc:"Galata Köprüsü",fish:["Lüfer","Kolyoz","Kefal"],rod:"Olta",bait:"Çoklu iğne, hamsi",note:"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.",heat:5,type:"deniz",time:"Az önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d02",lat:41.0165,lng:28.9730,loc:"Eminönü",fish:["Kefal","İstavrit"],rod:"Olta",bait:"Ekmek, solucan",note:"Eminönü rıhtımında kefal aktif.",heat:4,type:"deniz",time:"45dk önce",source:"Sihirli Zoka Radar",hot:false},
+  {id:"d03",lat:41.0225,lng:28.9740,loc:"Karaköy",fish:["Lüfer","Levrek"],rod:"Spin",bait:"Küçük kaşık",note:"Karaköy iskelesi. Sabah lüfer çıktı.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d04",lat:41.1987,lng:29.0622,loc:"Rumeli Kavağı",fish:["Palamut","Lüfer","Torik"],rod:"Trolling",bait:"CD-11 Rapala",note:"Rumeli Kavağı. Torik ve palamut aktif.",heat:5,type:"deniz",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d05",lat:41.1665,lng:29.0530,loc:"Sarıyer",fish:["Lüfer","Palamut"],rod:"Spin",bait:"Mepps No:3",note:"Sarıyer açıkları. Lüfer girişi başladı.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d06",lat:40.9781,lng:27.5117,loc:"Tekirdağ",fish:["Lüfer","Palamut","Kolyoz"],rod:"Surf",bait:"Çoklu iğne",note:"Tekirdağ sahili. Palamut geçişi var.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d07",lat:39.8320,lng:26.0640,loc:"Bozcaada",fish:["Çipura","Levrek","Sargoz","Lahos"],rod:"LRF",bait:"Micro jig, gulp",note:"Bozcaada etrafı berrak su, çipura bol.",heat:5,type:"deniz",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d08",lat:40.1780,lng:25.9000,loc:"Gökçeada",fish:["Çipura","Levrek","Lahos","Grida"],rod:"Jigging",bait:"Silikon, jig",note:"Gökçeada dipten güzel balıklar tutuluyor.",heat:5,type:"deniz",time:"3s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d09",lat:39.3176,lng:26.6963,loc:"Ayvalık",fish:["Çipura","Levrek","Sargoz"],rod:"LRF",bait:"Micro jig, silikon",note:"Ayvalık adaları etrafı harika.",heat:5,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d10",lat:40.7200,lng:30.2000,loc:"Sapanca Gölü",fish:["Alabalık","Sazan","Yayın"],rod:"Spin",bait:"Rapala, solucan",note:"Sapanca sabah alabalık harika.",heat:5,type:"göl",time:"55dk önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d11",lat:41.0600,lng:28.5900,loc:"Büyükçekmece Gölü",fish:["Sazan","Turna","Kefal"],rod:"Feeder",bait:"Mısır, solucan",note:"Büyükçekmece Gölü sazan sezonu açık.",heat:5,type:"göl",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d12",lat:40.1546,lng:26.4086,loc:"Çanakkale",fish:["Lüfer","Palamut","Kolyoz"],rod:"Trolling",bait:"Rapala",note:"Çanakkale Boğazı göç dönemi aktif.",heat:5,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d13",lat:40.5500,lng:26.6000,loc:"Saros Körfezi",fish:["Çipura","Levrek","Sargoz"],rod:"LRF",bait:"Micro jig",note:"Saros körfezi temiz su, çipura bol.",heat:4,type:"deniz",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d14",lat:41.6771,lng:26.5557,loc:"Edirne - Meriç",fish:["Sazan","Yayın","Turna"],rod:"Feeder",bait:"Boilie, canlı balık",note:"Meriç nehrinde yayın sezonu.",heat:4,type:"nehir",time:"2s önce",source:"Sihirli Zoka Radar",hot:true},
+  {id:"d15",lat:40.4330,lng:29.5500,loc:"İznik Gölü",fish:["Sazan","Levrek","Sudak"],rod:"Feeder",bait:"Pellet, mısır",note:"İznik gölü sazan sezonu açık.",heat:4,type:"göl",time:"4s önce",source:"Sihirli Zoka Radar",hot:false},
 ];
 
-let REPORTS=[], activeF='all', markers={}, map, csecs=10800;
-let userR=[];
-try{ userR=JSON.parse(localStorage.getItem('szr_reports')||'[]'); }catch(e){}
+let REPORTS=[],activeF='all',markers={},map,csecs=10800;
+let userR=[];try{userR=JSON.parse(localStorage.getItem('szr')||'[]');}catch(e){}
 
 function initMap(){
-  map = L.map('map',{center:[39.8,28.5],zoom:6,zoomControl:false});
+  map=L.map('map',{center:[39.8,28.5],zoom:6,zoomControl:false});
   L.control.zoom({position:'bottomright'}).addTo(map);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'© OSM © CartoDB',subdomains:'abcd',maxZoom:19
-  }).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OSM © CartoDB',subdomains:'abcd',maxZoom:19}).addTo(map);
 }
 
 async function loadData(){
   try{
-    const res = await fetch(DATA_URL+'?t='+Date.now());
+    const res=await fetch(DATA_URL+'?t='+Date.now());
     if(!res.ok) throw 0;
-    const data = await res.json();
-    REPORTS = [...(data.reports||[]),...userR];
+    const data=await res.json();
+    REPORTS=[...(data.reports||[]),...userR];
     if(data.last_updated){
-      const d = new Date(data.last_updated);
-      document.getElementById('lastup').textContent =
-        d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+      const d=new Date(data.last_updated);
+      const el=document.getElementById('lup');
+      if(el) el.textContent=d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
     }
     setLive(true);
   }catch(e){
-    REPORTS = [...DEMO,...userR];
-    document.getElementById('lastup').textContent='Demo';
+    REPORTS=[...DEMO,...userR];
+    const el=document.getElementById('lup');if(el) el.textContent='Demo';
     setLive(false);
   }
-  document.getElementById('loader').style.display='none';
-  renderAll(); updateStats();
+  document.getElementById('ldr').style.display='none';
+  renderAll();updateStats();
 }
 
 function setLive(ok){
-  const dot=document.getElementById('live-dot');
-  const lbl=document.getElementById('live-label');
-  if(ok){
-    dot.style.background='#00ff88';dot.style.boxShadow='0 0 8px #00ff88';
-    lbl.textContent='CANLI';lbl.style.color='#00ff88';
-  }else{
-    dot.style.background='#f0c040';dot.style.boxShadow='0 0 8px #f0c040';
-    lbl.textContent='DEMO';lbl.style.color='#f0c040';
-  }
+  const d=document.getElementById('ldot'),l=document.getElementById('llbl');
+  if(ok){d.style.background='#00e87a';d.style.boxShadow='0 0 9px #00e87a';l.textContent='CANLI';l.style.color='#00e87a';}
+  else{d.style.background='#f4c430';d.style.boxShadow='0 0 9px #f4c430';l.textContent='DEMO';l.style.color='#f4c430';}
 }
 
 function getIcon(r){
-  const C={deniz:'#00d4ff',göl:'#00ff88',nehir:'#f0c040'};
-  const c=C[r.type]||'#c8e8f8';
-  const s=r.hot?20:12;
-  const glow=r.hot?`box-shadow:0 0 12px ${c},0 0 24px ${c}60;`:'';
-  const ping=r.hot?`
-    <div style="position:absolute;top:-6px;left:-6px;width:${s+12}px;height:${s+12}px;border-radius:50%;border:1.5px solid ${c};animation:radarPing 2s ease-out infinite;"></div>
-    <div style="position:absolute;top:-3px;left:-3px;width:${s+6}px;height:${s+6}px;border-radius:50%;border:1px solid ${c};animation:radarPing 2s ease-out infinite .6s;"></div>`:'';
-  const emoji=r.type==='göl'?'🐠':r.type==='nehir'?'🎣':'🐟';
-  return L.divIcon({
-    className:'',
-    html:`<div style="position:relative;width:${s}px;height:${s}px;">${ping}<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};${glow}border:1.5px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:${Math.floor(s*.55)}px;">${emoji}</div></div>`,
-    iconSize:[s,s],iconAnchor:[s/2,s/2]
-  });
+  const C={deniz:'#00c8f8',göl:'#00e87a',nehir:'#f4c430'};
+  const c=C[r.type]||'#d8eef8';const s=r.hot?22:13;
+  const glow=r.hot?`box-shadow:0 0 12px ${c},0 0 22px ${c}50;`:'';
+  const ping=r.hot?`<div style="position:absolute;top:-6px;left:-6px;width:${s+12}px;height:${s+12}px;border-radius:50%;border:1px solid ${c};animation:rPing 2s ease-out infinite;"></div><div style="position:absolute;top:-3px;left:-3px;width:${s+6}px;height:${s+6}px;border-radius:50%;border:1px solid ${c};animation:rPing 2s ease-out infinite .6s;"></div>`:'';
+  const em=r.type==='göl'?'🐠':r.type==='nehir'?'🎣':'🐟';
+  return L.divIcon({className:'',html:`<div style="position:relative;width:${s}px;height:${s}px;">${ping}<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};${glow}border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:${Math.floor(s*.55)}px;">${em}</div></div>`,iconSize:[s,s],iconAnchor:[s/2,s/2]});
 }
 
 function getFiltered(){
   const q=document.getElementById('sbox').value.toLowerCase();
-  const rodF=['spin','lrf','surf','jigging'];
+  const rf=['spin','lrf','surf','jigging'];
   return REPORTS.filter(r=>{
     if(activeF==='hot') return r.hot;
-    if(rodF.includes(activeF)) return (r.rod||'').toLowerCase()===activeF;
+    if(rf.includes(activeF)) return (r.rod||'').toLowerCase()===activeF;
     if(activeF!=='all'&&r.type!==activeF) return false;
     if(q) return r.loc.toLowerCase().includes(q)||(r.fish||[]).some(f=>f.toLowerCase().includes(q));
     return true;
@@ -445,66 +467,63 @@ function getFiltered(){
 
 function renderAll(){
   if(!map) return;
-  Object.values(markers).forEach(m=>map.removeLayer(m)); markers={};
+  Object.values(markers).forEach(m=>map.removeLayer(m));markers={};
   const list=getFiltered();
   list.forEach(r=>{
     const m=L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
-    const th=r.rod?`<span class="tackle-tag rod-tag">🎣 ${r.rod}</span>`:'';
-    const tb=r.bait?`<span class="tackle-tag bait-tag">🪱 ${r.bait}</span>`:'';
-    m.bindPopup(`<div class="popup-inner">
-      <div class="popup-loc">📍 ${r.loc}</div>
-      <div class="popup-fish">${(r.fish||[]).map(f=>`<span class="popup-tag">${f}</span>`).join('')}</div>
-      ${th||tb?`<div class="popup-tackle">${th}${tb}</div>`:''}
-      <div class="popup-note">${r.note||''}</div>
-      <div class="popup-footer"><span>${r.time||''}</span><span>${r.source||''}</span></div>
-    </div>`,{maxWidth:260});
+    const th=r.rod?`<span class="tk r">🎣 ${r.rod}</span>`:'';
+    const tb=r.bait?`<span class="tk b">🪱 ${r.bait}</span>`:'';
+    m.bindPopup(`<div class="pi"><div class="pl">📍 ${r.loc}</div><div class="pf">${(r.fish||[]).map(f=>`<span class="pt2">${f}</span>`).join('')}</div>${th||tb?`<div class="ptk">${th}${tb}</div>`:''}<div class="pn">${r.note||''}</div><div class="pf2"><span>${r.time||''}</span><span>${r.source||''}</span></div></div>`,{maxWidth:260});
     markers[r.id]=m;
   });
-  renderList(list);
-  document.getElementById('rcount').textContent=list.length+' rapor';
+  renderList(list,'rlist');
+  renderList(list,'dlist');
+  document.getElementById('rcnt').textContent=list.length+' rapor';
+  document.getElementById('dr-cnt').textContent=list.length+' rapor';
 }
 
-function renderList(list){
-  const el=document.getElementById('rlist');
+function makeCard(r,i){
+  const d=document.createElement('div');
+  d.className='rc'+(r.hot?' hot':'');
+  d.style.animationDelay=(i*25)+'ms';
+  const dots=Array.from({length:5},(_,j)=>`<div class="hd${j<(r.heat||0)?' on':''}"></div>`).join('');
+  const ld=r.type==='göl'?'g':r.type==='nehir'?'n':'d';
+  d.innerHTML=`
+    <div class="ct">
+      <div class="ftags">${(r.fish||[]).map((f,j)=>`<span class="ft${j===0&&r.hot?' h':j===0?' p':''}">${f}</span>`).join('')}</div>
+      <span class="tt">${r.time||''}</span>
+    </div>
+    <div class="ln"><div class="ld ${ld}"></div>${r.loc}</div>
+    <div class="cn">${r.note||''}</div>
+    ${r.rod||r.bait?`<div class="tr">${r.rod?`<span class="tk r">🎣 ${r.rod}</span>`:''}${r.bait?`<span class="tk b">🪱 ${r.bait}</span>`:''}</div>`:''}
+    <div class="hr"><div class="hb">${dots}</div><span class="src">${r.source||''}</span></div>`;
+  d.onclick=()=>{
+    closeDrawer();
+    map.flyTo([r.lat,r.lng],11,{duration:1.2});
+    setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1300);
+  };
+  return d;
+}
+
+function renderList(list,cid){
+  const el=document.getElementById(cid);if(!el) return;
   el.innerHTML='';
-  if(!list.length){
-    el.innerHTML='<div style="padding:30px;text-align:center;color:var(--text-muted);font-size:11px;letter-spacing:1px">BU FİLTREDE RAPOR YOK</div>';
-    return;
-  }
-  list.slice().sort((a,b)=>(b.heat||0)-(a.heat||0)).forEach((r,i)=>{
-    const d=document.createElement('div');
-    d.className='rcard'+(r.hot?' hot':'');
-    d.style.animationDelay=(i*30)+'ms';
-    const dots=Array.from({length:5},(_,j)=>`<div class="hdot${j<(r.heat||0)?' on':''}"></div>`).join('');
-    const tc=r.type==='göl'?'gol':r.type==='nehir'?'nehir':'deniz';
-    d.innerHTML=`
-      <div class="card-top">
-        <div class="fish-tags">${(r.fish||[]).map((f,j)=>`<span class="fish-tag${j===0&&r.hot?' hot-fish':j===0?' primary':''}">${f}</span>`).join('')}</div>
-        <span class="time-tag">${r.time||''}</span>
-      </div>
-      <div class="loc-name"><div class="loc-dot ${tc}"></div>${r.loc}</div>
-      <div class="card-note">${r.note||''}</div>
-      ${r.rod||r.bait?`<div class="tackle-row">${r.rod?`<span class="tackle-tag rod-tag">🎣 ${r.rod}</span>`:''}${r.bait?`<span class="tackle-tag bait-tag">🪱 ${r.bait}</span>`:''}</div>`:''}
-      <div class="heat-row"><div class="heat-bar">${dots}</div><span class="source-tag">${r.source||''}</span></div>`;
-    d.onclick=()=>{
-      map.flyTo([r.lat,r.lng],11,{duration:1.2});
-      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1300);
-    };
-    el.appendChild(d);
-  });
+  if(!list.length){el.innerHTML='<div style="padding:24px;text-align:center;color:var(--txt3);font-size:13px;">Bu filtrede rapor bulunamadı.</div>';return;}
+  list.slice().sort((a,b)=>(b.heat||0)-(a.heat||0)).forEach((r,i)=>el.appendChild(makeCard(r,i)));
 }
 
 function setF(f,btn){
   activeF=f;
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAll();
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderAll();
+}
+function updateStats(){
+  document.getElementById('sa').textContent=REPORTS.filter(r=>r.hot).length;
+  document.getElementById('st').textContent=REPORTS.length;
 }
 
-function updateStats(){
-  document.getElementById('s-active').textContent=REPORTS.filter(r=>r.hot).length;
-  document.getElementById('s-total').textContent=REPORTS.length;
-}
+function toggleDrawer(){const d=document.getElementById('drawer'),o=document.getElementById('overlay');const op=d.classList.toggle('open');o.style.display=op?'block':'none';}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').style.display='none';}
 
 function submitR(){
   const loc=document.getElementById('floc').value.trim();
@@ -513,18 +532,8 @@ function submitR(){
   const bait=document.getElementById('fbait').value.trim();
   const note=document.getElementById('fnote').value.trim();
   if(!loc||!fish){alert('Lokasyon ve balık türü zorunludur!');return;}
-  const nr={
-    id:'u'+Date.now(),
-    lat:39+Math.random()*3,lng:26+Math.random()*5,
-    loc,fish:fish.split(',').map(f=>f.trim()),
-    rod:rod||'',bait:bait||'',
-    note:note||'Kullanıcı raporu.',
-    heat:3,type:'deniz',time:'Az önce',
-    timestamp:new Date().toISOString(),
-    source:'Sihirli Zoka Radar',hot:false,
-  };
-  userR.unshift(nr);
-  try{localStorage.setItem('szr_reports',JSON.stringify(userR.slice(0,20)));}catch(e){}
+  const nr={id:'u'+Date.now(),lat:39+Math.random()*3,lng:26+Math.random()*5,loc,fish:fish.split(',').map(f=>f.trim()),rod:rod||'',bait:bait||'',note:note||'Kullanıcı raporu.',heat:3,type:'deniz',time:'Az önce',timestamp:new Date().toISOString(),source:'Sihirli Zoka Radar',hot:false};
+  userR.unshift(nr);try{localStorage.setItem('szr',JSON.stringify(userR.slice(0,20)));}catch(e){}
   REPORTS.unshift(nr);
   ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('frod').value='';
@@ -532,13 +541,16 @@ function submitR(){
 }
 
 setInterval(()=>{
-  csecs--;
-  if(csecs<=0){csecs=10800;loadData();}
+  csecs--;if(csecs<=0){csecs=10800;loadData();}
   const h=Math.floor(csecs/3600),m=Math.floor((csecs%3600)/60),s=csecs%60;
-  document.getElementById('cdtimer').textContent=h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
+  document.getElementById('cdt').textContent=h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
 },1000);
 
-window.addEventListener('load',()=>{initMap();loadData();});
+let sy=0;
+document.getElementById('drawer').addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
+document.getElementById('drawer').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>55)closeDrawer();},{passive:true});
+
+window.addEventListener('DOMContentLoaded',()=>{initMap();loadData();});
 </script>
 </body>
 </html>
