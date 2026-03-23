@@ -54,7 +54,8 @@ export default async function handler(request, context) {
     if(!getRes.ok) throw new Error('GitHub okuma hatası: ' + getRes.status);
 
     const fileData   = await getRes.json();
-    const content    = atob(fileData.content.replace(/\n/g, ''));
+    const bytes      = Uint8Array.from(atob(fileData.content.replace(/\n/g,'')), c=>c.charCodeAt(0));
+    const content    = new TextDecoder('utf-8').decode(bytes);
     const jsonData   = JSON.parse(content);
     const reports    = jsonData.reports || [];
 
@@ -95,7 +96,7 @@ export default async function handler(request, context) {
       },
       body: JSON.stringify({
         message: `✅ Kullanıcı raporu onaylandı: ${loc}`,
-        content: btoa(unescape(encodeURIComponent(updatedJson))),
+        content: btoa(new TextEncoder().encode(updatedJson).reduce((s,b)=>s+String.fromCharCode(b),'')),
         sha:     fileData.sha,
         branch:  'main'
       })
