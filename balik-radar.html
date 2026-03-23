@@ -30,14 +30,15 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 body::after{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(0,200,248,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,248,0.02) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(0,200,248,0.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,200,248,0.02) 1px,transparent 1px);
   background-size:50px 50px;
 }
 #app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;}
 #main{display:flex;flex:1;overflow:hidden;position:relative;}
 #map{flex:1;z-index:1;}
 
-/* ── HEADER ── */
+/* HEADER */
 #hdr{
   background:linear-gradient(180deg,rgba(1,12,22,.99),rgba(3,14,26,.96));
   border-bottom:1px solid var(--b2);
@@ -46,19 +47,9 @@ body::after{
   flex-shrink:0;position:relative;z-index:10;
   box-shadow:0 3px 25px rgba(0,0,0,.6);
 }
-#hdr::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);
-}
+#hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);}
 .logo{display:flex;align-items:center;gap:12px;}
-.logo-box{
-  width:44px;height:44px;border-radius:var(--r);
-  background:linear-gradient(135deg,rgba(0,200,248,.18),rgba(0,232,122,.08));
-  border:1px solid var(--b2);
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-  animation:boxGlow 3s ease-in-out infinite;flex-shrink:0;
-}
-@keyframes boxGlow{0%,100%{box-shadow:0 0 10px rgba(0,200,248,.25);}50%{box-shadow:0 0 22px rgba(0,200,248,.55),0 0 44px rgba(0,200,248,.15);}}
+.logo-box{width:44px;height:44px;border-radius:var(--r);background:linear-gradient(135deg,rgba(0,200,248,.18),rgba(0,232,122,.08));border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 10px rgba(0,200,248,.25);}
 .logo-t1{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--c1);letter-spacing:2px;text-shadow:0 0 15px rgba(0,200,248,.4);}
 .logo-t2{font-size:11px;color:var(--txt2);letter-spacing:1px;margin-top:1px;}
 .hdr-mid{display:flex;align-items:center;gap:16px;}
@@ -73,26 +64,28 @@ body::after{
 .lu-lbl{font-size:11px;color:var(--txt2);}
 .lu-val{font-family:'Orbitron',monospace;font-size:13px;color:var(--gold);font-weight:700;}
 
-/* ── FILTER BAR ── */
-#fbar{
-  background:rgba(3,14,26,.93);border-bottom:1px solid var(--b1);
-  padding:8px 14px;display:flex;align-items:center;gap:7px;
-  flex-shrink:0;overflow-x:auto;white-space:nowrap;z-index:10;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+/* GÜN/GECE GÖSTERGESİ */
+#mode-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--txt2);
 }
+
+/* FILTER BAR */
+#fbar{background:rgba(3,14,26,.93);border-bottom:1px solid var(--b1);padding:8px 14px;display:flex;align-items:center;gap:7px;flex-shrink:0;overflow-x:auto;white-space:nowrap;z-index:10;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 #fbar::-webkit-scrollbar{display:none;}
 .sw{position:relative;flex-shrink:0;}
 .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txt2);font-size:13px;pointer-events:none;}
 #sbox{background:var(--b1);border:1px solid var(--b1);color:var(--txt);padding:7px 10px 7px 30px;border-radius:7px;font-size:13px;font-family:'Exo 2',sans-serif;outline:none;width:180px;transition:all .2s;}
-#sbox:focus{border-color:var(--c1);box-shadow:0 0 10px rgba(0,200,248,.15);width:200px;}
+#sbox:focus{border-color:var(--c1);width:200px;}
 #sbox::placeholder{color:var(--txt3);}
 .fb{background:var(--b1);border:1px solid var(--b1);color:var(--txt2);padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
 .fb:hover{background:rgba(0,200,248,.1);border-color:var(--b2);color:var(--c1);}
-.fb.on{background:rgba(0,200,248,.14);border-color:var(--c1);color:var(--c1);box-shadow:0 0 10px rgba(0,200,248,.18);}
+.fb.on{background:rgba(0,200,248,.14);border-color:var(--c1);color:var(--c1);}
 .fb.hot.on{background:rgba(255,94,42,.14);border-color:var(--c3);color:var(--c3);}
 .sep{width:1px;height:22px;background:var(--b1);flex-shrink:0;}
 
-/* ── STATS BAR ── */
+/* STATS BAR */
 #sbar{background:rgba(1,12,22,.98);border-top:1px solid var(--b1);padding:7px 16px;display:flex;align-items:center;gap:20px;flex-shrink:0;position:relative;z-index:10;}
 #sbar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);}
 .si2{display:flex;align-items:center;gap:6px;}
@@ -103,7 +96,7 @@ body::after{
 .rbtn{background:var(--b1);border:1px solid var(--b1);color:var(--txt2);padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .2s;}
 .rbtn:hover{border-color:var(--c1);color:var(--c1);}
 
-/* ── DRAWER BUTTON ── */
+/* DRAWER BUTTON */
 #dbtn{
   position:fixed;bottom:80px;right:18px;z-index:100;
   width:58px;height:58px;border-radius:50%;
@@ -111,34 +104,34 @@ body::after{
   border:1px solid var(--b2);color:var(--c1);
   font-size:24px;cursor:pointer;
   box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 18px rgba(0,200,248,.22);
-  animation:bp 2.5s ease-in-out infinite;
   display:flex;align-items:center;justify-content:center;
 }
-@keyframes bp{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 18px rgba(0,200,248,.22);}50%{box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 30px rgba(0,200,248,.5);}}
 
-/* ── DRAWER ── */
+/* DRAWER — mobilde %55, masaüstünde %78 */
 #drawer{
   position:fixed;bottom:0;left:0;right:0;z-index:200;
   background:rgba(3,14,26,.99);
   border-top:1px solid var(--b2);
   border-radius:20px 20px 0 0;
-  height:78vh;
+  height:55vh;   /* mobil: haritanın yarısı görünür */
   transform:translateY(100%);
-  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:0 -10px 50px rgba(0,0,0,.8);
+  transition:transform .32s ease-out;
+  box-shadow:0 -8px 40px rgba(0,0,0,.7);
   display:flex;flex-direction:column;overflow:hidden;
 }
 #drawer.open{transform:translateY(0);}
-.dhandle{width:48px;height:5px;background:var(--b2);border-radius:3px;margin:12px auto 0;flex-shrink:0;cursor:pointer;}
-.dhdr{padding:12px 18px 10px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+
+.dhandle{width:44px;height:5px;background:var(--b2);border-radius:3px;margin:11px auto 0;flex-shrink:0;cursor:pointer;}
+.dhdr{padding:10px 18px 9px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
 .dttl{font-family:'Orbitron',monospace;font-size:13px;color:var(--c1);letter-spacing:2px;font-weight:700;}
 .dcls{background:none;border:none;color:var(--txt2);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;}
-.drawer-body{flex:1;overflow:hidden;display:flex;gap:0;}
-#dlist{flex:1;overflow-y:auto;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start;}
+
+.drawer-body{flex:1;overflow:hidden;display:flex;}
+#dlist{flex:1;overflow-y:auto;padding:9px 10px;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-content:start;}
 #dlist::-webkit-scrollbar{width:3px;}
 #dlist::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
-#dfp{width:260px;flex-shrink:0;border-left:1px solid var(--b1);padding:14px;background:rgba(0,0,0,.2);overflow-y:auto;}
-.ftl{font-family:'Orbitron',monospace;font-size:11px;color:var(--c1);letter-spacing:2px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+#dfp{width:260px;flex-shrink:0;border-left:1px solid var(--b1);padding:13px;background:rgba(0,0,0,.2);overflow-y:auto;}
+.ftl{font-family:'Orbitron',monospace;font-size:11px;color:var(--c1);letter-spacing:2px;font-weight:700;margin-bottom:11px;display:flex;align-items:center;gap:8px;}
 .ftl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b2),transparent);}
 .fr{display:flex;gap:6px;margin-bottom:7px;}
 .fi{background:rgba(0,200,248,.04);border:1px solid var(--b1);color:var(--txt);padding:9px 10px;border-radius:6px;font-size:13px;font-family:'Exo 2',sans-serif;flex:1;outline:none;transition:border-color .2s;}
@@ -150,12 +143,10 @@ body::after{
 .sb2{width:100%;padding:10px;background:linear-gradient(135deg,rgba(0,200,248,.14),rgba(0,232,122,.07));border:1px solid var(--b2);color:var(--c1);font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;border-radius:7px;cursor:pointer;transition:all .2s;}
 .sb2:hover{box-shadow:0 0 14px rgba(0,200,248,.28);}
 
-/* ── CARDS ── */
-.rc{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;animation:cin .3s ease both;}
+/* CARDS */
+.rc{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);padding:12px;cursor:pointer;transition:background .2s,border-color .2s;position:relative;overflow:hidden;animation:cin .3s ease both;}
 @keyframes cin{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.rc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,248,.28),transparent);opacity:0;transition:.22s;}
 .rc:hover{background:var(--hover);border-color:var(--b2);}
-.rc:hover::before{opacity:1;}
 .rc.hot{border-left:3px solid var(--c3);}
 .rc.hot::after{content:'🔥';position:absolute;top:8px;right:9px;font-size:13px;}
 .ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
@@ -166,9 +157,9 @@ body::after{
 .tt{font-size:10px;color:var(--txt2);white-space:nowrap;font-weight:600;}
 .ln{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
 .ld{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.ld.d{background:var(--c1);box-shadow:0 0 6px var(--c1);}
-.ld.g{background:var(--c2);box-shadow:0 0 6px var(--c2);}
-.ld.n{background:var(--gold);box-shadow:0 0 6px var(--gold);}
+.ld.d{background:var(--c1);box-shadow:0 0 5px var(--c1);}
+.ld.g{background:var(--c2);box-shadow:0 0 5px var(--c2);}
+.ld.n{background:var(--gold);box-shadow:0 0 5px var(--gold);}
 .cn{font-size:12px;color:var(--txt2);line-height:1.5;margin-bottom:5px;}
 .tr{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px;}
 .tk{display:flex;align-items:center;gap:2px;padding:3px 7px;border-radius:4px;font-size:11px;font-weight:700;}
@@ -177,10 +168,10 @@ body::after{
 .hr{display:flex;align-items:center;gap:5px;}
 .hb{display:flex;gap:2px;}
 .hd{width:11px;height:3px;border-radius:2px;background:rgba(255,94,42,.12);}
-.hd.on{background:var(--c3);box-shadow:0 0 4px var(--c3);}
+.hd.on{background:var(--c3);}
 .src{font-size:10px;color:var(--txt3);margin-left:auto;font-weight:600;}
 
-/* ── LOADER ── */
+/* LOADER */
 #ldr{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .lradar{width:110px;height:110px;border-radius:50%;border:1px solid rgba(0,200,248,.18);position:relative;margin-bottom:22px;}
 .lradar::before,.lradar::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,200,248,.09);}
@@ -189,14 +180,14 @@ body::after{
 .lswp{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 60%,rgba(0,200,248,.35) 100%);animation:swp 1.8s linear infinite;}
 @keyframes swp{to{transform:rotate(360deg);}}
 .ldot{position:absolute;top:50%;left:50%;width:6px;height:6px;border-radius:50%;background:var(--c1);transform:translate(-50%,-50%);box-shadow:0 0 14px var(--c1);}
-.lt1{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--c1);letter-spacing:4px;margin-bottom:7px;text-shadow:0 0 18px rgba(0,200,248,.5);}
+.lt1{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--c1);letter-spacing:4px;margin-bottom:7px;}
 .lt2{font-size:13px;color:var(--txt2);letter-spacing:2px;font-weight:600;}
 .lbar{width:200px;height:2px;background:rgba(0,200,248,.1);border-radius:1px;margin-top:20px;overflow:hidden;}
 .lbf{height:100%;background:linear-gradient(90deg,transparent,var(--c1));animation:ba 1.4s ease-in-out infinite;}
 @keyframes ba{0%{width:0;margin-left:0;}50%{width:60%;}100%{width:0;margin-left:100%;}}
 
-/* ── POPUP ── */
-.leaflet-popup-content-wrapper{background:rgba(3,14,26,.98)!important;border:1px solid var(--b2)!important;border-radius:12px!important;box-shadow:0 12px 40px rgba(0,0,0,.8),0 0 20px rgba(0,200,248,.12)!important;padding:0!important;}
+/* POPUP */
+.leaflet-popup-content-wrapper{background:rgba(3,14,26,.98)!important;border:1px solid var(--b2)!important;border-radius:12px!important;box-shadow:0 12px 40px rgba(0,0,0,.8)!important;padding:0!important;}
 .leaflet-popup-tip-container{display:none;}
 .leaflet-popup-content{margin:0!important;}
 .pi{padding:15px 17px;min-width:230px;}
@@ -207,19 +198,16 @@ body::after{
 .pn{font-size:12px;color:var(--txt2);line-height:1.55;margin-bottom:9px;}
 .pf2{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);font-weight:600;}
 
-/* ── HARITA MARKER ÖRNEĞİ (CSS) ── */
-/* Desktop: animasyonlu ping */
-@keyframes rPing{0%{transform:scale(1);opacity:.8;}100%{transform:scale(4.5);opacity:0;}}
-
-/* Mobil: animasyon yok, sadece glow */
-@media(max-width:640px){
-  /* marker animasyonlarını durdur */
-  .marker-ping{display:none!important;}
+/* MARKER ANİMASYONLARI — sadece masaüstünde, çok hafif */
+@keyframes softPing{
+  0%{transform:scale(1);opacity:0.6;}
+  70%{transform:scale(2.2);opacity:0;}
+  100%{transform:scale(2.2);opacity:0;}
 }
 
-#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;backdrop-filter:blur(2px);}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;}
 
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media(max-width:800px){
   #dlist{grid-template-columns:1fr;}
   #dfp{display:none;}
@@ -229,10 +217,15 @@ body::after{
   .cd-wrap{display:none;}
   #fbar{padding:6px 10px;}
   #sbox{width:140px;}
-  #sbox:focus{width:160px;}
   #sbar{padding:5px 12px;gap:14px;}
   .sl{font-size:10px;}
   .sv{font-size:12px;}
+  /* Mobilde drawer yüksekliği %55 — harita görünür kalır */
+  #drawer{height:55vh;}
+}
+@media(min-width:801px){
+  /* Masaüstünde drawer daha büyük */
+  #drawer{height:75vh;}
 }
 @media(max-width:400px){
   .logo-t1{font-size:12px;letter-spacing:1px;}
@@ -296,6 +289,7 @@ body::after{
         <div class="cd-lbl">Sonraki Güncelleme</div>
         <div class="cd-val" id="cdt">3:00:00</div>
       </div>
+      <div id="mode-badge">☀️ Gündüz</div>
     </div>
     <div class="hdr-right">
       <div class="lu-lbl">Son Güncelleme</div>
@@ -335,12 +329,48 @@ body::after{
 </div>
 
 <script>
-const DATA_URL="https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
+const DATA_URL = "https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
+const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 800;
 
-// Mobil mi masaüstü mü?
-const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 640;
+// ── GECE / GÜNDÜZ HARITA ────────────────────────────────────────
+// 06:00–20:00 gündüz, geri kalanı gece (Türkiye saati UTC+3)
+function isDaytime(){
+  const now = new Date();
+  const trHour = (now.getUTCHours() + 3) % 24;
+  return trHour >= 6 && trHour < 20;
+}
 
-const DEMO=[
+const TILE_DARK  = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+const TILE_LIGHT = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+let tileLayer = null;
+let currentDaytime = null;
+
+function updateMapTheme(){
+  const day = isDaytime();
+  if(day === currentDaytime) return; // değişmedi, dokunma
+  currentDaytime = day;
+
+  const badge = document.getElementById('mode-badge');
+  if(badge) badge.textContent = day ? '☀️ Gündüz' : '🌙 Gece';
+
+  if(!map) return;
+  if(tileLayer) map.removeLayer(tileLayer);
+  tileLayer = L.tileLayer(day ? TILE_LIGHT : TILE_DARK, {
+    attribution:'© OSM © CartoDB',
+    subdomains:'abcd',
+    maxZoom:19
+  }).addTo(map);
+
+  // Gündüz harita açık, ui renklerini de hafif güncelle
+  // (sadece harita tile değişir, UI karanlık kalır — ama header arka planı biraz açılır)
+  document.getElementById('hdr').style.background = day
+    ? 'linear-gradient(180deg,rgba(5,20,40,0.98),rgba(10,30,55,0.96))'
+    : 'linear-gradient(180deg,rgba(1,12,22,0.99),rgba(3,14,26,0.96))';
+}
+
+// ── DEMO VERİ ────────────────────────────────────────────────────
+const DEMO = [
   {id:"d01",lat:41.0162,lng:28.9742,loc:"Galata Köprüsü",fish:["Lüfer","Kolyoz","Kefal"],rod:"Olta",bait:"Çoklu iğne, hamsi",note:"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.",heat:5,type:"deniz",time:"Az önce",source:"Sihirli Zoka Radar",hot:true},
   {id:"d02",lat:41.0165,lng:28.9730,loc:"Eminönü",fish:["Kefal","İstavrit"],rod:"Olta",bait:"Ekmek, solucan",note:"Eminönü rıhtımında kefal aktif.",heat:4,type:"deniz",time:"45dk önce",source:"Sihirli Zoka Radar",hot:false},
   {id:"d03",lat:41.0225,lng:28.9740,loc:"Karaköy",fish:["Lüfer","Levrek"],rod:"Spin",bait:"Küçük kaşık",note:"Karaköy iskelesi. Sabah lüfer çıktı.",heat:4,type:"deniz",time:"1s önce",source:"Sihirli Zoka Radar",hot:true},
@@ -358,102 +388,123 @@ const DEMO=[
   {id:"d15",lat:40.4330,lng:29.5500,loc:"İznik Gölü",fish:["Sazan","Levrek","Sudak"],rod:"Feeder",bait:"Pellet, mısır",note:"İznik gölü sazan sezonu açık.",heat:4,type:"göl",time:"4s önce",source:"Sihirli Zoka Radar",hot:false},
 ];
 
-let REPORTS=[],activeF='all',markers={},map,csecs=10800;
-let userR=[];try{userR=JSON.parse(localStorage.getItem('szr')||'[]');}catch(e){}
+let REPORTS=[], activeF='all', markers={}, map, csecs=10800;
+let userR=[];
+try{ userR=JSON.parse(localStorage.getItem('szr')||'[]'); }catch(e){}
 
+// ── HARİTA ──────────────────────────────────────────────────────
 function initMap(){
-  map=L.map('map',{center:[39.8,28.5],zoom:6,zoomControl:false,preferCanvas:true});
+  map = L.map('map', {center:[39.8,28.5], zoom:6, zoomControl:false, preferCanvas:true});
   L.control.zoom({position:'bottomright'}).addTo(map);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'© OSM © CartoDB',subdomains:'abcd',maxZoom:19
-  }).addTo(map);
+  updateMapTheme(); // başlangıçta doğru tile yükle
 }
 
-async function loadData(){
-  try{
-    const res=await fetch(DATA_URL+'?t='+Date.now());
-    if(!res.ok) throw 0;
-    const data=await res.json();
-    REPORTS=[...(data.reports||[]),...userR];
-    if(data.last_updated){
-      const d=new Date(data.last_updated);
-      const el=document.getElementById('lup');
-      if(el) el.textContent=d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-    }
-    setLive(true);
-  }catch(e){
-    REPORTS=[...DEMO,...userR];
-    const el=document.getElementById('lup');if(el) el.textContent='Demo';
-    setLive(false);
-  }
-  document.getElementById('ldr').style.display='none';
-  renderAll();updateStats();
-}
-
-function setLive(ok){
-  const d=document.getElementById('ldot'),l=document.getElementById('llbl');
-  if(ok){d.style.background='#00e87a';d.style.boxShadow='0 0 9px #00e87a';l.textContent='CANLI';l.style.color='#00e87a';}
-  else{d.style.background='#f4c430';d.style.boxShadow='0 0 9px #f4c430';l.textContent='DEMO';l.style.color='#f4c430';}
-}
-
-// ── MARKER — mobil ve masaüstü farklı ──────────────────────────
+// ── MARKER ──────────────────────────────────────────────────────
 function getIcon(r){
-  const C={deniz:'#00c8f8',göl:'#00e87a',nehir:'#f4c430'};
-  const c=C[r.type]||'#d8eef8';
+  const C = {deniz:'#00c8f8', göl:'#00e87a', nehir:'#f4c430'};
+  const c = C[r.type] || '#d8eef8';
 
+  // ─ MOBİL: Sade daire, animasyon yok ─
   if(isMobile){
-    // MOBİL: Sade, net, animasyonsuz
-    // Aktif = büyük dolu daire + beyaz border
-    // Normal = küçük dolu daire
     const s = r.hot ? 18 : 11;
-    const border = r.hot ? '2.5px solid rgba(255,255,255,0.7)' : '1.5px solid rgba(255,255,255,0.3)';
-    const shadow = r.hot
-      ? `box-shadow:0 0 0 3px ${c}40, 0 2px 6px rgba(0,0,0,0.6);`
-      : `box-shadow:0 1px 4px rgba(0,0,0,0.5);`;
-    // Aktif noktalar için ateş emoji
-    const badge = r.hot
-      ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:10px;line-height:1;">🔥</div>`
+    const ring = r.hot
+      ? `<div style="position:absolute;inset:-4px;border-radius:50%;border:2px solid ${c};opacity:0.5;"></div>`
+      : '';
+    const fire = r.hot
+      ? `<div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:10px;line-height:1;">🔥</div>`
       : '';
     return L.divIcon({
       className:'',
       html:`<div style="position:relative;width:${s}px;height:${s}px;">
-        ${badge}
+        ${ring}${fire}
         <div style="width:${s}px;height:${s}px;border-radius:50%;
-          background:${c};${shadow}
-          border:${border};"></div>
+          background:${c};
+          border:${r.hot?'2px':'1.5px'} solid rgba(255,255,255,${r.hot?.6:.25});
+          box-shadow:0 2px 8px rgba(0,0,0,.5)${r.hot?`,0 0 6px ${c}40`:''};
+        "></div>
       </div>`,
-      iconSize:[s,s],
-      iconAnchor:[s/2,s/2]
-    });
-  } else {
-    // MASAÜSTÜ: Animasyonlu ping
-    const s=r.hot?22:13;
-    const glow=r.hot?`box-shadow:0 0 12px ${c},0 0 22px ${c}50;`:'';
-    const ping=r.hot?`
-      <div style="position:absolute;top:-6px;left:-6px;width:${s+12}px;height:${s+12}px;border-radius:50%;border:1px solid ${c};animation:rPing 2s ease-out infinite;"></div>
-      <div style="position:absolute;top:-3px;left:-3px;width:${s+6}px;height:${s+6}px;border-radius:50%;border:1px solid ${c};animation:rPing 2s ease-out infinite .6s;"></div>`:'';
-    const em=r.type==='göl'?'🐠':r.type==='nehir'?'🎣':'🐟';
-    return L.divIcon({
-      className:'',
-      html:`<div style="position:relative;width:${s}px;height:${s}px;">
-        ${ping}
-        <div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};${glow}
-          border:1px solid rgba(255,255,255,.2);
-          display:flex;align-items:center;justify-content:center;
-          font-size:${Math.floor(s*.55)}px;">${em}</div>
-      </div>`,
-      iconSize:[s,s],iconAnchor:[s/2,s/2]
+      iconSize:[s,s], iconAnchor:[s/2, r.hot?s/2+4:s/2]
     });
   }
+
+  // ─ MASAÜSTÜ: Hafif animasyon — tek ping halkası, yavaş ve şeffaf ─
+  const s = r.hot ? 20 : 12;
+  const day = isDaytime();
+
+  // Gündüz haritada daha koyu border
+  const borderColor = day ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.2)';
+  const shadow = r.hot
+    ? `box-shadow:0 0 8px ${c}60,0 0 16px ${c}20;`
+    : `box-shadow:0 1px 4px rgba(0,0,0,.4);`;
+
+  // Tek halka, yavaş, %50 opaklık — göz yormaz
+  const ping = r.hot
+    ? `<div style="
+        position:absolute;
+        top:50%;left:50%;
+        width:${s+14}px;height:${s+14}px;
+        margin-top:-${(s+14)/2}px;margin-left:-${(s+14)/2}px;
+        border-radius:50%;
+        border:1.5px solid ${c};
+        opacity:0;
+        animation:softPing 3s ease-out infinite;
+      "></div>`
+    : '';
+
+  const em = r.type==='göl' ? '🐠' : r.type==='nehir' ? '🎣' : '🐟';
+
+  return L.divIcon({
+    className:'',
+    html:`<div style="position:relative;width:${s}px;height:${s}px;">
+      ${ping}
+      <div style="
+        width:${s}px;height:${s}px;border-radius:50%;
+        background:${c};${shadow}
+        border:1.5px solid ${borderColor};
+        display:flex;align-items:center;justify-content:center;
+        font-size:${Math.floor(s*.55)}px;
+      ">${em}</div>
+    </div>`,
+    iconSize:[s,s], iconAnchor:[s/2,s/2]
+  });
+}
+
+// ── VERİ ────────────────────────────────────────────────────────
+async function loadData(){
+  try{
+    const res = await fetch(DATA_URL+'?t='+Date.now());
+    if(!res.ok) throw 0;
+    const data = await res.json();
+    REPORTS = [...(data.reports||[]), ...userR];
+    if(data.last_updated){
+      const d = new Date(data.last_updated);
+      const el = document.getElementById('lup');
+      if(el) el.textContent = d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    }
+    setLive(true);
+  }catch(e){
+    REPORTS = [...DEMO, ...userR];
+    const el = document.getElementById('lup');
+    if(el) el.textContent = 'Demo';
+    setLive(false);
+  }
+  document.getElementById('ldr').style.display='none';
+  renderAll(); updateStats();
+}
+
+function setLive(ok){
+  const d=document.getElementById('ldot'), l=document.getElementById('llbl');
+  if(ok){d.style.background='#00e87a';d.style.boxShadow='0 0 9px #00e87a';l.textContent='CANLI';l.style.color='#00e87a';}
+  else{d.style.background='#f4c430';d.style.boxShadow='0 0 9px #f4c430';l.textContent='DEMO';l.style.color='#f4c430';}
 }
 
 function getFiltered(){
-  const q=document.getElementById('sbox').value.toLowerCase();
-  const rf=['spin','lrf','surf','jigging'];
+  const q = document.getElementById('sbox').value.toLowerCase();
+  const rf = ['spin','lrf','surf','jigging'];
   return REPORTS.filter(r=>{
     if(activeF==='hot') return r.hot;
     if(rf.includes(activeF)) return (r.rod||'').toLowerCase()===activeF;
-    if(activeF!=='all'&&r.type!==activeF) return false;
+    if(activeF!=='all' && r.type!==activeF) return false;
     if(q) return r.loc.toLowerCase().includes(q)||(r.fish||[]).some(f=>f.toLowerCase().includes(q));
     return true;
   });
@@ -461,12 +512,12 @@ function getFiltered(){
 
 function renderAll(){
   if(!map) return;
-  Object.values(markers).forEach(m=>map.removeLayer(m));markers={};
-  const list=getFiltered();
+  Object.values(markers).forEach(m=>map.removeLayer(m)); markers={};
+  const list = getFiltered();
   list.forEach(r=>{
-    const m=L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
-    const th=r.rod?`<span class="tk r">🎣 ${r.rod}</span>`:'';
-    const tb=r.bait?`<span class="tk b">🪱 ${r.bait}</span>`:'';
+    const m = L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
+    const th = r.rod ? `<span class="tk r">🎣 ${r.rod}</span>` : '';
+    const tb = r.bait ? `<span class="tk b">🪱 ${r.bait}</span>` : '';
     m.bindPopup(`<div class="pi">
       <div class="pl">📍 ${r.loc}</div>
       <div class="pf">${(r.fish||[]).map(f=>`<span class="pt2">${f}</span>`).join('')}</div>
@@ -477,16 +528,16 @@ function renderAll(){
     markers[r.id]=m;
   });
   renderList(list);
-  document.getElementById('dr-cnt').textContent=list.length+' rapor';
+  document.getElementById('dr-cnt').textContent = list.length+' rapor';
 }
 
 function makeCard(r,i){
-  const d=document.createElement('div');
-  d.className='rc'+(r.hot?' hot':'');
-  d.style.animationDelay=(i*20)+'ms';
-  const dots=Array.from({length:5},(_,j)=>`<div class="hd${j<(r.heat||0)?' on':''}"></div>`).join('');
-  const ld=r.type==='göl'?'g':r.type==='nehir'?'n':'d';
-  d.innerHTML=`
+  const d = document.createElement('div');
+  d.className = 'rc'+(r.hot?' hot':'');
+  d.style.animationDelay = (i*20)+'ms';
+  const dots = Array.from({length:5},(_,j)=>`<div class="hd${j<(r.heat||0)?' on':''}"></div>`).join('');
+  const ld = r.type==='göl'?'g':r.type==='nehir'?'n':'d';
+  d.innerHTML = `
     <div class="ct">
       <div class="ftags">${(r.fish||[]).map((f,j)=>`<span class="ft${j===0&&r.hot?' h':j===0?' p':''}">${f}</span>`).join('')}</div>
       <span class="tt">${r.time||''}</span>
@@ -495,7 +546,7 @@ function makeCard(r,i){
     <div class="cn">${r.note||''}</div>
     ${r.rod||r.bait?`<div class="tr">${r.rod?`<span class="tk r">🎣 ${r.rod}</span>`:''}${r.bait?`<span class="tk b">🪱 ${r.bait}</span>`:''}</div>`:''}
     <div class="hr"><div class="hb">${dots}</div><span class="src">${r.source||''}</span></div>`;
-  d.onclick=()=>{
+  d.onclick = ()=>{
     closeDrawer();
     map.flyTo([r.lat,r.lng],11,{duration:1.2});
     setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1300);
@@ -504,8 +555,9 @@ function makeCard(r,i){
 }
 
 function renderList(list){
-  const el=document.getElementById('dlist');if(!el) return;
-  el.innerHTML='';
+  const el = document.getElementById('dlist');
+  if(!el) return;
+  el.innerHTML = '';
   if(!list.length){
     el.innerHTML='<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--txt3);font-size:13px;">Bu filtrede rapor bulunamadı.</div>';
     return;
@@ -516,15 +568,15 @@ function renderList(list){
 function setF(f,btn){
   activeF=f;
   document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');renderAll();
+  btn.classList.add('on'); renderAll();
 }
 function updateStats(){
-  document.getElementById('sa').textContent=REPORTS.filter(r=>r.hot).length;
-  document.getElementById('st').textContent=REPORTS.length;
+  document.getElementById('sa').textContent = REPORTS.filter(r=>r.hot).length;
+  document.getElementById('st').textContent = REPORTS.length;
 }
 function toggleDrawer(){
-  const d=document.getElementById('drawer'),o=document.getElementById('overlay');
-  const op=d.classList.toggle('open');o.style.display=op?'block':'none';
+  const d=document.getElementById('drawer'), o=document.getElementById('overlay');
+  const op=d.classList.toggle('open'); o.style.display=op?'block':'none';
 }
 function closeDrawer(){
   document.getElementById('drawer').classList.remove('open');
@@ -538,21 +590,31 @@ function submitR(){
   const note=document.getElementById('fnote').value.trim();
   if(!loc||!fish){alert('Lokasyon ve balık türü zorunludur!');return;}
   const nr={id:'u'+Date.now(),lat:39+Math.random()*3,lng:26+Math.random()*5,loc,fish:fish.split(',').map(f=>f.trim()),rod:rod||'',bait:bait||'',note:note||'Kullanıcı raporu.',heat:3,type:'deniz',time:'Az önce',timestamp:new Date().toISOString(),source:'Sihirli Zoka Radar',hot:false};
-  userR.unshift(nr);try{localStorage.setItem('szr',JSON.stringify(userR.slice(0,20)));}catch(e){}
+  userR.unshift(nr);
+  try{localStorage.setItem('szr',JSON.stringify(userR.slice(0,20)));}catch(e){}
   REPORTS.unshift(nr);
   ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('frod').value='';
-  renderAll();updateStats();
+  renderAll(); updateStats();
 }
+
+// ── SAYAÇ ────────────────────────────────────────────────────────
 setInterval(()=>{
-  csecs--;if(csecs<=0){csecs=10800;loadData();}
-  const h=Math.floor(csecs/3600),m=Math.floor((csecs%3600)/60),s=csecs%60;
+  csecs--;
+  if(csecs<=0){ csecs=10800; loadData(); }
+  const h=Math.floor(csecs/3600), m=Math.floor((csecs%3600)/60), s=csecs%60;
   document.getElementById('cdt').textContent=h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
-},1000);
+}, 1000);
+
+// Saatte bir harita temasını kontrol et
+setInterval(updateMapTheme, 60*1000);
+
+// Drawer swipe to close
 let sy=0;
 document.getElementById('drawer').addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
-document.getElementById('drawer').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>60)closeDrawer();},{passive:true});
-window.addEventListener('DOMContentLoaded',()=>{initMap();loadData();});
+document.getElementById('drawer').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>50)closeDrawer();},{passive:true});
+
+window.addEventListener('DOMContentLoaded',()=>{ initMap(); loadData(); });
 </script>
 </body>
 </html>
