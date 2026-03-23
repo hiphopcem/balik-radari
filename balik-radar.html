@@ -167,7 +167,7 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;}
 
 /* RESPONSIVE */
-@media(max-width:900px){
+@media(max-width:768px){
   /* Tüm animasyonları kapat - performans */
   *{animation:none!important;transition:none!important;}
   .dot{opacity:1!important;}
@@ -295,7 +295,7 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 
 <script>
 const DATA_URL = "https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
-const isMob = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 900;
+const isMob = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 769;
 
 // ── GECE/GÜNDÜZ ─────────────────────────────────────────────────
 const TILE_D = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
