@@ -297,9 +297,13 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
       <div id="rlist"></div>
       <div id="fp">
         <div class="ftl">RAPOR EKLE</div>
+        <div class="fr" style="position:relative;">
+          <input class="fi" id="floc" placeholder="Lokasyon adı yaz..." oninput="clearLocResult()">
+          <button onclick="findLoc()" style="flex-shrink:0;background:rgba(0,200,248,.15);border:1px solid var(--b2);color:var(--c1);padding:7px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">📍 Bul</button>
+        </div>
+        <div id="loc-result" style="display:none;margin-bottom:6px;padding:7px 9px;background:rgba(0,232,122,.07);border:1px solid rgba(0,232,122,.2);border-radius:5px;font-size:11px;color:var(--c2);"></div>
         <div class="fr">
-          <input class="fi" id="floc" placeholder="Lokasyon adı">
-          <input class="fi" id="ffish" placeholder="Balık türü">
+          <input class="fi" id="ffish" placeholder="Balık türü (virgülle ayır)">
         </div>
         <div class="fr">
           <select class="fsl" id="frod">
@@ -716,6 +720,76 @@ function closeDrawer(){
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('overlay').style.display='none';
 }
+// ── LOKASYON BULMA — OpenStreetMap Nominatim ─────────────────────
+let foundLat = 0, foundLng = 0, foundType = 'deniz';
+
+async function findLoc(){
+  const loc = document.getElementById('floc').value.trim();
+  if(!loc){ alert('Lokasyon adı yaz!'); return; }
+
+  const btn = document.querySelector('button[onclick="findLoc()"]');
+  btn.textContent = '⏳';
+  btn.disabled = true;
+
+  try{
+    // Türkiye sınırları içinde ara
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(loc+', Türkiye')}&format=json&limit=1&countrycodes=tr`,
+      { headers: {'Accept-Language':'tr', 'User-Agent':'SihirliZokaRadar'} }
+    );
+    const data = await res.json();
+
+    if(!data || data.length === 0){
+      document.getElementById('loc-result').style.display='block';
+      document.getElementById('loc-result').style.color='var(--c3)';
+      document.getElementById('loc-result').style.borderColor='rgba(255,94,42,.2)';
+      document.getElementById('loc-result').style.background='rgba(255,94,42,.07)';
+      document.getElementById('loc-result').textContent = '❌ Konum bulunamadı. Daha açık bir isim dene.';
+      foundLat = 0; foundLng = 0;
+    } else {
+      foundLat = parseFloat(data[0].lat);
+      foundLng = parseFloat(data[0].lon);
+
+      // Tür tahmini
+      const name = (data[0].display_name || '').toLowerCase();
+      const locLow = loc.toLowerCase();
+      foundType = (locLow.includes('göl')||locLow.includes('gölü')||name.includes('lake')) ? 'göl'
+                : (locLow.includes('nehir')||locLow.includes('irmak')||locLow.includes('dere')) ? 'nehir'
+                : 'deniz';
+
+      // Haritada göster
+      map.setView([foundLat, foundLng], 13);
+
+      // Geçici marker ekle
+      if(window._tempMarker) map.removeLayer(window._tempMarker);
+      window._tempMarker = L.circleMarker([foundLat, foundLng],{
+        radius:10, fillColor:'#f4c430', fillOpacity:0.9,
+        color:'white', weight:2
+      }).addTo(map).bindPopup(`📍 ${loc}`).openPopup();
+
+      // Sonuç göster
+      const el = document.getElementById('loc-result');
+      el.style.display = 'block';
+      el.style.color = 'var(--c2)';
+      el.style.borderColor = 'rgba(0,232,122,.2)';
+      el.style.background = 'rgba(0,232,122,.07)';
+      el.textContent = `✅ Bulundu: ${data[0].display_name.split(',').slice(0,3).join(', ')}`;
+    }
+  }catch(e){
+    document.getElementById('loc-result').style.display='block';
+    document.getElementById('loc-result').textContent = '❌ Bağlantı hatası, tekrar dene.';
+  }
+
+  btn.textContent = '📍 Bul';
+  btn.disabled = false;
+}
+
+function clearLocResult(){
+  document.getElementById('loc-result').style.display='none';
+  if(window._tempMarker){ map.removeLayer(window._tempMarker); window._tempMarker=null; }
+  foundLat = 0; foundLng = 0;
+}
+
 function submitR(){
   const loc  = document.getElementById('floc').value.trim();
   const fish = document.getElementById('ffish').value.trim();
@@ -725,42 +799,16 @@ function submitR(){
 
   if(!loc||!fish){ alert('Lokasyon ve balık türü zorunludur!'); return; }
 
-  // Lokasyon koordinatını bul (bilinen lokasyonlardan)
-  const LOCS = {
-    'galata köprüsü':[41.0162,28.9742],'eminönü':[41.0165,28.9730],
-    'karaköy':[41.0225,28.9740],'sarayburnu':[41.0133,28.9817],
-    'sarıyer':[41.1665,29.0530],'beykoz':[41.1218,29.1014],
-    'kadıköy':[40.9902,29.0232],'bostancı':[40.9607,29.0900],
-    'rumeli kavağı':[41.1987,29.0622],'büyükçekmece':[41.0197,28.5773],
-    'şile':[41.1778,29.6103],'kilyos':[41.2497,29.0157],
-    'bozcaada':[39.8320,26.0640],'gökçeada':[40.1780,25.9000],
-    'ayvalık':[39.3176,26.6963],'çanakkale':[40.1546,26.4086],
-    'sapanca gölü':[40.7200,30.2000],'iznik gölü':[40.4330,29.5500],
-    'tekirdağ':[40.9781,27.5117],'saros körfezi':[40.5500,26.6000],
-    'gemlik':[40.4315,29.1625],'edirne':[41.6771,26.5557],
-  };
-
-  const locKey = loc.toLowerCase().trim();
-  let lat = 0, lng = 0;
-  for(const [k,v] of Object.entries(LOCS)){
-    if(locKey.includes(k)){ lat=v[0]; lng=v[1]; break; }
+  if(!foundLat || !foundLng){
+    alert('Lütfen önce "📍 Bul" butonuna basarak konumu haritada doğrula!');
+    return;
   }
-  // Koordinat bulunamazsa rastgele Marmara bölgesi
-  if(!lat){ lat = 40.5 + Math.random()*1.5; lng = 27.5 + Math.random()*3; }
 
-  // Tür tahmini
-  const locLow = loc.toLowerCase();
-  const type = locLow.includes('göl')||locLow.includes('gölü') ? 'göl'
-             : locLow.includes('nehir')||locLow.includes('irmak') ? 'nehir'
-             : 'deniz';
-
-  // Butonu devre dışı bırak
   const btn = document.querySelector('.sbtn');
   const origTxt = btn.textContent;
   btn.textContent = '⏳ Gönderiliyor...';
   btn.disabled = true;
 
-  // EmailJS ile bildirim gönder
   emailjs.send('service_yrsyqd2', 'template_rkbvgcv', {
     loc:    loc,
     fish:   fish,
@@ -769,9 +817,9 @@ function submitR(){
     note:   note || '—',
     time:   new Date().toLocaleString('tr-TR'),
     device: navigator.userAgent.includes('Mobile') ? 'Mobil' : 'Masaüstü',
-    lat:    lat.toFixed(5),
-    lng:    lng.toFixed(5),
-    type:   type,
+    lat:    foundLat.toFixed(5),
+    lng:    foundLng.toFixed(5),
+    type:   foundType,
   })
   .then(function(){
     btn.textContent = '✅ Rapor Gönderildi!';
@@ -779,6 +827,9 @@ function submitR(){
     btn.style.borderColor = 'var(--c2)';
     ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('frod').value='';
+    document.getElementById('loc-result').style.display='none';
+    if(window._tempMarker){ map.removeLayer(window._tempMarker); window._tempMarker=null; }
+    foundLat=0; foundLng=0;
     setTimeout(()=>{
       btn.textContent = origTxt;
       btn.style.color = '';
