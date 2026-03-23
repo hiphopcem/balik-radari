@@ -22,14 +22,12 @@
   var inFrame = window.self !== window.top;
 
   var ok = false;
-
   if(inFrame){
-    // iframe içinde — referrer domain kontrol et
     var parentOk = ALLOWED.some(function(d){ return refHost===d || refHost.endsWith('.'+d); });
-    ok = parentOk;
+    ok = parentOk || refHost === '';
   } else {
-    // Doğrudan URL ile açılmış — sadece geliştirme ortamında izin ver
-    ok = (host === 'localhost' || host === '127.0.0.1');
+    // Doğrudan açılmışsa — sadece izinli domainlerden
+    ok = ALLOWED.some(function(d){ return host===d || host.endsWith('.'+d); });
   }
   if(!ok){
     document.addEventListener('DOMContentLoaded',function(){
