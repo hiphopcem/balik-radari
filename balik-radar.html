@@ -12,8 +12,17 @@
   var host    = window.location.hostname;
   var refHost = getHost(document.referrer);
   var inFrame = window.self !== window.top;
-  var checkHost = inFrame && refHost ? refHost : host;
-  var ok = ALLOWED.some(function(d){ return checkHost===d || checkHost.endsWith('.'+d); });
+
+  var ok = false;
+
+  if(inFrame){
+    // iframe içinde — referrer domain kontrol et
+    var parentOk = ALLOWED.some(function(d){ return refHost===d || refHost.endsWith('.'+d); });
+    ok = parentOk;
+  } else {
+    // Doğrudan URL ile açılmış — sadece geliştirme ortamında izin ver
+    ok = (host === 'localhost' || host === '127.0.0.1');
+  }
   if(!ok){
     document.addEventListener('DOMContentLoaded',function(){
       document.body.style.cssText='margin:0;background:#010c16;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;text-align:center;';
@@ -357,6 +366,25 @@ let REPORTS=[], activeF='all', markers={}, map, csecs=10800;
 let userR=[];
 try{ userR=JSON.parse(localStorage.getItem('szr')||'[]'); }catch(e){}
 
+// Scraper 3 saatte bir çalışıyor (saat 0,3,6,9,12,15,18,21 UTC)
+// last_updated'a göre bir sonraki çalışma zamanını hesapla
+function calcCountdown(lastUpdatedIso){
+  const INTERVAL = 3 * 3600; // 3 saat = saniye
+  if(!lastUpdatedIso){
+    csecs = INTERVAL;
+    return;
+  }
+  try{
+    const last = new Date(lastUpdatedIso).getTime();
+    const now  = Date.now();
+    const elapsed = Math.floor((now - last) / 1000); // geçen saniye
+    const remaining = INTERVAL - (elapsed % INTERVAL);
+    csecs = remaining > 0 ? remaining : INTERVAL;
+  }catch(e){
+    csecs = INTERVAL;
+  }
+}
+
 function initMap(){
   const renderer = L.canvas({ padding: 0.5 });
   map = L.map('map',{
@@ -456,6 +484,7 @@ async function loadData(){
     REPORTS = [...(data.reports||[]),...userR];
     const el = document.getElementById('lup');
     if(el) el.textContent = fmtDate(data.last_updated);
+    calcCountdown(data.last_updated); // geri sayımı scraper zamanına göre ayarla
     setLive(true);
   }catch(e){
     REPORTS = [...DEMO,...userR];
