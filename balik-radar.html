@@ -604,7 +604,8 @@ async function loadData(){
   try{
     const res = await fetch(DATA_URL+'?t='+Date.now());
     if(!res.ok) throw new Error('HTTP '+res.status);
-    const data = await res.json();
+    const text = await res.text();
+    const data = JSON.parse(text);
     REPORTS = [...(data.reports||[]),...userR];
     const el = document.getElementById('lup');
     if(el) el.textContent = fmtDate(data.last_updated);
@@ -813,6 +814,24 @@ function submitR(){
   btn.textContent = '⏳ Gönderiliyor...';
   btn.disabled = true;
 
+  // Yeni rapor JSON'u hazırla
+  const newReport = {
+    id:        'u' + Date.now(),
+    lat:       foundLat,
+    lng:       foundLng,
+    loc:       loc,
+    fish:      fish.split(',').map(f=>f.trim()).filter(Boolean),
+    rod:       rod || '',
+    bait:      bait || '',
+    note:      note || 'Kullanıcı raporu.',
+    heat:      3,
+    type:      foundType,
+    timestamp: new Date().toISOString(),
+    source:    'Sihirli Zoka Radar',
+    hot:       false
+  };
+  const reportJson = JSON.stringify(newReport, null, 2);
+
   emailjs.send('service_yrsyqd2', 'template_rkbvgcv', {
     loc:    loc,
     fish:   fish,
@@ -824,7 +843,8 @@ function submitR(){
     lat:    foundLat.toFixed(5),
     lng:    foundLng.toFixed(5),
     type:   foundType,
-    // URL encode edilmiş veriler — onay linki için
+    report: reportJson,
+    editurl: 'https://github.com/hiphopcem/balik-radari/edit/main/data/reports.json',
     eloc:   encodeURIComponent(loc),
     efish:  encodeURIComponent(fish),
     erod:   encodeURIComponent(rod || 'Belirtilmemiş'),
