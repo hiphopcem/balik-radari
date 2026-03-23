@@ -343,24 +343,7 @@ function updateTheme(){
   tileL = L.tileLayer(day ? TILE_L : TILE_D,{attribution:'© OSM © CartoDB',subdomains:'abcd',maxZoom:19}).addTo(map);
 }
 
-// ── DEMO VERİ ────────────────────────────────────────────────────
-const DEMO=[
-  {id:"d01",lat:41.0162,lng:28.9742,loc:"Galata Köprüsü",fish:["Lüfer","Kolyoz","Kefal"],rod:"Olta",bait:"Çoklu iğne, hamsi",note:"Galata Köprüsü'nde yoğun balıkçı. Lüfer ve kolyoz tutuldu.",heat:5,type:"deniz",timestamp:new Date(Date.now()-1800000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d02",lat:41.0165,lng:28.9730,loc:"Eminönü",fish:["Kefal","İstavrit"],rod:"Olta",bait:"Ekmek, solucan",note:"Eminönü rıhtımında kefal aktif.",heat:4,type:"deniz",timestamp:new Date(Date.now()-2700000).toISOString(),source:"Sihirli Zoka Radar",hot:false},
-  {id:"d03",lat:41.0225,lng:28.9740,loc:"Karaköy",fish:["Lüfer","Levrek"],rod:"Spin",bait:"Küçük kaşık",note:"Karaköy iskelesi. Sabah lüfer çıktı.",heat:4,type:"deniz",timestamp:new Date(Date.now()-3600000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d04",lat:41.1987,lng:29.0622,loc:"Rumeli Kavağı",fish:["Palamut","Lüfer","Torik"],rod:"Trolling",bait:"CD-11 Rapala",note:"Rumeli Kavağı. Torik ve palamut aktif.",heat:5,type:"deniz",timestamp:new Date(Date.now()-7200000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d05",lat:41.1665,lng:29.0530,loc:"Sarıyer",fish:["Lüfer","Palamut"],rod:"Spin",bait:"Mepps No:3",note:"Sarıyer açıkları. Lüfer girişi başladı.",heat:4,type:"deniz",timestamp:new Date(Date.now()-5400000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d06",lat:40.9781,lng:27.5117,loc:"Tekirdağ",fish:["Lüfer","Palamut","Kolyoz"],rod:"Surf",bait:"Çoklu iğne",note:"Tekirdağ sahili. Palamut geçişi var.",heat:4,type:"deniz",timestamp:new Date(Date.now()-9000000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d07",lat:39.8320,lng:26.0640,loc:"Bozcaada",fish:["Çipura","Levrek","Sargoz","Lahos"],rod:"LRF",bait:"Micro jig, gulp",note:"Bozcaada etrafı berrak su, çipura bol.",heat:5,type:"deniz",timestamp:new Date(Date.now()-10800000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d08",lat:40.1780,lng:25.9000,loc:"Gökçeada",fish:["Çipura","Levrek","Lahos","Grida"],rod:"Jigging",bait:"Silikon, jig",note:"Gökçeada dipten güzel balıklar tutuluyor.",heat:5,type:"deniz",timestamp:new Date(Date.now()-12600000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d09",lat:39.3176,lng:26.6963,loc:"Ayvalık",fish:["Çipura","Levrek","Sargoz"],rod:"LRF",bait:"Micro jig, silikon",note:"Ayvalık adaları etrafı harika.",heat:5,type:"deniz",timestamp:new Date(Date.now()-14400000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d10",lat:40.7200,lng:30.2000,loc:"Sapanca Gölü",fish:["Alabalık","Sazan","Yayın"],rod:"Spin",bait:"Rapala, solucan",note:"Sapanca sabah alabalık harika.",heat:5,type:"göl",timestamp:new Date(Date.now()-16200000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d11",lat:41.0600,lng:28.5900,loc:"Büyükçekmece Gölü",fish:["Sazan","Turna","Kefal"],rod:"Feeder",bait:"Mısır, solucan",note:"Büyükçekmece Gölü sazan sezonu açık.",heat:5,type:"göl",timestamp:new Date(Date.now()-18000000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d12",lat:40.1546,lng:26.4086,loc:"Çanakkale",fish:["Lüfer","Palamut","Kolyoz"],rod:"Trolling",bait:"Rapala",note:"Çanakkale Boğazı göç dönemi aktif.",heat:5,type:"deniz",timestamp:new Date(Date.now()-19800000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d13",lat:40.5500,lng:26.6000,loc:"Saros Körfezi",fish:["Çipura","Levrek","Sargoz"],rod:"LRF",bait:"Micro jig",note:"Saros körfezi temiz su, çipura bol.",heat:4,type:"deniz",timestamp:new Date(Date.now()-21600000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d14",lat:41.6771,lng:26.5557,loc:"Edirne - Meriç",fish:["Sazan","Yayın","Turna"],rod:"Feeder",bait:"Boilie, canlı balık",note:"Meriç nehrinde yayın sezonu.",heat:4,type:"nehir",timestamp:new Date(Date.now()-23400000).toISOString(),source:"Sihirli Zoka Radar",hot:true},
-  {id:"d15",lat:40.4330,lng:29.5500,loc:"İznik Gölü",fish:["Sazan","Levrek","Sudak"],rod:"Feeder",bait:"Pellet, mısır",note:"İznik gölü sazan sezonu açık.",heat:4,type:"göl",timestamp:new Date(Date.now()-25200000).toISOString(),source:"Sihirli Zoka Radar",hot:false},
-];
+// ── DEMO VERİ KALDIRILDI — sadece gerçek scraper verisi ──────────
 
 let REPORTS=[], activeF='all', markers={}, map, csecs=10800;
 let userR=[];
@@ -477,21 +460,33 @@ function fmtDate(iso){
 async function loadData(){
   try{
     const res = await fetch(DATA_URL+'?t='+Date.now());
-    if(!res.ok) throw 0;
+    if(!res.ok) throw new Error('HTTP '+res.status);
     const data = await res.json();
     REPORTS = [...(data.reports||[]),...userR];
     const el = document.getElementById('lup');
     if(el) el.textContent = fmtDate(data.last_updated);
-    calcCountdown(data.last_updated); // geri sayımı scraper zamanına göre ayarla
+    calcCountdown(data.last_updated);
     setLive(true);
   }catch(e){
-    REPORTS = [...DEMO,...userR];
+    // Veri gelmedi — kullanıcı raporları varsa onları göster
+    REPORTS = [...userR];
     const el = document.getElementById('lup');
-    if(el) el.textContent = 'Demo';
+    if(el) el.textContent = 'Bağlanılamadı';
     setLive(false);
+    // Liste yerine bilgi mesajı göster
+    ['rlist','dmob'].forEach(id=>{
+      const el2 = document.getElementById(id);
+      if(el2) el2.innerHTML = `
+        <div style="padding:24px;text-align:center;color:var(--txt2);font-size:13px;line-height:1.8;">
+          <div style="font-size:32px;margin-bottom:10px;">🔄</div>
+          <div style="font-weight:700;color:var(--c1);margin-bottom:6px;">Veriler Yükleniyor</div>
+          <div style="color:var(--txt3);font-size:11px;">Sunucuya bağlanılamadı.<br>Otomatik olarak tekrar denenecek.</div>
+        </div>`;
+    });
   }
   document.getElementById('ldr').style.display='none';
-  renderAll(); updateStats();
+  if(REPORTS.length > 0){ renderAll(); }
+  updateStats();
 }
 
 function setLive(ok){
