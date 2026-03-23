@@ -1,880 +1,155 @@
-<!DOCTYPE html>
+// Netlify Edge Function — Rapor Onaylama
+// Kullanıcı raporu email'den onaylanınca GitHub'a ekler
+
+export default async function handler(request, context) {
+
+  // Sadece GET isteği
+  if(request.method !== 'GET'){
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  const url   = new URL(request.url);
+  const token = url.searchParams.get('token');
+
+  // Güvenlik token kontrolü
+  if(token !== Deno.env.get('APPROVE_SECRET')){
+    return new Response(html('❌ Geçersiz Token', 'Bu link geçersiz veya süresi dolmuş.'), {
+      status: 403,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+  }
+
+  // Rapor verisini al — URL encoded parametreler
+  const loc   = decodeURIComponent(url.searchParams.get('loc')  || '');
+  const fish  = decodeURIComponent(url.searchParams.get('fish') || '');
+  const rod   = decodeURIComponent(url.searchParams.get('rod')  || '');
+  const bait  = decodeURIComponent(url.searchParams.get('bait') || '');
+  const note  = decodeURIComponent(url.searchParams.get('note') || '');
+  const lat   = parseFloat(url.searchParams.get('lat') || '0');
+  const lng   = parseFloat(url.searchParams.get('lng') || '0');
+  const type  = decodeURIComponent(url.searchParams.get('type') || 'deniz');
+
+  if(!loc || !fish){
+    return new Response(html('❌ Eksik Bilgi', 'Lokasyon veya balık bilgisi eksik.'), {
+      status: 400,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+  }
+
+  const GITHUB_TOKEN = Deno.env.get('GITHUB_TOKEN');
+  const REPO         = 'hiphopcem/balik-radari';
+  const FILE_PATH    = 'data/reports.json';
+  const API_BASE     = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`;
+
+  try {
+    // Mevcut reports.json'u oku
+    const getRes = await fetch(API_BASE, {
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'SihirliZokaRadar'
+      }
+    });
+
+    if(!getRes.ok) throw new Error('GitHub okuma hatası: ' + getRes.status);
+
+    const fileData   = await getRes.json();
+    const bytes      = Uint8Array.from(atob(fileData.content.replace(/\n/g,'')), c=>c.charCodeAt(0));
+    const content    = new TextDecoder('utf-8').decode(bytes);
+    const jsonData   = JSON.parse(content);
+    const reports    = jsonData.reports || [];
+
+    // Yeni raporu oluştur
+    const newReport = {
+      id:        'u' + Date.now(),
+      lat:       lat || (39 + Math.random() * 3),
+      lng:       lng || (26 + Math.random() * 5),
+      loc:       loc,
+      fish:      fish.split(',').map(f => f.trim()).filter(Boolean),
+      rod:       rod,
+      bait:      bait,
+      note:      note || 'Kullanıcı raporu (onaylandı).',
+      heat:      3,
+      type:      type,
+      timestamp: new Date().toISOString(),
+      source:    'Sihirli Zoka Radar',
+      hot:       false
+    };
+
+    // Başa ekle
+    reports.unshift(newReport);
+
+    // Güncelle ve kaydet
+    const updatedJson = JSON.stringify({
+      last_updated: new Date().toISOString(),
+      total:        reports.length,
+      reports:      reports.slice(0, 200) // max 200
+    }, null, 2);
+
+    const putRes = await fetch(API_BASE, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'SihirliZokaRadar',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `✅ Kullanıcı raporu onaylandı: ${loc}`,
+        content: btoa(new TextEncoder().encode(updatedJson).reduce((s,b)=>s+String.fromCharCode(b),'')),
+        sha:     fileData.sha,
+        branch:  'main'
+      })
+    });
+
+    if(!putRes.ok){
+      const err = await putRes.text();
+      throw new Error('GitHub yazma hatası: ' + err);
+    }
+
+    // Başarılı
+    return new Response(html(
+      '✅ Rapor Onaylandı!',
+      `<b>${loc}</b> için <b>${fish}</b> raporu haritaya eklendi.<br><br>Netlify otomatik olarak güncellenecek, birkaç dakika içinde haritada görünecek.`
+    ), {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+
+  } catch(e) {
+    return new Response(html('❌ Hata Oluştu', e.message), {
+      status: 500,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+  }
+}
+
+function html(title, message) {
+  return `<!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="referrer" content="strict-origin">
-<title>Sihirli Zoka Radar</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init('RCuzQNqIGsKgv06Cg');</script>
-<script>
-(function(){
-  var ALLOWED = ['www.sihirlizoka.com','sihirlizoka.com','balik-radari.netlify.app','localhost','127.0.0.1'];
-  function getHost(u){ try{ return new URL(u).hostname; }catch(e){ return ''; } }
-  var host    = window.location.hostname;
-  var refHost = getHost(document.referrer);
-  var inFrame = window.self !== window.top;
-
-  var ok = false;
-
-  if(inFrame){
-    // iframe içinde — referrer domain kontrol et
-    var parentOk = ALLOWED.some(function(d){ return refHost===d || refHost.endsWith('.'+d); });
-    ok = parentOk;
-  } else {
-    // Doğrudan URL ile açılmış — sadece geliştirme ortamında izin ver
-    ok = (host === 'localhost' || host === '127.0.0.1');
-  }
-  if(!ok){
-    document.addEventListener('DOMContentLoaded',function(){
-      document.body.style.cssText='margin:0;background:#010c16;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;text-align:center;';
-      document.body.innerHTML='<div style="color:#ff5e2a;padding:30px"><div style="font-size:48px;margin-bottom:16px">⛔</div><div style="font-size:18px;font-weight:bold;margin-bottom:8px">Yetkisiz Erişim</div><div style="font-size:13px;color:#7aaac8">Bu içerik yalnızca sihirlizoka.com üzerinde çalışır.</div></div>';
-    });
-    throw new Error('Unauthorized: '+checkHost);
-  }
-})();
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title} — Sihirli Zoka Radar</title>
 <style>
-:root{
-  --bg:#010c16;--card:#061522;--hover:#091e30;
-  --c1:#00c8f8;--c2:#00e87a;--c3:#ff5e2a;--gold:#f4c430;
-  --b1:rgba(0,200,248,0.12);--b2:rgba(0,200,248,0.28);
-  --txt:#d8eef8;--txt2:#7aaac8;--txt3:#3a6a88;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Exo 2',sans-serif;color:var(--txt);}
-
-#app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;}
-#main{display:flex;flex:1;overflow:hidden;min-height:0;}
-#map{flex:1;z-index:1;}
-
-/* HEADER */
-#hdr{
-  background:linear-gradient(180deg,rgba(1,12,22,.99),rgba(3,14,26,.96));
-  border-bottom:1px solid var(--b2);
-  height:58px;padding:0 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;position:relative;z-index:10;
-  box-shadow:0 2px 16px rgba(0,0,0,.6);
-}
-#hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);}
-.logo{display:flex;align-items:center;gap:10px;}
-.logo-box{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,rgba(0,200,248,.18),rgba(0,232,122,.08));border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.logo-t1{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--c1);letter-spacing:1.5px;}
-.logo-t2{font-size:10px;color:var(--txt2);margin-top:1px;}
-.hdr-mid{display:flex;align-items:center;gap:12px;}
-.pill{display:flex;align-items:center;gap:6px;background:rgba(0,232,122,.07);border:1px solid rgba(0,232,122,.22);border-radius:18px;padding:5px 12px;}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--c2);box-shadow:0 0 7px var(--c2);animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-.pill-txt{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;}
-.cd-lbl{font-size:9px;color:var(--txt2);text-align:center;}
-.cd-val{font-family:'Orbitron',monospace;font-size:12px;color:var(--c1);font-weight:700;text-align:center;}
-#mode-b{font-size:11px;color:var(--txt2);font-weight:600;}
-.hdr-right{text-align:right;}
-.lu-lbl{font-size:9px;color:var(--txt2);}
-.lu-val{font-family:'Orbitron',monospace;font-size:11px;color:var(--gold);font-weight:700;}
-
-/* FILTER BAR */
-#fbar{background:rgba(3,14,26,.95);border-bottom:1px solid var(--b1);padding:6px 12px;display:flex;align-items:center;gap:5px;flex-shrink:0;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-#fbar::-webkit-scrollbar{display:none;}
-.sw{position:relative;flex-shrink:0;}
-.si{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--txt2);font-size:11px;pointer-events:none;}
-#sbox{background:var(--b1);border:1px solid var(--b1);color:var(--txt);padding:6px 8px 6px 26px;border-radius:6px;font-size:12px;font-family:'Exo 2',sans-serif;outline:none;width:150px;transition:all .2s;}
-#sbox:focus{border-color:var(--c1);width:170px;}
-#sbox::placeholder{color:var(--txt3);}
-.fb{background:var(--b1);border:1px solid var(--b1);color:var(--txt2);padding:6px 11px;border-radius:6px;font-size:11px;font-weight:600;font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
-.fb.on{background:rgba(0,200,248,.14);border-color:var(--c1);color:var(--c1);}
-.fb.hot.on{background:rgba(255,94,42,.14);border-color:var(--c3);color:var(--c3);}
-.sep{width:1px;height:18px;background:var(--b1);flex-shrink:0;}
-
-/* SIDEBAR */
-#sidebar{width:290px;flex-shrink:0;background:rgba(3,14,26,.97);border-left:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;min-height:0;}
-.sb-hdr{padding:10px 13px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
-.sb-ttl{font-family:'Orbitron',monospace;font-size:10px;color:var(--c1);letter-spacing:2px;font-weight:700;}
-.sb-cnt{background:rgba(0,200,248,.12);border:1px solid var(--b2);color:var(--c1);font-family:'Orbitron',monospace;font-size:9px;padding:2px 8px;border-radius:10px;font-weight:700;}
-#rlist{flex:1;overflow-y:auto;padding:7px;min-height:0;}
-#rlist::-webkit-scrollbar{width:2px;}
-#rlist::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
-
-/* FORM */
-#fp{flex-shrink:0;border-top:1px solid var(--b1);padding:10px 11px;background:rgba(0,0,0,.22);}
-.ftl{font-family:'Orbitron',monospace;font-size:9px;color:var(--c1);letter-spacing:2px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.ftl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b2),transparent);}
-.fr{display:flex;gap:5px;margin-bottom:5px;}
-.fi{background:rgba(0,200,248,.04);border:1px solid var(--b1);color:var(--txt);padding:7px 8px;border-radius:5px;font-size:12px;font-family:'Exo 2',sans-serif;flex:1;outline:none;min-width:0;box-sizing:border-box;}
-.fi:focus{border-color:var(--c1);}
-.fi::placeholder{color:var(--txt3);}
-.fsl{background:rgba(0,200,248,.04);border:1px solid var(--b1);color:var(--txt);padding:7px 8px;border-radius:5px;font-size:12px;font-family:'Exo 2',sans-serif;flex:1;outline:none;cursor:pointer;min-width:0;}
-.fsl option{background:#061522;}
-.fi-f{width:100%;display:block;margin-bottom:5px;box-sizing:border-box;}
-.sbtn{width:100%;padding:8px;background:linear-gradient(135deg,rgba(0,200,248,.14),rgba(0,232,122,.07));border:1px solid var(--b2);color:var(--c1);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer;}
-
-/* CARDS */
-.rc{background:var(--card);border:1px solid var(--b1);border-radius:9px;padding:10px;margin-bottom:6px;cursor:pointer;transition:background .15s;position:relative;overflow:hidden;}
-.rc:hover,.rc:active{background:var(--hover);border-color:var(--b2);}
-.rc.hot{border-left:3px solid var(--c3);}
-.rc.hot::after{content:'🔥';position:absolute;top:7px;right:8px;font-size:12px;}
-.ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;}
-.ftags{display:flex;gap:3px;flex-wrap:wrap;flex:1;margin-right:18px;}
-.ft{background:rgba(0,200,248,.1);border:1px solid rgba(0,200,248,.2);color:var(--c1);padding:2px 6px;border-radius:3px;font-size:11px;font-weight:700;}
-.ft.p{background:rgba(0,232,122,.1);border-color:rgba(0,232,122,.22);color:var(--c2);}
-.ft.h{background:rgba(255,94,42,.12);border-color:rgba(255,94,42,.24);color:var(--c3);}
-.tt{font-size:10px;color:var(--txt2);white-space:nowrap;font-weight:600;flex-shrink:0;}
-.ln{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:3px;display:flex;align-items:center;gap:5px;}
-.ld{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.ld.d{background:var(--c1);}
-.ld.g{background:var(--c2);}
-.ld.n{background:var(--gold);}
-.cn{font-size:11px;color:var(--txt2);line-height:1.45;margin-bottom:5px;}
-.tr{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;}
-.tk{padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700;}
-.tk.r{background:rgba(0,80,50,.4);border:1px solid rgba(0,180,100,.15);color:#4de;}
-.tk.b{background:rgba(80,40,0,.4);border:1px solid rgba(200,110,0,.15);color:#fca;}
-.hr{display:flex;align-items:center;gap:4px;}
-.hb{display:flex;gap:2px;}
-.hd{width:10px;height:2px;border-radius:1px;background:rgba(255,94,42,.12);}
-.hd.on{background:var(--c3);}
-.src{font-size:9px;color:var(--txt3);margin-left:auto;}
-
-/* STATS BAR */
-#sbar{background:rgba(1,12,22,.98);border-top:1px solid var(--b1);padding:5px 14px;display:flex;align-items:center;gap:16px;flex-shrink:0;position:relative;z-index:10;}
-#sbar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1) 40%,var(--c2) 60%,transparent);}
-.si2{display:flex;align-items:center;gap:5px;}
-.sl{font-size:11px;color:var(--txt2);font-weight:600;}
-.sv{font-family:'Orbitron',monospace;font-size:12px;color:var(--c1);font-weight:700;}
-.sv.g{color:var(--c2);}
-.sv.o{color:var(--c3);}
-.rbtn{background:var(--b1);border:1px solid var(--b1);color:var(--txt2);padding:4px 11px;border-radius:5px;font-size:11px;font-weight:600;font-family:'Exo 2',sans-serif;cursor:pointer;margin-left:auto;}
-.rbtn:hover{border-color:var(--c1);color:var(--c1);}
-
-/* MOBİL DRAWER BUTTON */
-#dbtn{position:fixed;bottom:70px;right:14px;z-index:100;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,rgba(0,200,248,.22),rgba(0,232,122,.1));border:1px solid var(--b2);color:var(--c1);font-size:20px;cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.5),0 0 12px rgba(0,200,248,.2);display:none;align-items:center;justify-content:center;}
-
-/* MOBİL DRAWER — %55 yükseklik, harita görünür */
-#drawer{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(3,14,26,.99);border-top:1px solid var(--b2);border-radius:16px 16px 0 0;height:56vh;transform:translateY(100%);transition:transform .28s ease-out;box-shadow:0 -6px 30px rgba(0,0,0,.7);display:flex;flex-direction:column;overflow:hidden;}
-#drawer.open{transform:translateY(0);}
-.dhandle{width:40px;height:4px;background:var(--b2);border-radius:2px;margin:10px auto 0;flex-shrink:0;cursor:pointer;}
-.dhdr{padding:9px 15px 8px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
-.dttl{font-family:'Orbitron',monospace;font-size:11px;color:var(--c1);letter-spacing:2px;font-weight:700;}
-.dcls{background:none;border:none;color:var(--txt2);font-size:18px;cursor:pointer;padding:0 4px;line-height:1;}
-#dmob{flex:1;overflow-y:auto;padding:7px;-webkit-overflow-scrolling:touch;}
-
-/* LOADER */
-#ldr{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.lr{width:90px;height:90px;border-radius:50%;border:1px solid rgba(0,200,248,.15);position:relative;margin-bottom:18px;}
-.lr::before,.lr::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,200,248,.07);}
-.lr::before{transform:scale(.6);}
-.lr::after{transform:scale(.3);}
-.lswp{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 60%,rgba(0,200,248,.35) 100%);animation:swp 1.8s linear infinite;}
-@keyframes swp{to{transform:rotate(360deg);}}
-.ldot2{position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;background:var(--c1);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--c1);}
-.lt1{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--c1);letter-spacing:3px;margin-bottom:5px;}
-.lt2{font-size:12px;color:var(--txt2);letter-spacing:2px;}
-.lbar{width:160px;height:2px;background:rgba(0,200,248,.1);border-radius:1px;margin-top:16px;overflow:hidden;}
-.lbf{height:100%;background:linear-gradient(90deg,transparent,var(--c1));animation:ba 1.4s ease-in-out infinite;}
-@keyframes ba{0%{width:0;margin-left:0;}50%{width:60%;}100%{width:0;margin-left:100%;}}
-
-/* POPUP */
-.leaflet-popup-content-wrapper{background:rgba(3,14,26,.98)!important;border:1px solid var(--b2)!important;border-radius:10px!important;box-shadow:0 8px 30px rgba(0,0,0,.8)!important;padding:0!important;}
-.leaflet-popup-tip-container{display:none;}
-.leaflet-popup-content{margin:0!important;}
-.wxpop .leaflet-popup-content-wrapper{min-width:260px;}
-.pi{padding:13px 15px;min-width:240px;}
-.pl{font-family:'Orbitron',monospace;font-size:12px;color:var(--c1);margin-bottom:7px;letter-spacing:1px;font-weight:700;}
-.pf{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:7px;}
-.pt2{background:rgba(0,200,248,.1);border:1px solid rgba(0,200,248,.2);color:var(--c1);padding:2px 6px;border-radius:3px;font-size:11px;font-weight:700;}
-.ptk{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
-.pn{font-size:12px;color:var(--txt2);line-height:1.5;margin-bottom:4px;}
-.pf2{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);font-weight:600;margin-top:6px;}
-
-/* Masaüstü: çok hafif ping animasyonu */
-@keyframes softPing{0%{opacity:.4;transform:scale(1);}80%{opacity:0;transform:scale(2.2);}100%{opacity:0;transform:scale(2.2);}}
-
-#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  /* Tüm animasyonları kapat - performans */
-  *{animation:none!important;transition:none!important;}
-  .dot{opacity:1!important;}
-  #sidebar{display:none;}
-  #dbtn{display:flex;}
-  #hdr{height:50px;padding:0 12px;}
-  .logo-t2{display:none;}
-  .hdr-right{display:none;}
-  .cd-val,.cd-lbl{display:none;}
-  #mode-b{display:none;}
-  #fbar{padding:5px 10px;}
-  #sbox{width:120px;}
-  #sbar{padding:4px 11px;gap:10px;}
-  .sl{font-size:10px;}
-  .sv{font-size:11px;}
-}
-@media(max-width:360px){
-  .logo-t1{font-size:11px;}
-  .pill-txt{display:none;}
-}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#010c16;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Segoe UI',sans-serif;}
+  .box{background:#061522;border:1px solid rgba(0,200,248,0.2);border-radius:16px;padding:40px;text-align:center;max-width:420px;width:90%;}
+  .icon{font-size:52px;margin-bottom:16px;}
+  h1{color:#00c8f8;font-size:20px;margin-bottom:12px;}
+  p{color:#7aaac8;font-size:14px;line-height:1.7;}
+  .back{display:inline-block;margin-top:20px;padding:10px 24px;background:rgba(0,200,248,0.1);border:1px solid rgba(0,200,248,0.3);color:#00c8f8;border-radius:8px;text-decoration:none;font-size:13px;}
 </style>
 </head>
 <body>
-
-<div id="ldr">
-  <div class="lr"><div class="lswp"></div><div class="ldot2"></div></div>
-  <div class="lt1">SİHİRLİ ZOKA</div>
-  <div class="lt2">CANLI BALIK RADARI</div>
-  <div class="lbar"><div class="lbf"></div></div>
-</div>
-
-<div id="overlay" onclick="closeDrawer()"></div>
-<button id="dbtn" onclick="toggleDrawer()">📋</button>
-
-<div id="drawer">
-  <div class="dhandle" onclick="closeDrawer()"></div>
-  <div class="dhdr">
-    <div class="dttl">RAPORLAR · <span id="dr-cnt">—</span></div>
-    <button class="dcls" onclick="closeDrawer()">✕</button>
+  <div class="box">
+    <div class="icon">${title.includes('✅') ? '🎣' : '⛔'}</div>
+    <h1>${title}</h1>
+    <p>${message}</p>
+    <a href="https://www.sihirlizoka.com" class="back">← Siteye Dön</a>
   </div>
-  <div id="dmob"></div>
-</div>
-
-<div id="app">
-  <div id="hdr">
-    <div class="logo">
-      <div class="logo-box">🎣</div>
-      <div>
-        <div class="logo-t1">SİHİRLİ ZOKA RADAR</div>
-        <div class="logo-t2">Canlı Balık Takip Sistemi</div>
-      </div>
-    </div>
-    <div class="hdr-mid">
-      <div class="pill">
-        <div class="dot" id="ldot"></div>
-        <div class="pill-txt" id="llbl" style="color:var(--c2)">CANLI</div>
-      </div>
-      <div>
-        <div class="cd-lbl">Sonraki Güncelleme</div>
-        <div class="cd-val" id="cdt">3:00:00</div>
-      </div>
-      <div id="mode-b">☀️</div>
-    </div>
-    <div class="hdr-right">
-      <div class="lu-lbl">Son Güncelleme</div>
-      <div class="lu-val" id="lup">—</div>
-    </div>
-  </div>
-
-  <div id="fbar">
-    <div class="sw">
-      <span class="si">🔍</span>
-      <input id="sbox" placeholder="Yer veya balık ara..." oninput="renderAll()">
-    </div>
-    <div class="sep"></div>
-    <button class="fb on" onclick="setF('all',this)">Tümü</button>
-    <button class="fb" onclick="setF('deniz',this)">🌊 Deniz</button>
-    <button class="fb" onclick="setF('göl',this)">🏞 Göl</button>
-    <button class="fb" onclick="setF('nehir',this)">🌀 Nehir</button>
-    <div class="sep"></div>
-    <button class="fb" onclick="setF('spin',this)">Spin</button>
-    <button class="fb" onclick="setF('lrf',this)">LRF</button>
-    <button class="fb" onclick="setF('surf',this)">Surf</button>
-    <button class="fb" onclick="setF('jigging',this)">Jigging</button>
-    <div class="sep"></div>
-    <button class="fb hot" onclick="setF('hot',this)">🔥 Aktif</button>
-  </div>
-
-  <div id="main">
-    <div id="map"></div>
-    <div id="sidebar">
-      <div class="sb-hdr">
-        <div class="sb-ttl">SON RAPORLAR</div>
-        <div class="sb-cnt" id="rcnt">—</div>
-      </div>
-      <div id="rlist"></div>
-      <div id="fp">
-        <div class="ftl">RAPOR EKLE</div>
-        <div class="fr" style="position:relative;">
-          <input class="fi" id="floc" placeholder="Lokasyon adı yaz..." oninput="clearLocResult()">
-          <button onclick="findLoc()" style="flex-shrink:0;background:rgba(0,200,248,.15);border:1px solid var(--b2);color:var(--c1);padding:7px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">📍 Bul</button>
-        </div>
-        <div id="loc-result" style="display:none;margin-bottom:6px;padding:7px 9px;background:rgba(0,232,122,.07);border:1px solid rgba(0,232,122,.2);border-radius:5px;font-size:11px;color:var(--c2);"></div>
-        <div class="fr">
-          <input class="fi" id="ffish" placeholder="Balık türü (virgülle ayır)">
-        </div>
-        <div class="fr">
-          <select class="fsl" id="frod">
-            <option value="">Olta türü...</option>
-            <option>Spin</option><option>LRF</option><option>Surf</option>
-            <option>Feeder</option><option>Jigging</option><option>Trolling</option>
-            <option>Fly</option><option>Bolentino</option><option>Zıpkın</option><option>Olta</option>
-          </select>
-          <input class="fi" id="fbait" placeholder="Yem">
-        </div>
-        <input class="fi fi-f" id="fnote" placeholder="Not (isteğe bağlı)">
-        <button class="sbtn" onclick="submitR()">▶ RAPOR GÖNDER</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="sbar">
-    <div class="si2"><span class="sl">Aktif:</span><span class="sv o" id="sa">—</span></div>
-    <div class="si2"><span class="sl">Toplam:</span><span class="sv" id="st">—</span></div>
-    <div class="si2"><span class="sl">Kapsama:</span><span class="sv g" style="font-size:10px">İstanbul · Marmara · Ege · Çanakkale</span></div>
-    <button class="rbtn" onclick="loadData()">↻ Yenile</button>
-  </div>
-</div>
-
-<script>
-const DATA_URL = "https://raw.githubusercontent.com/hiphopcem/balik-radari/main/data/reports.json";
-const isMob = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 769;
-
-// ── GECE/GÜNDÜZ ─────────────────────────────────────────────────
-const TILE_D = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-const TILE_L = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-let tileL = null, curDay = null;
-
-function isDay(){ return ((new Date().getUTCHours()+3)%24) >= 6 && ((new Date().getUTCHours()+3)%24) < 20; }
-
-function updateTheme(){
-  const day = isDay();
-  if(day===curDay) return;
-  curDay = day;
-  const b = document.getElementById('mode-b');
-  if(b) b.textContent = day ? '☀️ Gündüz' : '🌙 Gece';
-  if(!map) return;
-  if(tileL) map.removeLayer(tileL);
-  tileL = L.tileLayer(day ? TILE_L : TILE_D,{attribution:'© OSM © CartoDB',subdomains:'abcd',maxZoom:19}).addTo(map);
-}
-
-// ── DEMO VERİ KALDIRILDI — sadece gerçek scraper verisi ──────────
-
-let REPORTS=[], activeF='all', markers={}, map, csecs=10800;
-let userR=[];
-try{ userR=JSON.parse(localStorage.getItem('szr')||'[]'); }catch(e){}
-
-// Scraper 3 saatte bir çalışıyor (saat 0,3,6,9,12,15,18,21 UTC)
-// last_updated'a göre bir sonraki çalışma zamanını hesapla
-function calcCountdown(lastUpdatedIso){
-  const INTERVAL = 3 * 3600;
-  if(!lastUpdatedIso){ csecs = INTERVAL; updateTimer(); return; }
-  try{
-    const last = new Date(lastUpdatedIso).getTime();
-    const now  = Date.now();
-    const elapsed  = Math.floor((now - last) / 1000);
-    const remaining = INTERVAL - (elapsed % INTERVAL);
-    csecs = remaining > 0 ? remaining : INTERVAL;
-  }catch(e){
-    csecs = INTERVAL;
-  }
-  updateTimer(); // hemen ekranda göster
-}
-
-function initMap(){
-  const renderer = L.canvas({ padding: 0.5 });
-  map = L.map('map',{
-    center:[39.8,28.5], zoom:6,
-    zoomControl:false,
-    preferCanvas: true,
-    renderer: renderer
-  });
-  L.control.zoom({position:'bottomright'}).addTo(map);
-  updateTheme();
-}
-
-// ── MARKER — mobil: basit CircleMarker (canvas), masaüstü: hafif ping ──
-function getIcon(r){
-  const C = {deniz:'#00c8f8', göl:'#00e87a', nehir:'#f4c430'};
-  const c = C[r.type] || '#d8eef8';
-
-  if(isMob){
-    // Canvas CircleMarker — en hafif, animasyon yok
-    return null; // CircleMarker kullanılacak (aşağıda)
-  }
-
-  // Masaüstü: hafif tek ping
-  const s = r.hot ? 20 : 12;
-  const day = isDay();
-  const borderCol = day ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.18)';
-  const ping = r.hot
-    ? `<div style="position:absolute;top:50%;left:50%;width:${s+14}px;height:${s+14}px;margin-top:-${(s+14)/2}px;margin-left:-${(s+14)/2}px;border-radius:50%;border:1px solid ${c};animation:softPing 4s ease-out infinite;"></div>`
-    : '';
-  const em = r.type==='göl'?'🐠':r.type==='nehir'?'🎣':'🐟';
-  return L.divIcon({
-    className:'',
-    html:`<div style="position:relative;width:${s}px;height:${s}px;">${ping}<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};box-shadow:0 0 6px ${c}40,0 1px 4px rgba(0,0,0,.4);border:1.5px solid ${borderCol};display:flex;align-items:center;justify-content:center;font-size:${Math.floor(s*.55)}px;">${em}</div></div>`,
-    iconSize:[s,s], iconAnchor:[s/2,s/2]
-  });
-}
-
-function addMarker(r){
-  const C = {deniz:'#00c8f8', göl:'#00e87a', nehir:'#f4c430'};
-  const c = C[r.type] || '#d8eef8';
-  const th = r.rod ? `<span class="tk r">🎣 ${r.rod}</span>` : '';
-  const tb = r.bait ? `<span class="tk b">🪱 ${r.bait}</span>` : '';
-  const ts = timeAgo(r.timestamp);
-
-  // Popup içeriği — hava verisi için id ile oluştur
-  const pid = 'pop_'+r.id;
-  const popup = `<div class="pi" id="${pid}">
-    <div class="pl">📍 ${r.loc}</div>
-    <div class="pf">${(r.fish||[]).map(f=>`<span class="pt2">${f}</span>`).join('')}</div>
-    ${th||tb?`<div class="ptk">${th}${tb}</div>`:''}
-    <div class="pn">${r.note||''}</div>
-    <div class="pw" id="wx_${r.id}">
-      <div style="color:var(--txt3);font-size:10px;text-align:center;padding:6px 0;">
-        ⏳ Hava verisi yükleniyor...
-      </div>
-    </div>
-    <div class="pf2"><span>${ts}</span><span>${r.source||''}</span></div>
-  </div>`;
-
-  let m;
-  if(isMob){
-    const radius = r.hot ? 9 : 5;
-    m = L.circleMarker([r.lat,r.lng],{
-      radius,
-      fillColor: c,
-      fillOpacity: r.hot ? 0.95 : 0.8,
-      color: r.hot ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.25)',
-      weight: r.hot ? 2 : 1,
-    }).addTo(map);
-  } else {
-    m = L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
-  }
-
-  const lp = L.popup({
-    maxWidth:280,
-    className:'wxpop',
-    autoPan: true,
-    autoPanPadding: [30, 80], // üstten 80px boşluk bırak — header/filterbar altına düşmesin
-    keepInView: true
-  }).setContent(popup);
-  m.bindPopup(lp);
-
-  // Popup açılınca haritayı ortala + hava verisini çek
-  m.on('popupopen', function(){
-    // Popup'ın koordinatına göre haritayı yumuşakça kaydır
-    const px = map.project(m.getLatLng(), map.getZoom());
-    px.y -= 120; // popup'ı biraz aşağıda göster ki başlık görünsün
-    const newLatLng = map.unproject(px, map.getZoom());
-    map.panTo(newLatLng, {animate:true, duration:0.5});
-    fetchWeather(r.lat, r.lng, r.id, r.type);
-  });
-
-  markers[r.id] = m;
-}
-
-// ── METEOROLOJİ — Open-Meteo API (ücretsiz, kayıtsız) ───────────
-const wxCache = {}; // koordinat bazlı önbellek
-
-async function fetchWeather(lat, lng, rid, type){
-  const key = Math.round(lat*100)/100 + ',' + Math.round(lng*100)/100;
-
-  // Önbellekte varsa direkt göster (10 dakika geçerli)
-  if(wxCache[key] && Date.now() - wxCache[key].ts < 600000){
-    renderWeather(rid, wxCache[key].data, type);
-    return;
-  }
-
-  try{
-    // Hava + deniz verisi aynı anda çek
-    const [wxRes, marRes] = await Promise.all([
-      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure,weather_code&wind_speed_unit=kmh&timezone=Europe/Istanbul`),
-      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&current=wave_height,sea_surface_temperature&timezone=Europe/Istanbul`)
-    ]);
-
-    const wx  = await wxRes.json();
-    const mar = await marRes.json();
-
-    const data = {
-      temp:      wx.current?.temperature_2m,
-      wind:      wx.current?.wind_speed_10m,
-      windDir:   wx.current?.wind_direction_10m,
-      pressure:  wx.current?.surface_pressure,
-      wcode:     wx.current?.weather_code,
-      seaTemp:   mar.current?.sea_surface_temperature,
-      waveH:     mar.current?.wave_height,
-    };
-
-    wxCache[key] = { data, ts: Date.now() };
-    renderWeather(rid, data, type);
-
-  }catch(e){
-    const el = document.getElementById('wx_'+rid);
-    if(el) el.innerHTML = '<div style="color:var(--txt3);font-size:10px;text-align:center;padding:4px 0;">Hava verisi alınamadı</div>';
-  }
-}
-
-function windDirTR(deg){
-  if(deg===null||deg===undefined) return '—';
-  const dirs = ['K','KD','D','GD','G','GB','B','KB'];
-  return dirs[Math.round(deg/45) % 8];
-}
-
-function windArrow(deg){
-  if(deg===null||deg===undefined) return '';
-  const arrows = ['↑','↗','→','↘','↓','↙','←','↖'];
-  return arrows[Math.round(deg/45) % 8];
-}
-
-function weatherEmoji(code){
-  if(code===null||code===undefined) return '🌤️';
-  if(code===0) return '☀️';
-  if(code<=2)  return '🌤️';
-  if(code<=3)  return '☁️';
-  if(code<=48) return '🌫️';
-  if(code<=57) return '🌧️';
-  if(code<=67) return '🌧️';
-  if(code<=77) return '❄️';
-  if(code<=82) return '🌦️';
-  if(code<=86) return '🌨️';
-  if(code<=99) return '⛈️';
-  return '🌤️';
-}
-
-function renderWeather(rid, d, type){
-  const el = document.getElementById('wx_'+rid);
-  if(!el) return;
-
-  const isSea = type === 'deniz';
-
-  const rows = [
-    { icon:'🌡️', label:'Hava',     val: d.temp!==null&&d.temp!==undefined ? Math.round(d.temp)+'°C' : '—' },
-    { icon:'🌬️', label:'Rüzgar',   val: d.wind!==null&&d.wind!==undefined ? Math.round(d.wind)+' km/s '+windArrow(d.windDir)+' '+windDirTR(d.windDir) : '—' },
-    { icon:'📊', label:'Basınç',   val: d.pressure!==null&&d.pressure!==undefined ? Math.round(d.pressure)+' hPa' : '—' },
-    isSea ? { icon:'🌊', label:'Deniz',   val: d.seaTemp!==null&&d.seaTemp!==undefined ? Math.round(d.seaTemp)+'°C' : '—' } : null,
-    isSea ? { icon:'〰️', label:'Dalga',   val: d.waveH!==null&&d.waveH!==undefined ? d.waveH.toFixed(1)+' m' : '—' } : null,
-  ].filter(Boolean);
-
-  el.innerHTML = `
-    <div style="
-      margin:8px 0 4px;
-      background:rgba(0,200,248,0.05);
-      border:1px solid rgba(0,200,248,0.12);
-      border-radius:8px;
-      padding:8px 10px;
-    ">
-      <div style="font-size:10px;color:var(--txt3);letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:5px;">
-        ${weatherEmoji(d.wcode)} <span style="font-family:'Orbitron',monospace;">ANLИК HAVA</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
-        ${rows.map(r=>`
-          <div style="display:flex;align-items:center;gap:5px;">
-            <span style="font-size:13px;">${r.icon}</span>
-            <div>
-              <div style="font-size:9px;color:var(--txt3);">${r.label}</div>
-              <div style="font-size:12px;font-weight:700;color:var(--txt);">${r.val}</div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>`;
-}
-
-// ── ZAMAN FORMATLAMA ─────────────────────────────────────────────
-function timeAgo(iso){
-  if(!iso) return '';
-  try{
-    const diff = Math.floor((Date.now()-new Date(iso).getTime())/1000);
-    if(diff<60) return 'Az önce';
-    if(diff<3600) return Math.floor(diff/60)+'dk önce';
-    if(diff<86400) return Math.floor(diff/3600)+'sa önce';
-    return Math.floor(diff/86400)+'g önce';
-  }catch(e){ return ''; }
-}
-
-function fmtDate(iso){
-  if(!iso) return '—';
-  try{
-    const d = new Date(iso);
-    return d.toLocaleString('tr-TR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-  }catch(e){ return '—'; }
-}
-
-// ── VERİ ─────────────────────────────────────────────────────────
-async function loadData(){
-  try{
-    const res = await fetch(DATA_URL+'?t='+Date.now());
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const data = await res.json();
-    REPORTS = [...(data.reports||[]),...userR];
-    const el = document.getElementById('lup');
-    if(el) el.textContent = fmtDate(data.last_updated);
-    calcCountdown(data.last_updated);
-    setLive(true);
-  }catch(e){
-    // Veri gelmedi — kullanıcı raporları varsa onları göster
-    REPORTS = [...userR];
-    const el = document.getElementById('lup');
-    if(el) el.textContent = 'Bağlanılamadı';
-    setLive(false);
-    // Liste yerine bilgi mesajı göster
-    ['rlist','dmob'].forEach(id=>{
-      const el2 = document.getElementById(id);
-      if(el2) el2.innerHTML = `
-        <div style="padding:24px;text-align:center;color:var(--txt2);font-size:13px;line-height:1.8;">
-          <div style="font-size:32px;margin-bottom:10px;">🔄</div>
-          <div style="font-weight:700;color:var(--c1);margin-bottom:6px;">Veriler Yükleniyor</div>
-          <div style="color:var(--txt3);font-size:11px;">Sunucuya bağlanılamadı.<br>Otomatik olarak tekrar denenecek.</div>
-        </div>`;
-    });
-  }
-  document.getElementById('ldr').style.display='none';
-  if(REPORTS.length > 0){ renderAll(); }
-  updateStats();
-}
-
-function setLive(ok){
-  const d=document.getElementById('ldot'),l=document.getElementById('llbl');
-  if(ok){d.style.background='#00e87a';d.style.boxShadow='0 0 8px #00e87a';l.textContent='CANLI';l.style.color='#00e87a';}
-  else{d.style.background='#f4c430';d.style.boxShadow='0 0 8px #f4c430';l.textContent='DEMO';l.style.color='#f4c430';}
-}
-
-function getFiltered(){
-  const q = document.getElementById('sbox').value.toLowerCase();
-  const rf = ['spin','lrf','surf','jigging'];
-  return REPORTS.filter(r=>{
-    if(activeF==='hot') return r.hot;
-    if(rf.includes(activeF)) return (r.rod||'').toLowerCase()===activeF;
-    if(activeF!=='all'&&r.type!==activeF) return false;
-    if(q) return r.loc.toLowerCase().includes(q)||(r.fish||[]).some(f=>f.toLowerCase().includes(q));
-    return true;
-  });
-}
-
-function renderAll(){
-  if(!map) return;
-  Object.values(markers).forEach(m=>map.removeLayer(m)); markers={};
-  const list = getFiltered();
-  list.forEach(r=>addMarker(r));
-  renderCards(list,'rlist');
-  renderCards(list,'dmob');
-  document.getElementById('rcnt').textContent = list.length+' rapor';
-  document.getElementById('dr-cnt').textContent = list.length+' rapor';
-}
-
-function makeCard(r,i){
-  const d = document.createElement('div');
-  d.className = 'rc'+(r.hot?' hot':'');
-  d.style.animationDelay = isMob ? '0ms' : (i*15)+'ms';
-  const dots = Array.from({length:5},(_,j)=>`<div class="hd${j<(r.heat||0)?' on':''}"></div>`).join('');
-  const ld = r.type==='göl'?'g':r.type==='nehir'?'n':'d';
-  const ts = timeAgo(r.timestamp);
-  d.innerHTML=`
-    <div class="ct">
-      <div class="ftags">${(r.fish||[]).map((f,j)=>`<span class="ft${j===0&&r.hot?' h':j===0?' p':''}">${f}</span>`).join('')}</div>
-      <span class="tt">${ts}</span>
-    </div>
-    <div class="ln"><div class="ld ${ld}"></div>${r.loc}</div>
-    <div class="cn">${r.note||''}</div>
-    ${r.rod||r.bait?`<div class="tr">${r.rod?`<span class="tk r">🎣 ${r.rod}</span>`:''}${r.bait?`<span class="tk b">🪱 ${r.bait}</span>`:''}</div>`:''}
-    <div class="hr"><div class="hb">${dots}</div><span class="src">${r.source||''}</span></div>`;
-  d.onclick=()=>{
-    if(isMob){
-      closeDrawer();
-      map.setView([r.lat,r.lng],12);
-      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),300);
-    } else {
-      closeDrawer();
-      map.flyTo([r.lat,r.lng],11,{duration:1.0});
-      setTimeout(()=>markers[r.id]&&markers[r.id].openPopup(),1100);
-    }
-  };
-  return d;
-}
-
-function renderCards(list, id){
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.innerHTML='';
-  if(!list.length){
-    el.innerHTML='<div style="padding:18px;text-align:center;color:var(--txt3);font-size:12px;">Rapor bulunamadı.</div>';
-    return;
-  }
-  // Mobilde max 50 kart göster - performans
-  const items = isMob ? list.slice(0,50) : list;
-  const sorted = items.slice().sort((a,b)=>(b.heat||0)-(a.heat||0));
-  const frag = document.createDocumentFragment();
-  sorted.forEach((r,i)=>frag.appendChild(makeCard(r,i)));
-  el.appendChild(frag);
-}
-
-function setF(f,btn){
-  activeF=f;
-  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on'); renderAll();
-}
-function updateStats(){
-  document.getElementById('sa').textContent=REPORTS.filter(r=>r.hot).length;
-  document.getElementById('st').textContent=REPORTS.length;
-}
-function toggleDrawer(){
-  const d=document.getElementById('drawer'),o=document.getElementById('overlay');
-  const op=d.classList.toggle('open');o.style.display=op?'block':'none';
-}
-function closeDrawer(){
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('overlay').style.display='none';
-}
-// ── LOKASYON BULMA — OpenStreetMap Nominatim ─────────────────────
-let foundLat = 0, foundLng = 0, foundType = 'deniz';
-
-async function findLoc(){
-  const loc = document.getElementById('floc').value.trim();
-  if(!loc){ alert('Lokasyon adı yaz!'); return; }
-
-  const btn = document.querySelector('button[onclick="findLoc()"]');
-  btn.textContent = '⏳';
-  btn.disabled = true;
-
-  try{
-    // Türkiye sınırları içinde ara
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(loc+', Türkiye')}&format=json&limit=1&countrycodes=tr`,
-      { headers: {'Accept-Language':'tr', 'User-Agent':'SihirliZokaRadar'} }
-    );
-    const data = await res.json();
-
-    if(!data || data.length === 0){
-      document.getElementById('loc-result').style.display='block';
-      document.getElementById('loc-result').style.color='var(--c3)';
-      document.getElementById('loc-result').style.borderColor='rgba(255,94,42,.2)';
-      document.getElementById('loc-result').style.background='rgba(255,94,42,.07)';
-      document.getElementById('loc-result').textContent = '❌ Konum bulunamadı. Daha açık bir isim dene.';
-      foundLat = 0; foundLng = 0;
-    } else {
-      foundLat = parseFloat(data[0].lat);
-      foundLng = parseFloat(data[0].lon);
-
-      // Tür tahmini
-      const name = (data[0].display_name || '').toLowerCase();
-      const locLow = loc.toLowerCase();
-      foundType = (locLow.includes('göl')||locLow.includes('gölü')||name.includes('lake')) ? 'göl'
-                : (locLow.includes('nehir')||locLow.includes('irmak')||locLow.includes('dere')) ? 'nehir'
-                : 'deniz';
-
-      // Haritada göster
-      map.setView([foundLat, foundLng], 13);
-
-      // Geçici marker ekle
-      if(window._tempMarker) map.removeLayer(window._tempMarker);
-      window._tempMarker = L.circleMarker([foundLat, foundLng],{
-        radius:10, fillColor:'#f4c430', fillOpacity:0.9,
-        color:'white', weight:2
-      }).addTo(map).bindPopup(`📍 ${loc}`).openPopup();
-
-      // Sonuç göster
-      const el = document.getElementById('loc-result');
-      el.style.display = 'block';
-      el.style.color = 'var(--c2)';
-      el.style.borderColor = 'rgba(0,232,122,.2)';
-      el.style.background = 'rgba(0,232,122,.07)';
-      el.textContent = `✅ Bulundu: ${data[0].display_name.split(',').slice(0,3).join(', ')}`;
-    }
-  }catch(e){
-    document.getElementById('loc-result').style.display='block';
-    document.getElementById('loc-result').textContent = '❌ Bağlantı hatası, tekrar dene.';
-  }
-
-  btn.textContent = '📍 Bul';
-  btn.disabled = false;
-}
-
-function clearLocResult(){
-  document.getElementById('loc-result').style.display='none';
-  if(window._tempMarker){ map.removeLayer(window._tempMarker); window._tempMarker=null; }
-  foundLat = 0; foundLng = 0;
-}
-
-function submitR(){
-  const loc  = document.getElementById('floc').value.trim();
-  const fish = document.getElementById('ffish').value.trim();
-  const rod  = document.getElementById('frod').value;
-  const bait = document.getElementById('fbait').value.trim();
-  const note = document.getElementById('fnote').value.trim();
-
-  if(!loc||!fish){ alert('Lokasyon ve balık türü zorunludur!'); return; }
-
-  if(!foundLat || !foundLng){
-    alert('Lütfen önce "📍 Bul" butonuna basarak konumu haritada doğrula!');
-    return;
-  }
-
-  const btn = document.querySelector('.sbtn');
-  const origTxt = btn.textContent;
-  btn.textContent = '⏳ Gönderiliyor...';
-  btn.disabled = true;
-
-  emailjs.send('service_yrsyqd2', 'template_rkbvgcv', {
-    loc:    loc,
-    fish:   fish,
-    rod:    rod || 'Belirtilmemiş',
-    bait:   bait || 'Belirtilmemiş',
-    note:   note || '—',
-    time:   new Date().toLocaleString('tr-TR'),
-    device: navigator.userAgent.includes('Mobile') ? 'Mobil' : 'Masaüstü',
-    lat:    foundLat.toFixed(5),
-    lng:    foundLng.toFixed(5),
-    type:   foundType,
-    // URL encode edilmiş veriler — onay linki için
-    eloc:   encodeURIComponent(loc),
-    efish:  encodeURIComponent(fish),
-    erod:   encodeURIComponent(rod || 'Belirtilmemiş'),
-    ebait:  encodeURIComponent(bait || 'Belirtilmemiş'),
-    enote:  encodeURIComponent(note || '—'),
-  })
-  .then(function(){
-    btn.textContent = '✅ Rapor Gönderildi!';
-    btn.style.color = 'var(--c2)';
-    btn.style.borderColor = 'var(--c2)';
-    ['floc','ffish','fbait','fnote'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('frod').value='';
-    document.getElementById('loc-result').style.display='none';
-    if(window._tempMarker){ map.removeLayer(window._tempMarker); window._tempMarker=null; }
-    foundLat=0; foundLng=0;
-    setTimeout(()=>{
-      btn.textContent = origTxt;
-      btn.style.color = '';
-      btn.style.borderColor = '';
-      btn.disabled = false;
-    }, 3000);
-  })
-  .catch(function(err){
-    console.error('Email hatası:', err);
-    btn.textContent = '❌ Hata! Tekrar dene';
-    btn.style.color = 'var(--c3)';
-    setTimeout(()=>{
-      btn.textContent = origTxt;
-      btn.style.color = '';
-      btn.disabled = false;
-    }, 3000);
-  });
-}
-
-// ── SAYAÇ ────────────────────────────────────────────────────────
-function updateTimer(){
-  const h=Math.floor(csecs/3600), m=Math.floor((csecs%3600)/60), s=csecs%60;
-  const el = document.getElementById('cdt');
-  if(el) el.textContent = h+':'+m.toString().padStart(2,'0')+':'+s.toString().padStart(2,'0');
-}
-
-setInterval(()=>{
-  csecs--;
-  if(csecs<=0){ csecs=10800; loadData(); }
-  updateTimer();
-}, 1000);
-
-setInterval(updateTheme, 60*1000);
-
-let sy=0;
-document.getElementById('drawer').addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
-document.getElementById('drawer').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>50)closeDrawer();},{passive:true});
-
-window.addEventListener('DOMContentLoaded',()=>{initMap();loadData();});
-</script>
 </body>
-</html>
+</html>`;
+}
+
+export const config = { path: '/approve' };
