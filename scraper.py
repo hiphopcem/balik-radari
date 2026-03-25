@@ -273,6 +273,42 @@ BAIT_KW = [
     "deniz kurdu","kalamar","midye","karides","hamsi yemi",
 ]
 
+# ── ALARM KELİMELERİ — yoğun balık aktivitesini işaret eder ──────
+ALARM_L3 = [  # Seviye 3 — ACİL ALARM (kırmızı, hızlı yanıp söner)
+    "kaynıyor","patladı","coşmuş","çıldırmış","manyak balık","efsane balık",
+    "deli gibi balık","canavar gibi","ortalık yıkılıyor","av kopuyor",
+    "su resmen kaynıyor","balık resmen akın","her yer kıpır","tut tut bitmiyor",
+    "çek çek bitmiyor","aklın durur","yok böyle","böyle gün zor gelir",
+    "tam patlak","ortalık yanıyor","sürü girmiş","sürü oturmuş",
+    "akın etmiş","kıyıdan geçilmiyor","peş peşe","arka arkaya",
+    "fışkırıyor","taşmış","fena açmış","deli gibi alıyor",
+]
+ALARM_L2 = [  # Seviye 2 — YÜKSEK AKTİVİTE (turuncu, yavaş yanıp söner)
+    "çok iyi yapıyor","güzel yapıyor","iyi yapıyor","bereketli","verimli",
+    "aktif","hareketli","canlı","sürü var","sürü geçmiş","geçiş var",
+    "akın var","kıyıladı","yüzeye çıktı","basıyor","sardı","çöktü",
+    "girdi","toplandı","vuruyor","sert vuruyor","yapıştırıyor",
+    "biniyor","yeme biniyor","sahteye biniyor","at çekte","seri geliyor",
+    "takır takır","çatır çatır","kova doluyor","sepet doluyor",
+    "boş dönmüyor","gelen alıyor","oltayı atan alıyor",
+]
+ALARM_L1 = [  # Seviye 1 — NORMAL AKTİF (sarı, statik)
+    "balık var","av iyi","balık alıyor","iyi alıyor","güzel alıyor",
+    "tutuldu","tuttu","avlandı","çalışıyor","verdi","av veriyor",
+    "fena değil","lumanda var","mendirekte var","taşlıkta var",
+]
+
+def calc_alarm(text):
+    """Metinden alarm seviyesi hesapla: 0=normal, 1=aktif, 2=yüksek, 3=alarm"""
+    tn = normalize(text)
+    for w in ALARM_L3:
+        if normalize(w) in tn: return 3
+    for w in ALARM_L2:
+        if normalize(w) in tn: return 2
+    for w in ALARM_L1:
+        if normalize(w) in tn: return 1
+    return 0
+
 def safe_get(url, timeout=20):
     try:
         r = requests.get(url, headers=HEADERS, timeout=timeout)
@@ -369,6 +405,7 @@ def build_report(title, body, source, url="", hint="", pub_date=None):
         ts = now_iso()
     lat = round(coords[0] + random.uniform(-0.002, 0.002), 6)
     lng = round(coords[1] + random.uniform(-0.002, 0.002), 6)
+    alarm = calc_alarm(text)
     return {
         "id":        make_id(title+(loc or "")),
         "lat":       lat, "lng": lng,
@@ -384,6 +421,7 @@ def build_report(title, body, source, url="", hint="", pub_date=None):
         "source":    SOURCE_NAME,
         "url":       url,
         "hot":       len(fish) >= 2,
+        "alarm":     alarm,
     }
 
 def ask_gemini(prompt):
@@ -420,13 +458,21 @@ def parse_gemini_lines(response, source_label=""):
             if not loc_hint or not fish_str: continue
             if normalize(fish_str) in [normalize(w) for w in YOK_WORDS]:
                 continue
-            full_text = f"{loc_hint} {fish_str} {rod_str} {bait_str} {note_str}"
+            alarm_str = clean_gemini(parts.get("ALARM","")).strip()
+            full_text = f"{loc_hint} {fish_str} {rod_str} {bait_str} {note_str} {alarm_str}"
             loc, coords = find_location(full_text)
             if not coords: loc, coords = find_location(loc_hint)
             if not coords: continue
             if not any(normalize(r) in normalize(loc_hint) for r in VALID_REGIONS): continue
             fish = [f.strip().title() for f in fish_str.split(",") if f.strip()]
             if not fish: continue
+            # Alarm skoru — hem Gemini'nin verdiği hem de metinden hesaplanan
+            alarm = calc_alarm(full_text)
+            if alarm_str:
+                try:
+                    a = int(alarm_str[0])
+                    if a in [1,2,3]: alarm = max(alarm, a)
+                except: pass
             ts = now_iso()
             lat = round(coords[0] + random.uniform(-0.003, 0.003), 6)
             lng = round(coords[1] + random.uniform(-0.003, 0.003), 6)
@@ -445,17 +491,25 @@ def parse_gemini_lines(response, source_label=""):
                 "source":    SOURCE_NAME,
                 "url":       "",
                 "hot":       len(fish) >= 2,
+                "alarm":     alarm,
             })
             print(f"    ✓ {loc_hint} → {fish_str}")
         except Exception as e:
             continue
     return results
 
-FORMAT = """LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem] | NOT: [kısa bilgi]
+FORMAT = """LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem] | NOT: [kısa profesyonel yorum] | ALARM: [0/1/2/3]
+
+ALARM seviyeleri:
+0 = Normal (balık var ama sakin)
+1 = Aktif (balık alıyor, iyi gidiyor)
+2 = Yüksek (çok aktif, sürü var, bereketli)
+3 = ACİL (patlak gün, kaynıyor, efsane aktivite)
 
 Örnek:
-LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam yoğun
-LOKASYON: Bozcaada | BALIK: Çipura, Levrek, Sargoz | OLTA: LRF | YEM: Micro jig | NOT: Berrak su"""
+LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma, sürü kıyıya yanaşmış | ALARM: 2
+LOKASYON: Bozcaada | BALIK: Çipura, Levrek, Sargoz | OLTA: LRF | YEM: Micro jig | NOT: Berrak suda aktif | ALARM: 1
+LOKASYON: Sarıyer | BALIK: Palamut, Lüfer, Torik | OLTA: Trolling | YEM: Rapala | NOT: Sürü patladı, her atışta vuruş var, efsane gün | ALARM: 3"""
 
 def scrape_gemini():
     print("🤖 Gemini ile kapsamlı tarama (15 sorgu)...")
