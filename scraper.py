@@ -459,6 +459,7 @@ def parse_gemini_lines(response, source_label=""):
             if normalize(fish_str) in [normalize(w) for w in YOK_WORDS]:
                 continue
             alarm_str = clean_gemini(parts.get("ALARM","")).strip()
+            saat_str  = clean_gemini(parts.get("SAAT","")).strip()
             full_text = f"{loc_hint} {fish_str} {rod_str} {bait_str} {note_str} {alarm_str}"
             loc, coords = find_location(full_text)
             if not coords: loc, coords = find_location(loc_hint)
@@ -466,14 +467,28 @@ def parse_gemini_lines(response, source_label=""):
             if not any(normalize(r) in normalize(loc_hint) for r in VALID_REGIONS): continue
             fish = [f.strip().title() for f in fish_str.split(",") if f.strip()]
             if not fish: continue
-            # Alarm skoru — hem Gemini'nin verdiği hem de metinden hesaplanan
+
+            # Alarm skoru
             alarm = calc_alarm(full_text)
             if alarm_str:
                 try:
                     a = int(alarm_str[0])
                     if a in [1,2,3]: alarm = max(alarm, a)
                 except: pass
+
+            # Gerçek timestamp — Gemini'nin verdiği saati kullan
             ts = now_iso()
+            if saat_str:
+                try:
+                    now = datetime.now(timezone.utc)
+                    h, m = map(int, saat_str.replace(".",":").split(":")[:2])
+                    # Türkiye UTC+3 → UTC'ye çevir
+                    ts_candidate = now.replace(hour=(h-3)%24, minute=m, second=0, microsecond=0)
+                    # Gelecekteyse dünkü demektir
+                    if ts_candidate > now:
+                        ts_candidate = ts_candidate - timedelta(days=1)
+                    ts = ts_candidate.isoformat()
+                except: pass
             lat = round(coords[0] + random.uniform(-0.003, 0.003), 6)
             lng = round(coords[1] + random.uniform(-0.003, 0.003), 6)
             results.append({
@@ -486,7 +501,7 @@ def parse_gemini_lines(response, source_label=""):
                 "note":      note_str[:200] if note_str else f"{loc_hint} — {fish_str}",
                 "heat":      min(5, len(fish)+1),
                 "type":      classify_type(full_text, loc),
-                "time":      "Az önce",
+                "time":      time_ago_str(ts),
                 "timestamp": ts,
                 "source":    SOURCE_NAME,
                 "url":       "",
@@ -498,7 +513,7 @@ def parse_gemini_lines(response, source_label=""):
             continue
     return results
 
-FORMAT = """LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem] | NOT: [kısa profesyonel yorum] | ALARM: [0/1/2/3]
+FORMAT = """LOKASYON: [tam yer adı] | BALIK: [balık türleri virgülle] | OLTA: [olta türü] | YEM: [yem] | NOT: [kısa profesyonel yorum] | ALARM: [0/1/2/3] | SAAT: [tahmini saat, örn: 06:00 veya 14:30]
 
 ALARM seviyeleri:
 0 = Normal (balık var ama sakin)
@@ -507,9 +522,9 @@ ALARM seviyeleri:
 3 = ACİL (patlak gün, kaynıyor, efsane aktivite)
 
 Örnek:
-LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma, sürü kıyıya yanaşmış | ALARM: 2
-LOKASYON: Bozcaada | BALIK: Çipura, Levrek, Sargoz | OLTA: LRF | YEM: Micro jig | NOT: Berrak suda aktif | ALARM: 1
-LOKASYON: Sarıyer | BALIK: Palamut, Lüfer, Torik | OLTA: Trolling | YEM: Rapala | NOT: Sürü patladı, her atışta vuruş var, efsane gün | ALARM: 3"""
+LOKASYON: Galata Köprüsü | BALIK: Lüfer, Kolyoz | OLTA: Olta | YEM: Hamsi | NOT: Akşam saatlerinde yoğun tutulma | ALARM: 2 | SAAT: 18:30
+LOKASYON: Bozcaada | BALIK: Çipura, Levrek, Sargoz | OLTA: LRF | YEM: Micro jig | NOT: Berrak suda aktif | ALARM: 1 | SAAT: 09:00
+LOKASYON: Sarıyer | BALIK: Palamut, Lüfer, Torik | OLTA: Trolling | YEM: Rapala | NOT: Sürü patladı, efsane gün | ALARM: 3 | SAAT: 07:45"""
 
 def scrape_gemini():
     print("🤖 Gemini ile kapsamlı tarama (15 sorgu)...")
