@@ -181,6 +181,7 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
   border-radius:10px;padding:10px 12px;min-width:200px;
   backdrop-filter:blur(6px);
   box-shadow:0 4px 20px rgba(0,0,0,.5);
+  transition:opacity .3s ease;
 }
 .leg-title{font-family:'Orbitron',monospace;font-size:9px;color:var(--c1);letter-spacing:2px;margin-bottom:8px;font-weight:700;}
 .leg-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:11px;color:var(--txt2);font-weight:600;}
@@ -517,17 +518,28 @@ function addMarker(r){
                    : alarm===1?'⚡ AKTİF — Balık Var'
                    : '';
 
-  // Sub-raporlar (son aktiviteler)
-  const subReps = r.reports || [];
+  // Sub-raporlar — son 12 saat, max 4 satır
+  const subReps = (r.reports || []).filter(sr => {
+    if(!sr.time) return true;
+    // "Xsa önce" formatından saat hesapla
+    const m = sr.time.match(/(\d+)sa/);
+    if(m) return parseInt(m[1]) < 12;
+    const m2 = sr.time.match(/(\d+)dk/);
+    if(m2) return true; // dakika önce = kesinlikle son 12 saat
+    return sr.time === 'Az önce';
+  });
+
   const subHtml = subReps.length > 1 ? `
-    <div style="margin:8px 0 4px;border-top:1px solid rgba(0,200,248,.1);padding-top:8px;">
+    <div style="margin:7px 0 4px;border-top:1px solid rgba(0,200,248,.1);padding-top:7px;">
       <div style="font-size:9px;color:var(--txt3);letter-spacing:1px;margin-bottom:5px;font-family:'Orbitron',monospace;">SON AKTİVİTELER</div>
-      ${subReps.slice(0,4).map(sr=>`
-        <div style="display:flex;gap:6px;margin-bottom:4px;font-size:10px;">
-          <span style="color:var(--txt3);white-space:nowrap;flex-shrink:0;">${sr.time||''}</span>
-          <span style="color:var(--c1);font-weight:600;">${(sr.fish||[]).join(', ')}</span>
-          ${sr.rod?`<span style="color:#4de;flex-shrink:0;">· ${sr.rod}</span>`:''}
-        </div>`).join('')}
+      <div style="max-height:${isMob?'80px':'100px'};overflow-y:auto;">
+        ${subReps.slice(0,4).map(sr=>`
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:${isMob?'10px':'11px'};line-height:1.3;">
+            <span style="color:var(--txt3);white-space:nowrap;flex-shrink:0;min-width:55px;">${sr.time||''}</span>
+            <span style="color:var(--c1);font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${(sr.fish||[]).join(', ')}</span>
+            ${sr.rod?`<span style="color:#4de;flex-shrink:0;font-size:9px;">· ${sr.rod}</span>`:''}
+          </div>`).join('')}
+      </div>
     </div>` : '';
 
   const countBadge = r.report_count > 1
@@ -579,12 +591,18 @@ function addMarker(r){
 
   // Popup açılınca haritayı ortala + hava verisini çek
   m.on('popupopen', function(){
-    // Popup'ın koordinatına göre haritayı yumuşakça kaydır
     const px = map.project(m.getLatLng(), map.getZoom());
-    px.y -= 120; // popup'ı biraz aşağıda göster ki başlık görünsün
+    px.y -= 120;
     const newLatLng = map.unproject(px, map.getZoom());
     map.panTo(newLatLng, {animate:true, duration:0.5});
     fetchWeather(r.lat, r.lng, r.id, r.type);
+    const leg = document.getElementById('legend');
+    if(leg) leg.style.opacity = '0';
+  });
+
+  m.on('popupclose', function(){
+    const leg = document.getElementById('legend');
+    if(leg) leg.style.opacity = '1';
   });
 
   markers[r.id] = m;
