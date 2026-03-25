@@ -123,6 +123,12 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 .rc:hover,.rc:active{background:var(--hover);border-color:var(--b2);}
 .rc.hot{border-left:3px solid var(--c3);}
 .rc.hot::after{content:'🔥';position:absolute;top:7px;right:8px;font-size:12px;}
+.rc.alarm3{border-left:3px solid #ff2244;box-shadow:0 0 12px rgba(255,34,68,.2);}
+.rc.alarm3::after{content:'🚨';position:absolute;top:7px;right:8px;font-size:13px;}
+.rc.alarm2{border-left:3px solid #ff8800;box-shadow:0 0 8px rgba(255,136,0,.15);}
+.rc.alarm2::after{content:'🔥';position:absolute;top:7px;right:8px;font-size:13px;}
+.rc.alarm1{border-left:3px solid #ffdd00;}
+.rc.alarm1::after{content:'⚡';position:absolute;top:7px;right:8px;font-size:12px;}
 .ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;}
 .ftags{display:flex;gap:3px;flex-wrap:wrap;flex:1;margin-right:18px;}
 .ft{background:rgba(0,200,248,.1);border:1px solid rgba(0,200,248,.2);color:var(--c1);padding:2px 6px;border-radius:3px;font-size:11px;font-weight:700;}
@@ -198,6 +204,11 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 
 /* Masaüstü: çok hafif ping animasyonu */
 @keyframes softPing{0%{opacity:.4;transform:scale(1);}80%{opacity:0;transform:scale(2.2);}100%{opacity:0;transform:scale(2.2);}}
+
+/* ALARM animasyonları */
+@keyframes alarm3{0%{opacity:.8;transform:scale(1);}50%{opacity:0;transform:scale(3.5);}100%{opacity:0;transform:scale(3.5);}}
+@keyframes alarm2{0%{opacity:.6;transform:scale(1);}60%{opacity:0;transform:scale(2.8);}100%{opacity:0;transform:scale(2.8);}}
+@keyframes alarm1{0%{opacity:.4;transform:scale(1);}70%{opacity:0;transform:scale(2.2);}100%{opacity:0;transform:scale(2.2);}}
 
 #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;}
 
@@ -393,23 +404,78 @@ function initMap(){
 function getIcon(r){
   const C = {deniz:'#00c8f8', göl:'#00e87a', nehir:'#f4c430'};
   const c = C[r.type] || '#d8eef8';
+  const alarm = r.alarm || 0;
+
+  // Alarm renkleri
+  const alarmColor = alarm===3 ? '#ff2244'
+                   : alarm===2 ? '#ff8800'
+                   : alarm===1 ? '#ffdd00'
+                   : c;
+  const markerColor = alarm > 0 ? alarmColor : c;
 
   if(isMob){
-    // Canvas CircleMarker — en hafif, animasyon yok
-    return null; // CircleMarker kullanılacak (aşağıda)
+    // MOBİL: Sade daire, alarm varsa renkli
+    const s = alarm===3 ? 22 : alarm===2 ? 18 : alarm===1 ? 15 : r.hot ? 18 : 11;
+    const ring = alarm > 0
+      ? `<div style="position:absolute;inset:-4px;border-radius:50%;border:2px solid ${markerColor};opacity:0.5;"></div>` : '';
+    const badge = alarm===3 ? `<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:11px;line-height:1;">🚨</div>`
+                : alarm===2 ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:10px;line-height:1;">🔥</div>`
+                : alarm===1 ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:10px;line-height:1;">⚡</div>`
+                : r.hot ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:9px;line-height:1;">🐟</div>` : '';
+    return L.divIcon({
+      className:'',
+      html:`<div style="position:relative;width:${s}px;height:${s}px;">
+        ${ring}${badge}
+        <div style="width:${s}px;height:${s}px;border-radius:50%;
+          background:${markerColor};
+          border:${alarm>0?'2.5px':'1.5px'} solid rgba(255,255,255,${alarm>0?.7:.2});
+          box-shadow:0 2px 8px rgba(0,0,0,.5)${alarm>0?`,0 0 10px ${markerColor}60`:''};
+        "></div>
+      </div>`,
+      iconSize:[s,s], iconAnchor:[s/2, alarm>0?s/2+5:s/2]
+    });
   }
 
-  // Masaüstü: hafif tek ping
-  const s = r.hot ? 20 : 12;
+  // MASAÜSTÜ
+  const s = alarm===3 ? 26 : alarm===2 ? 22 : alarm===1 ? 18 : r.hot ? 20 : 12;
   const day = isDay();
   const borderCol = day ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.18)';
-  const ping = r.hot
-    ? `<div style="position:absolute;top:50%;left:50%;width:${s+14}px;height:${s+14}px;margin-top:-${(s+14)/2}px;margin-left:-${(s+14)/2}px;border-radius:50%;border:1px solid ${c};animation:softPing 4s ease-out infinite;"></div>`
-    : '';
-  const em = r.type==='göl'?'🐠':r.type==='nehir'?'🎣':'🐟';
+
+  // Alarm ping halkaları
+  let pings = '';
+  if(alarm===3){
+    // 3 hızlı halkası — kırmızı, hızlı
+    pings = `
+      <div style="position:absolute;top:50%;left:50%;width:${s+20}px;height:${s+20}px;margin-top:-${(s+20)/2}px;margin-left:-${(s+20)/2}px;border-radius:50%;border:2px solid ${markerColor};animation:alarm3 1.2s ease-out infinite;"></div>
+      <div style="position:absolute;top:50%;left:50%;width:${s+36}px;height:${s+36}px;margin-top:-${(s+36)/2}px;margin-left:-${(s+36)/2}px;border-radius:50%;border:1.5px solid ${markerColor};animation:alarm3 1.2s ease-out infinite .3s;"></div>
+      <div style="position:absolute;top:50%;left:50%;width:${s+52}px;height:${s+52}px;margin-top:-${(s+52)/2}px;margin-left:-${(s+52)/2}px;border-radius:50%;border:1px solid ${markerColor};animation:alarm3 1.2s ease-out infinite .6s;"></div>`;
+  } else if(alarm===2){
+    // 2 halkası — turuncu, orta hız
+    pings = `
+      <div style="position:absolute;top:50%;left:50%;width:${s+16}px;height:${s+16}px;margin-top:-${(s+16)/2}px;margin-left:-${(s+16)/2}px;border-radius:50%;border:1.5px solid ${markerColor};animation:alarm2 2s ease-out infinite;"></div>
+      <div style="position:absolute;top:50%;left:50%;width:${s+30}px;height:${s+30}px;margin-top:-${(s+30)/2}px;margin-left:-${(s+30)/2}px;border-radius:50%;border:1px solid ${markerColor};animation:alarm2 2s ease-out infinite .5s;"></div>`;
+  } else if(alarm===1){
+    // 1 halkası — sarı, yavaş
+    pings = `
+      <div style="position:absolute;top:50%;left:50%;width:${s+14}px;height:${s+14}px;margin-top:-${(s+14)/2}px;margin-left:-${(s+14)/2}px;border-radius:50%;border:1px solid ${markerColor};animation:alarm1 3s ease-out infinite;"></div>`;
+  } else if(r.hot){
+    pings = `<div style="position:absolute;top:50%;left:50%;width:${s+14}px;height:${s+14}px;margin-top:-${(s+14)/2}px;margin-left:-${(s+14)/2}px;border-radius:50%;border:1px solid ${c};animation:softPing 4s ease-out infinite;"></div>`;
+  }
+
+  const badge = alarm===3 ? '🚨' : alarm===2 ? '🔥' : alarm===1 ? '⚡' : r.type==='göl' ? '🐠' : r.type==='nehir' ? '🎣' : '🐟';
+  const glow = alarm>0 ? `box-shadow:0 0 ${alarm*6}px ${markerColor}80,0 1px 4px rgba(0,0,0,.4);` : `box-shadow:0 1px 4px rgba(0,0,0,.35);`;
+
   return L.divIcon({
     className:'',
-    html:`<div style="position:relative;width:${s}px;height:${s}px;">${ping}<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};box-shadow:0 0 6px ${c}40,0 1px 4px rgba(0,0,0,.4);border:1.5px solid ${borderCol};display:flex;align-items:center;justify-content:center;font-size:${Math.floor(s*.55)}px;">${em}</div></div>`,
+    html:`<div style="position:relative;width:${s}px;height:${s}px;">
+      ${pings}
+      <div style="width:${s}px;height:${s}px;border-radius:50%;
+        background:${markerColor};${glow}
+        border:${alarm>0?2:1.5}px solid ${borderCol};
+        display:flex;align-items:center;justify-content:center;
+        font-size:${Math.floor(s*.5)}px;
+      ">${badge}</div>
+    </div>`,
     iconSize:[s,s], iconAnchor:[s/2,s/2]
   });
 }
@@ -438,13 +504,16 @@ function addMarker(r){
 
   let m;
   if(isMob){
-    const radius = r.hot ? 9 : 5;
+    const alarm = r.alarm || 0;
+    const alarmColor = alarm===3?'#ff2244':alarm===2?'#ff8800':alarm===1?'#ffdd00':c;
+    const mc = alarm > 0 ? alarmColor : c;
+    const radius = alarm===3?11:alarm===2?9:alarm===1?7:r.hot?9:5;
     m = L.circleMarker([r.lat,r.lng],{
       radius,
-      fillColor: c,
-      fillOpacity: r.hot ? 0.95 : 0.8,
-      color: r.hot ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.25)',
-      weight: r.hot ? 2 : 1,
+      fillColor: mc,
+      fillOpacity: alarm>0 ? 1 : r.hot ? 0.95 : 0.8,
+      color: alarm>0 ? 'rgba(255,255,255,0.8)' : r.hot ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.25)',
+      weight: alarm>0 ? 2.5 : r.hot ? 2 : 1,
     }).addTo(map);
   } else {
     m = L.marker([r.lat,r.lng],{icon:getIcon(r)}).addTo(map);
@@ -664,14 +733,23 @@ function renderAll(){
 
 function makeCard(r,i){
   const d = document.createElement('div');
-  d.className = 'rc'+(r.hot?' hot':'');
+  const alarm = r.alarm || 0;
+  const alarmBadge = alarm===3
+    ? `<div style="display:flex;align-items:center;gap:4px;background:rgba(255,34,68,.15);border:1px solid rgba(255,34,68,.3);color:#ff2244;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:6px;">🚨 ACİL — Yoğun Aktivite Tespit Edildi</div>`
+    : alarm===2
+    ? `<div style="display:flex;align-items:center;gap:4px;background:rgba(255,136,0,.12);border:1px solid rgba(255,136,0,.25);color:#ff8800;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:6px;">🔥 YÜKSEK — Bölgede Yoğun Balık Hareketi</div>`
+    : alarm===1
+    ? `<div style="display:flex;align-items:center;gap:4px;background:rgba(255,221,0,.1);border:1px solid rgba(255,221,0,.2);color:#ffdd00;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:6px;">⚡ AKTİF — Balık Alımı Devam Ediyor</div>`
+    : '';
+  d.className = 'rc'+(alarm===3?' alarm3':alarm===2?' alarm2':alarm===1?' alarm1':r.hot?' hot':'');
   d.style.animationDelay = isMob ? '0ms' : (i*15)+'ms';
   const dots = Array.from({length:5},(_,j)=>`<div class="hd${j<(r.heat||0)?' on':''}"></div>`).join('');
   const ld = r.type==='göl'?'g':r.type==='nehir'?'n':'d';
   const ts = timeAgo(r.timestamp);
   d.innerHTML=`
+    ${alarmBadge}
     <div class="ct">
-      <div class="ftags">${(r.fish||[]).map((f,j)=>`<span class="ft${j===0&&r.hot?' h':j===0?' p':''}">${f}</span>`).join('')}</div>
+      <div class="ftags">${(r.fish||[]).map((f,j)=>`<span class="ft${j===0&&alarm>0?' h':j===0?' p':''}">${f}</span>`).join('')}</div>
       <span class="tt">${ts}</span>
     </div>
     <div class="ln"><div class="ld ${ld}"></div>${r.loc}</div>
