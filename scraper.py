@@ -964,16 +964,10 @@ def merge_locations(reports):
             key = f"{ts_str}_{','.join(r.get('fish',[]))}"
             if key not in seen:
                 seen.add(key)
-                # Orijinal notu al — Gemini özetini değil
-                orig_note = r.get("original_note","") or r.get("note","")
-                # 100 karakterden uzunsa Gemini özeti, gösterme
-                if len(orig_note) > 100:
-                    orig_note = ""
                 all_activities.append({
-                    "time":      r.get("time",""),
+                    "time":      time_ago_str(ts_str),  # taze hesapla
                     "timestamp": ts_str,
                     "fish":      r.get("fish",[]),
-                    "note":      orig_note,
                     "rod":       r.get("rod",""),
                     "bait":      r.get("bait",""),
                 })
@@ -982,6 +976,7 @@ def merge_locations(reports):
             for sr in r.get("reports", []):
                 sr_ts = sr.get("timestamp","")
                 if not sr_ts: continue
+                if not sr.get("fish"): continue  # fish yoksa atla
                 try:
                     dt2 = datetime.fromisoformat(sr_ts.replace("Z","+00:00"))
                     if dt2.tzinfo is None: dt2 = dt2.replace(tzinfo=timezone.utc)
@@ -990,7 +985,10 @@ def merge_locations(reports):
                 sr_key = f"{sr_ts}_{','.join(sr.get('fish',[]))}"
                 if sr_key not in seen:
                     seen.add(sr_key)
-                    all_activities.append(sr)
+                    # time'ı taze hesapla
+                    sr_copy = {k:v for k,v in sr.items()}
+                    sr_copy["time"] = time_ago_str(sr_ts)
+                    all_activities.append(sr_copy)
 
         # Zamana göre sırala — en yeni başta, max 8
         all_activities.sort(key=lambda x: x.get("timestamp",""), reverse=True)
