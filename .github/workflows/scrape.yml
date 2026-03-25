@@ -5,6 +5,9 @@ on:
     - cron: '0 0,3,6,9,12,15,18,21 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -13,6 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -35,3 +39,5 @@ jobs:
           git diff --staged --quiet || git commit -m "Otomatik guncelleme"
           git pull --rebase origin main
           git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
