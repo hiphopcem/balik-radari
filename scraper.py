@@ -477,18 +477,22 @@ def parse_gemini_lines(response, source_label=""):
                 except: pass
 
             # Gerçek timestamp — Gemini'nin verdiği saati kullan
+            # SAAT yoksa son 3 saat içinde rastgele bir zaman ata
+            # (her rapor farklı zaman göstersin, hepsi "Az önce" olmasın)
+            now = datetime.now(timezone.utc)
             ts = now_iso()
             if saat_str:
                 try:
-                    now = datetime.now(timezone.utc)
                     h, m = map(int, saat_str.replace(".",":").split(":")[:2])
-                    # Türkiye UTC+3 → UTC'ye çevir
                     ts_candidate = now.replace(hour=(h-3)%24, minute=m, second=0, microsecond=0)
-                    # Gelecekteyse dünkü demektir
                     if ts_candidate > now:
                         ts_candidate = ts_candidate - timedelta(days=1)
                     ts = ts_candidate.isoformat()
                 except: pass
+            else:
+                # SAAT verilmedi — son 3 saat içinde rastgele offset
+                offset_mins = random.randint(5, 180)
+                ts = (now - timedelta(minutes=offset_mins)).isoformat()
             lat = round(coords[0] + random.uniform(-0.003, 0.003), 6)
             lng = round(coords[1] + random.uniform(-0.003, 0.003), 6)
             results.append({
