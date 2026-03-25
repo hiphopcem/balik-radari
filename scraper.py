@@ -882,7 +882,106 @@ def scrape_telegram():
     print(f"  ✓ Telegram toplam: {len(results)} rapor")
     return results
 
-def main():
+def merge_locations(reports):
+    """
+    Aynı lokasyondaki raporları tek noktada birleştir.
+    Gemini tüm raporları okuyup profesyonel özet yorum yazar.
+    """
+    # Lokasyona göre grupla
+    groups = {}
+    for r in reports:
+        loc = r.get("loc","").strip().lower()
+        if not loc: continue
+        if loc not in groups:
+            groups[loc] = []
+        groups[loc].append(r)
+
+    merged = []
+    for loc_key, reps in groups.items():
+        if not reps: continue
+
+        # En yeni raporu temel al
+        reps_sorted = sorted(reps, key=lambda x: x.get("timestamp",""), reverse=True)
+        base = reps_sorted[0].copy()
+
+        # Tüm balık türlerini birleştir
+        all_fish = []
+        for r in reps_sorted:
+            for f in r.get("fish",[]):
+                if f not in all_fish:
+                    all_fish.append(f)
+        base["fish"] = all_fish[:6]
+
+        # En yüksek alarm seviyesini al
+        base["alarm"] = max(r.get("alarm",0) for r in reps_sorted)
+        base["hot"] = any(r.get("hot",False) for r in reps_sorted)
+        base["heat"] = max(r.get("heat",0) for r in reps_sorted)
+
+        # Tüm notları birleştir
+        notes = []
+        for r in reps_sorted:
+            note = r.get("note","").strip()
+            t = r.get("time","")
+            if note and note not in notes:
+                notes.append(f"[{t}] {note}")
+
+        # Birden fazla rapor varsa Gemini ile özet yorum yaptır
+        if len(reps_sorted) > 1 and GEMINI_KEY:
+            summary = gemini_summarize(base["loc"], reps_sorted)
+            if summary:
+                base["note"] = summary
+            else:
+                base["note"] = " | ".join(notes[:3])
+        else:
+            base["note"] = notes[0] if notes else base.get("note","")
+
+        # Tüm sub-raporları sakla (popup'ta detay için)
+        base["reports"] = [
+            {
+                "time": r.get("time",""),
+                "fish": r.get("fish",[]),
+                "note": r.get("note",""),
+                "rod":  r.get("rod",""),
+                "bait": r.get("bait",""),
+            }
+            for r in reps_sorted[:5]  # max 5 detay
+        ]
+        base["report_count"] = len(reps_sorted)
+
+        merged.append(base)
+
+    return merged
+
+
+def gemini_summarize(loc, reports):
+    """Bir konumdaki birden fazla raporu Gemini ile özetlet"""
+    if not GEMINI_KEY or len(reports) < 2:
+        return None
+
+    # Rapor özetlerini hazırla
+    rep_lines = []
+    for r in reports[:5]:
+        t = r.get("time","")
+        fish = ", ".join(r.get("fish",[]))
+        note = r.get("note","")
+        rod  = r.get("rod","")
+        rep_lines.append(f"- {t}: {fish} tutuldu. {note} {rod}")
+
+    prompt = f"""Sen deneyimli bir balıkçılık uzmanısın.
+{loc} konumunda son 12 saatte şu raporlar geldi:
+
+{chr(10).join(rep_lines)}
+
+Bu raporları tek bir profesyonel özet yoruma dönüştür.
+- Balık hareketlerini analiz et
+- Trend varsa belirt (artıyor mu, azalıyor mu)
+- En iyi zaman dilimini belirt
+- Teknik tavsiye ver
+- Maksimum 2 cümle, Türkçe, professional ton
+- Sadece özeti yaz, başka hiçbir şey ekleme"""
+
+    response = ask_gemini(prompt)
+    return response.strip() if response else None
     print("="*65)
     print(f"🎣 Sihirli Zoka Radar v13 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"   AI Tarama: {'✓' if GEMINI_KEY else '✗'} | Max yaş: {MAX_AGE_HOURS} saat")
@@ -926,7 +1025,7 @@ def main():
     new_reports += scrape_rss()
     new_reports += scrape_telegram()
 
-    print(f"\n📊 Yeni rapor: {len(new_reports)}")
+    print(f"\n📊 Ham rapor: {len(new_reports)}")
 
     ts = now_iso()
     for r in new_reports:
@@ -941,16 +1040,24 @@ def main():
             all_map[r["id"]] = r
             added += 1
 
+    all_reports = list(all_map.values())
+
+    # ── KONUM BİRLEŞTİRME ────────────────────────────────────────
+    # Aynı lokasyondaki raporları tek noktada birleştir
+    print(f"\n🔀 Konum birleştirme...")
+    merged = merge_locations(all_reports)
+    print(f"   {len(all_reports)} rapor → {len(merged)} birleşik konum")
+
     # Son 12 saate göre sırala — en yeni başta
     sorted_reports = sorted(
-        all_map.values(),
+        merged,
         key=lambda x: x.get("timestamp",""),
         reverse=True
     )
 
     print(f"\n✅ Tamamlandı!")
     print(f"   Yeni eklenen : {added}")
-    print(f"   Toplam rapor : {len(sorted_reports)}")
+    print(f"   Toplam konum : {len(sorted_reports)}")
 
     os.makedirs("data", exist_ok=True)
     with open(OUTPUT_FILE,"w",encoding="utf-8") as f:
