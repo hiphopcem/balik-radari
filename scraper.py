@@ -982,6 +982,9 @@ Bu raporları tek bir profesyonel özet yoruma dönüştür.
 
     response = ask_gemini(prompt)
     return response.strip() if response else None
+
+
+def main():
     print("="*65)
     print(f"🎣 Sihirli Zoka Radar v13 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"   AI Tarama: {'✓' if GEMINI_KEY else '✗'} | Max yaş: {MAX_AGE_HOURS} saat")
