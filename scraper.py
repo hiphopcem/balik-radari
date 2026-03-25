@@ -964,11 +964,16 @@ def merge_locations(reports):
             key = f"{ts_str}_{','.join(r.get('fish',[]))}"
             if key not in seen:
                 seen.add(key)
+                # Orijinal notu al — Gemini özetini değil
+                orig_note = r.get("original_note","") or r.get("note","")
+                # 100 karakterden uzunsa Gemini özeti, gösterme
+                if len(orig_note) > 100:
+                    orig_note = ""
                 all_activities.append({
                     "time":      r.get("time",""),
                     "timestamp": ts_str,
                     "fish":      r.get("fish",[]),
-                    "note":      r.get("note",""),
+                    "note":      orig_note,
                     "rod":       r.get("rod",""),
                     "bait":      r.get("bait",""),
                 })
@@ -994,6 +999,10 @@ def merge_locations(reports):
 
         # Gemini özet yorum
         if len(reps_sorted) > 1 and GEMINI_KEY:
+            # Özet yapılmadan önce orijinal notları sakla
+            for r in reps_sorted:
+                if "original_note" not in r:
+                    r["original_note"] = r.get("note","")
             summary = gemini_summarize(base["loc"], reps_sorted)
             if summary:
                 base["note"] = summary
