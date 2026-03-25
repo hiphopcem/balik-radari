@@ -900,8 +900,10 @@ def scrape_telegram():
 def merge_locations(reports):
     """
     Aynı lokasyondaki raporları tek noktada birleştir.
-    Gemini tüm raporları okuyup profesyonel özet yorum yazar.
+    Son 12 saatteki tüm aktiviteleri sub-rapor olarak saklar.
     """
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=MAX_AGE_HOURS)
+
     # Lokasyona göre grupla
     groups = {}
     for r in reports:
@@ -929,18 +931,68 @@ def merge_locations(reports):
 
         # En yüksek alarm seviyesini al
         base["alarm"] = max(r.get("alarm",0) for r in reps_sorted)
-        base["hot"] = any(r.get("hot",False) for r in reps_sorted)
-        base["heat"] = max(r.get("heat",0) for r in reps_sorted)
+        base["hot"]   = any(r.get("hot",False) for r in reps_sorted)
+        base["heat"]  = max(r.get("heat",0) for r in reps_sorted)
 
-        # Tüm notları birleştir
+        # Notları birleştir
         notes = []
         for r in reps_sorted:
+            try:
+                dt = datetime.fromisoformat(r.get("timestamp","").replace("Z","+00:00"))
+                if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
+                if dt < cutoff: continue
+            except: pass
             note = r.get("note","").strip()
             t = r.get("time","")
             if note and note not in notes:
                 notes.append(f"[{t}] {note}")
 
-        # Birden fazla rapor varsa Gemini ile özet yorum yaptır
+        # ── SON 12 SAATTEKİ TÜM AKTİVİTELERİ TOPLA ─────────────
+        # Hem mevcut raporların sub-raporlarını hem de doğrudan raporları al
+        all_activities = []
+        seen = set()
+
+        for r in reps_sorted:
+            # Doğrudan raporu aktivite olarak ekle
+            ts_str = r.get("timestamp","")
+            try:
+                dt = datetime.fromisoformat(ts_str.replace("Z","+00:00"))
+                if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
+                if dt < cutoff: continue
+            except: continue
+
+            key = f"{ts_str}_{','.join(r.get('fish',[]))}"
+            if key not in seen:
+                seen.add(key)
+                all_activities.append({
+                    "time":      r.get("time",""),
+                    "timestamp": ts_str,
+                    "fish":      r.get("fish",[]),
+                    "note":      r.get("note",""),
+                    "rod":       r.get("rod",""),
+                    "bait":      r.get("bait",""),
+                })
+
+            # Önceki birleştirilmiş raporun sub-raporlarını da al
+            for sr in r.get("reports", []):
+                sr_ts = sr.get("timestamp","")
+                if not sr_ts: continue
+                try:
+                    dt2 = datetime.fromisoformat(sr_ts.replace("Z","+00:00"))
+                    if dt2.tzinfo is None: dt2 = dt2.replace(tzinfo=timezone.utc)
+                    if dt2 < cutoff: continue
+                except: continue
+                sr_key = f"{sr_ts}_{','.join(sr.get('fish',[]))}"
+                if sr_key not in seen:
+                    seen.add(sr_key)
+                    all_activities.append(sr)
+
+        # Zamana göre sırala — en yeni başta, max 8
+        all_activities.sort(key=lambda x: x.get("timestamp",""), reverse=True)
+        base["reports"]      = all_activities[:8]
+        base["report_count"] = len(all_activities)
+
+        # Gemini özet yorum
         if len(reps_sorted) > 1 and GEMINI_KEY:
             summary = gemini_summarize(base["loc"], reps_sorted)
             if summary:
@@ -949,19 +1001,6 @@ def merge_locations(reports):
                 base["note"] = " | ".join(notes[:3])
         else:
             base["note"] = notes[0] if notes else base.get("note","")
-
-        # Tüm sub-raporları sakla (popup'ta detay için)
-        base["reports"] = [
-            {
-                "time": r.get("time",""),
-                "fish": r.get("fish",[]),
-                "note": r.get("note",""),
-                "rod":  r.get("rod",""),
-                "bait": r.get("bait",""),
-            }
-            for r in reps_sorted[:5]  # max 5 detay
-        ]
-        base["report_count"] = len(reps_sorted)
 
         merged.append(base)
 
