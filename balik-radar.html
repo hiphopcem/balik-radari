@@ -520,18 +520,12 @@ function addMarker(r){
 
   // Sub-raporlar — son 12 saat, max 4 satır
   const subReps = (r.reports || []).filter(sr => {
-    // Fish bilgisi olmayan sub-raporları atla (Gemini yorumları gibi)
     if(!sr.fish || sr.fish.length === 0) return false;
-    if(sr.timestamp){
-      try{
-        const diff = (Date.now() - new Date(sr.timestamp).getTime()) / 3600000;
-        return diff < 12;
-      }catch(e){ return true; }
-    }
-    if(!sr.time) return false;
-    const m = sr.time.match(/(\d+)sa/);
-    if(m) return parseInt(m[1]) < 12;
-    return true;
+    if(!sr.timestamp) return false; // timestamp yoksa gösterme
+    try{
+      const diff = (Date.now() - new Date(sr.timestamp).getTime()) / 3600000;
+      return diff >= 0 && diff < 12;
+    }catch(e){ return false; }
   });
 
   const subHtml = subReps.length > 1 ? `
@@ -539,8 +533,8 @@ function addMarker(r){
       <div style="font-size:9px;color:var(--txt3);letter-spacing:1px;margin-bottom:5px;font-family:'Orbitron',monospace;">SON AKTİVİTELER</div>
       <div style="max-height:${isMob?'80px':'100px'};overflow-y:auto;">
         ${subReps.slice(0,4).map(sr=>{
-          let t = sr.time || '';
-          if(sr.timestamp){ try{ t = timeAgo(sr.timestamp); }catch(e){} }
+          // Her zaman timestamp'ten canlı hesapla — sabit string kullanma
+          const t = timeAgo(sr.timestamp);
           return `<div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:${isMob?'10px':'11px'};line-height:1.3;">
             <span style="color:var(--txt3);white-space:nowrap;flex-shrink:0;min-width:60px;">${t}</span>
             <span style="color:var(--c1);font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${(sr.fish||[]).slice(0,3).join(', ')}</span>
