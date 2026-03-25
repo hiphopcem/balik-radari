@@ -174,7 +174,22 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 .dcls{background:none;border:none;color:var(--txt2);font-size:18px;cursor:pointer;padding:0 4px;line-height:1;}
 #dmob{flex:1;overflow-y:auto;padding:7px;-webkit-overflow-scrolling:touch;}
 
-/* LOADER */
+/* LEGEND */
+#legend{
+  position:absolute;bottom:16px;left:16px;z-index:10;
+  background:rgba(3,14,26,.92);border:1px solid var(--b2);
+  border-radius:10px;padding:10px 12px;min-width:200px;
+  backdrop-filter:blur(6px);
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+.leg-title{font-family:'Orbitron',monospace;font-size:9px;color:var(--c1);letter-spacing:2px;margin-bottom:8px;font-weight:700;}
+.leg-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:11px;color:var(--txt2);font-weight:600;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.leg-note{font-size:9px;color:var(--txt3);margin-top:6px;border-top:1px solid var(--b1);padding-top:5px;}
+@media(max-width:768px){
+  #legend{bottom:70px;left:10px;min-width:160px;padding:8px 10px;}
+  .leg-row{font-size:10px;}
+}
 #ldr{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .lr{width:90px;height:90px;border-radius:50%;border:1px solid rgba(0,200,248,.15);position:relative;margin-bottom:18px;}
 .lr::before,.lr::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,200,248,.07);}
@@ -304,6 +319,18 @@ body{font-family:'Exo 2',sans-serif;color:var(--txt);}
 
   <div id="main">
     <div id="map"></div>
+
+    <!-- LEGEND — sol alt köşe -->
+    <div id="legend">
+      <div class="leg-title">HARİTA REHBERİ</div>
+      <div class="leg-row"><span class="leg-dot" style="background:#ff2244;box-shadow:0 0 6px #ff2244;"></span><span>🚨 ACİL — Yoğun aktivite</span></div>
+      <div class="leg-row"><span class="leg-dot" style="background:#ff8800;box-shadow:0 0 6px #ff8800;"></span><span>🔥 YÜKSEK — Aktif bölge</span></div>
+      <div class="leg-row"><span class="leg-dot" style="background:#ffdd00;box-shadow:0 0 6px #ffdd00;"></span><span>⚡ AKTİF — Balık var</span></div>
+      <div class="leg-row"><span class="leg-dot" style="background:#00c8f8;"></span><span>🐟 Deniz noktası</span></div>
+      <div class="leg-row"><span class="leg-dot" style="background:#00e87a;"></span><span>🐠 Göl noktası</span></div>
+      <div class="leg-row"><span class="leg-dot" style="background:#f4c430;"></span><span>🎣 Nehir noktası</span></div>
+      <div class="leg-note">Noktaya tıkla → detay ve hava durumu</div>
+    </div>
     <div id="sidebar">
       <div class="sb-hdr">
         <div class="sb-ttl">SON RAPORLAR</div>
@@ -483,23 +510,45 @@ function getIcon(r){
 function addMarker(r){
   const C = {deniz:'#00c8f8', göl:'#00e87a', nehir:'#f4c430'};
   const c = C[r.type] || '#d8eef8';
+  const alarm = r.alarm || 0;
+  const alarmColor = alarm===3?'#ff2244':alarm===2?'#ff8800':alarm===1?'#ffdd00':c;
+  const alarmLabel = alarm===3?'🚨 ACİL — Yoğun Aktivite'
+                   : alarm===2?'🔥 YÜKSEK — Aktif Bölge'
+                   : alarm===1?'⚡ AKTİF — Balık Var'
+                   : '';
+
+  // Sub-raporlar (son aktiviteler)
+  const subReps = r.reports || [];
+  const subHtml = subReps.length > 1 ? `
+    <div style="margin:8px 0 4px;border-top:1px solid rgba(0,200,248,.1);padding-top:8px;">
+      <div style="font-size:9px;color:var(--txt3);letter-spacing:1px;margin-bottom:5px;font-family:'Orbitron',monospace;">SON AKTİVİTELER</div>
+      ${subReps.slice(0,4).map(sr=>`
+        <div style="display:flex;gap:6px;margin-bottom:4px;font-size:10px;">
+          <span style="color:var(--txt3);white-space:nowrap;flex-shrink:0;">${sr.time||''}</span>
+          <span style="color:var(--c1);font-weight:600;">${(sr.fish||[]).join(', ')}</span>
+          ${sr.rod?`<span style="color:#4de;flex-shrink:0;">· ${sr.rod}</span>`:''}
+        </div>`).join('')}
+    </div>` : '';
+
+  const countBadge = r.report_count > 1
+    ? `<div style="font-size:9px;color:var(--txt3);margin-bottom:6px;">${r.report_count} rapor birleştirildi</div>` : '';
+
   const th = r.rod ? `<span class="tk r">🎣 ${r.rod}</span>` : '';
   const tb = r.bait ? `<span class="tk b">🪱 ${r.bait}</span>` : '';
-  const ts = timeAgo(r.timestamp);
+  const ts2 = timeAgo(r.timestamp);
 
-  // Popup içeriği — hava verisi için id ile oluştur
-  const pid = 'pop_'+r.id;
-  const popup = `<div class="pi" id="${pid}">
+  const popup = `<div class="pi">
+    ${alarm>0?`<div style="background:${alarmColor}20;border:1px solid ${alarmColor}40;color:${alarmColor};padding:4px 9px;border-radius:5px;font-size:10px;font-weight:700;margin-bottom:8px;">${alarmLabel}</div>`:''}
     <div class="pl">📍 ${r.loc}</div>
+    ${countBadge}
     <div class="pf">${(r.fish||[]).map(f=>`<span class="pt2">${f}</span>`).join('')}</div>
     ${th||tb?`<div class="ptk">${th}${tb}</div>`:''}
     <div class="pn">${r.note||''}</div>
+    ${subHtml}
     <div class="pw" id="wx_${r.id}">
-      <div style="color:var(--txt3);font-size:10px;text-align:center;padding:6px 0;">
-        ⏳ Hava verisi yükleniyor...
-      </div>
+      <div style="color:var(--txt3);font-size:10px;text-align:center;padding:6px 0;">⏳ Hava verisi yükleniyor...</div>
     </div>
-    <div class="pf2"><span>${ts}</span><span>${r.source||''}</span></div>
+    <div class="pf2"><span>${ts2}</span><span>${r.source||''}</span></div>
   </div>`;
 
   let m;
