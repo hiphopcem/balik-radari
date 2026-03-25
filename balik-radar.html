@@ -520,6 +520,8 @@ function addMarker(r){
 
   // Sub-raporlar — son 12 saat, max 4 satır
   const subReps = (r.reports || []).filter(sr => {
+    // Fish bilgisi olmayan sub-raporları atla (Gemini yorumları gibi)
+    if(!sr.fish || sr.fish.length === 0) return false;
     if(sr.timestamp){
       try{
         const diff = (Date.now() - new Date(sr.timestamp).getTime()) / 3600000;
