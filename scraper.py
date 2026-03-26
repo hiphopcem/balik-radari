@@ -969,8 +969,7 @@ def merge_locations(reports):
             if key not in seen:
                 seen.add(key)
                 all_activities.append({
-                    "time":      time_ago_str(ts_str),  # taze hesapla
-                    "timestamp": ts_str,
+                    "timestamp": ts_str,  # sadece timestamp, time yok
                     "fish":      r.get("fish",[]),
                     "rod":       r.get("rod",""),
                     "bait":      r.get("bait",""),
@@ -980,7 +979,7 @@ def merge_locations(reports):
             for sr in r.get("reports", []):
                 sr_ts = sr.get("timestamp","")
                 if not sr_ts: continue
-                if not sr.get("fish"): continue  # fish yoksa atla
+                if not sr.get("fish"): continue
                 try:
                     dt2 = datetime.fromisoformat(sr_ts.replace("Z","+00:00"))
                     if dt2.tzinfo is None: dt2 = dt2.replace(tzinfo=timezone.utc)
@@ -989,10 +988,12 @@ def merge_locations(reports):
                 sr_key = f"{sr_ts}_{','.join(sr.get('fish',[]))}"
                 if sr_key not in seen:
                     seen.add(sr_key)
-                    # time'ı taze hesapla
-                    sr_copy = {k:v for k,v in sr.items()}
-                    sr_copy["time"] = time_ago_str(sr_ts)
-                    all_activities.append(sr_copy)
+                    all_activities.append({
+                        "timestamp": sr_ts,  # sadece timestamp
+                        "fish":      sr.get("fish",[]),
+                        "rod":       sr.get("rod",""),
+                        "bait":      sr.get("bait",""),
+                    })
 
         # Zamana göre sırala — en yeni başta, max 8
         all_activities.sort(key=lambda x: x.get("timestamp",""), reverse=True)
