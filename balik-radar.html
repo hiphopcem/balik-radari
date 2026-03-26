@@ -557,7 +557,7 @@ function addMarker(r){
     ${countBadge}
     <div class="pf">${(r.fish||[]).map(f=>`<span class="pt2">${f}</span>`).join('')}</div>
     ${th||tb?`<div class="ptk">${th}${tb}</div>`:''}
-    <div class="pn">${r.note||''}</div>
+    <div class="pn">${(r.note||'').replace(/\[\d+[a-z]+ önce\]/g,'').replace(/\[Az önce\]/g,'').trim()}</div>
     ${subHtml}
     <div class="pw" id="wx_${r.id}">
       <div style="color:var(--txt3);font-size:10px;text-align:center;padding:6px 0;">⏳ Hava verisi yükleniyor...</div>
