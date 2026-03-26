@@ -940,7 +940,7 @@ def merge_locations(reports):
         base["hot"]   = any(r.get("hot",False) for r in reps_sorted)
         base["heat"]  = max(r.get("heat",0) for r in reps_sorted)
 
-        # Notları birleştir — zaman ön eki EKLEME
+        # Notları birleştir — zaman ön eki EKLEME, varsa temizle
         notes = []
         for r in reps_sorted:
             try:
@@ -949,6 +949,9 @@ def merge_locations(reports):
                 if dt < cutoff: continue
             except: pass
             note = r.get("note","").strip()
+            # Eski formattaki [Xsa önce] [Xdk önce] ön eklerini temizle
+            note = re.sub(r'\[\d+[a-z]+ önce\]\s*', '', note).strip()
+            note = re.sub(r'\[Az önce\]\s*', '', note).strip()
             if note and note not in notes:
                 notes.append(note)
 
