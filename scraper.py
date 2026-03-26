@@ -477,8 +477,6 @@ def parse_gemini_lines(response, source_label=""):
                 except: pass
 
             # Gerçek timestamp — Gemini'nin verdiği saati kullan
-            # SAAT yoksa son 3 saat içinde rastgele bir zaman ata
-            # (her rapor farklı zaman göstersin, hepsi "Az önce" olmasın)
             now = datetime.now(timezone.utc)
             ts = now_iso()
             if saat_str:
@@ -490,8 +488,12 @@ def parse_gemini_lines(response, source_label=""):
                     ts = ts_candidate.isoformat()
                 except: pass
             else:
-                # SAAT verilmedi — son 3 saat içinde rastgele offset
-                offset_mins = random.randint(5, 180)
+                # SAAT verilmedi — rapor içeriğine göre deterministik offset
+                # Aynı rapor her scraper çalışmasında aynı zamanı gösterir
+                seed_str = f"{loc_hint}{fish_str}{note_str}"
+                seed_val = int(hashlib.md5(seed_str.encode()).hexdigest()[:8], 16)
+                # 10 ile 170 dakika arasında deterministik offset
+                offset_mins = 10 + (seed_val % 160)
                 ts = (now - timedelta(minutes=offset_mins)).isoformat()
             lat = round(coords[0] + random.uniform(-0.003, 0.003), 6)
             lng = round(coords[1] + random.uniform(-0.003, 0.003), 6)
@@ -938,7 +940,7 @@ def merge_locations(reports):
         base["hot"]   = any(r.get("hot",False) for r in reps_sorted)
         base["heat"]  = max(r.get("heat",0) for r in reps_sorted)
 
-        # Notları birleştir
+        # Notları birleştir — zaman ön eki EKLEME
         notes = []
         for r in reps_sorted:
             try:
@@ -947,9 +949,8 @@ def merge_locations(reports):
                 if dt < cutoff: continue
             except: pass
             note = r.get("note","").strip()
-            t = r.get("time","")
             if note and note not in notes:
-                notes.append(f"[{t}] {note}")
+                notes.append(note)
 
         # ── SON 12 SAATTEKİ TÜM AKTİVİTELERİ TOPLA ─────────────
         # Hem mevcut raporların sub-raporlarını hem de doğrudan raporları al
