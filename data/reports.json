@@ -1,113 +1,106 @@
 {
-  "last_updated": "2026-04-01T18:45:15.204920+00:00",
-  "total": 69,
+  "last_updated": "2026-04-01T21:34:20.412840+00:00",
+  "total": 64,
   "reports": [
     {
-      "id": "d0641369af5f7e",
-      "lat": 40.649561,
-      "lng": 29.829509,
-      "loc": "Gölcük",
+      "id": "ea5270ec5fd221",
+      "lat": 40.350816,
+      "lng": 27.975151,
+      "loc": "Bandırma",
       "fish": [
-        "İstavrit",
-        "Levrek",
+        "Yayın",
+        "Turna",
         "Kefal",
-        "Çipura",
-        "Lüfer",
-        "Sardalya"
+        "İstavrit"
       ],
-      "rod": "Çapari",
-      "bait": "Hamur",
-      "note": "Gölcük'te levrek ve lüfer hareketliliği belirgin şekilde artış gösteriyor; sabah erken ve akşam suyu saatlerinde liman içi ve sahil şeridinde spin ve LRF teknikleri ile avlanmak, ışık altında çapari ve taşlık bölgelerde spin avcılığı verimli olacaktır. Son raporlar, çeşitli türlerin (levrek, çipura, kefal, lüfer, istavrit, sardalya) avlanabildiğini gösteriyor.",
+      "rod": "Dip oltası",
+      "bait": "Solucan",
+      "note": "Bandırma'da son raporlara göre hem tatlı su hem de deniz balıkları hareketli. Kefal ve istavrit avı için liman içi ve mendirekler, yayın ve turna için ise tatlı su ağızları dip oltasıyla denenebilir; yemli olta istavrit için etkili olabilir.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "1sa önce",
+      "timestamp": "2026-04-01T20:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T20:00:00+00:00",
+          "fish": [
+            "Yayın",
+            "Turna"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Solucan"
+        },
+        {
+          "timestamp": "2026-04-01T16:00:55.368271+00:00",
+          "fish": [
+            "Kefal",
+            "İstavrit"
+          ],
+          "rod": "Olta",
+          "bait": "Ekmek, Hamur, Yemlik"
+        }
+      ],
+      "report_count": 2
+    },
+    {
+      "id": "d8a0417b238b5b",
+      "lat": 40.491461,
+      "lng": 29.313936,
+      "loc": "Orhangazi",
+      "fish": [
+        "Yayın",
+        "Sazan"
+      ],
+      "rod": "Dip Oltası",
+      "bait": "Solucan, Mısır",
+      "note": "Orhangazi'de gece saatlerinde yayın ve sazan hareketliliği belirgin şekilde artış gösteriyor. Sığ sularda dip oltası tekniğiyle gece avlanmak, başarı şansını yükseltecektir.",
       "heat": 3,
       "type": "göl",
-      "time": "15dk önce",
-      "timestamp": "2026-04-01T18:30:00+00:00",
+      "time": "1sa önce",
+      "timestamp": "2026-04-01T20:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": true,
       "alarm": 2,
       "reports": [
         {
-          "timestamp": "2026-04-01T18:30:00+00:00",
+          "timestamp": "2026-04-01T20:00:00+00:00",
           "fish": [
-            "İstavrit"
+            "Yayın",
+            "Sazan"
           ],
-          "rod": "Çapari",
-          "bait": "Hamur"
+          "rod": "Dip Oltası",
+          "bait": "Solucan, Mısır"
         },
         {
           "timestamp": "2026-04-01T15:30:00+00:00",
           "fish": [
-            "Levrek",
-            "Kefal",
-            "Çipura",
-            "Lüfer",
-            "İstavrit",
-            "Sardalya"
+            "Yayın",
+            "Sazan"
           ],
-          "rod": "Spin",
-          "bait": "Silikon yem"
+          "rod": "Dip oltası",
+          "bait": "Mısır, Solucan"
         },
         {
-          "timestamp": "2026-04-01T15:30:00+00:00",
+          "timestamp": "2026-04-01T12:00:00+00:00",
           "fish": [
-            "Levrek",
-            "Kefal"
+            "Yayın",
+            "Sazan"
           ],
-          "rod": "Spin",
-          "bait": "Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T11:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura",
-            "Kefal",
-            "Lüfer",
-            "İstavrit",
-            "Sardalya"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T11:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Kefal",
-            "Lüfer",
-            "İstavrit",
-            "Sardalya",
-            "Çipura"
-          ],
-          "rod": "Spin Olta",
-          "bait": "Silikon Yemler"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Kefal"
-          ],
-          "rod": "Spin Olta",
-          "bait": "Silikon Yemler"
+          "rod": "Dip oltası",
+          "bait": "Solucan, Mısır"
         }
       ],
-      "report_count": 7
+      "report_count": 3
     },
     {
-      "id": "a39d9fda4b7f9b",
-      "lat": 40.374242,
-      "lng": 28.884198,
+      "id": "d12e316b40d22e",
+      "lat": 40.377692,
+      "lng": 28.884846,
       "loc": "Mudanya",
       "fish": [
         "İstavrit",
@@ -117,18 +110,40 @@
         "Uskumru",
         "İzmarit"
       ],
-      "rod": "Çaparili",
-      "bait": "Hamur",
+      "rod": "Çapari",
+      "bait": "Yok",
       "note": "Mudanya'da son dönemde balık hareketliliği belirgin şekilde arttı, özellikle istavrit akını yaşanıyor; sabah erken saatler ve öğleden sonraki gelgit zamanları av için uygun olup, istavrit için çapari, levrek için taşlık bölgelerde Surf ve LRF teknikleri, diğer türler için dip oltası denenebilir. Hamsi sürü halinde geçişler yapabilir, at-çek yöntemiyle denenebilir.",
       "heat": 3,
       "type": "deniz",
-      "time": "15dk önce",
-      "timestamp": "2026-04-01T18:30:00+00:00",
+      "time": "2sa önce",
+      "timestamp": "2026-04-01T19:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T19:00:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Sardalya"
+          ],
+          "rod": "Çapari",
+          "bait": "Yok"
+        },
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Sardalya",
+            "Hamsi",
+            "Kefal",
+            "Uskumru",
+            "İzmarit"
+          ],
+          "rod": "Çaparili",
+          "bait": "Hamur"
+        },
         {
           "timestamp": "2026-04-01T18:30:00+00:00",
           "fish": [
@@ -189,398 +204,58 @@
           ],
           "rod": "Çapari",
           "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.712326+00:00",
-          "fish": [
-            "Kefal",
-            "İstavrit",
-            "Sardalya",
-            "Hamsi",
-            "İzmarit",
-            "Levrek"
-          ],
-          "rod": "Surf",
-          "bait": "Ekmek, Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.712326+00:00",
-          "fish": [
-            "Kefal"
-          ],
-          "rod": "Surf",
-          "bait": "Ekmek, Hamur"
         }
       ],
       "report_count": 8
     },
     {
-      "id": "ffba8d2b76c9a1",
-      "lat": 39.834985,
-      "lng": 26.063574,
-      "loc": "Bozcaada",
-      "fish": [
-        "Levrek",
-        "Çipura",
-        "Sargoz"
-      ],
-      "rod": "Spin",
-      "bait": "Silikon Yem",
-      "note": "Bozcaada'da son 12 saatte levrek avı rüzgarlı havalarda spin tekniğiyle artış gösterirken, çipura ve sargoz avı sakin havalarda dip oltasıyla sabah ve akşam suyu hareketliliğinin arttığı saatlerde daha verimli olmuştur; rüzgarlı havalarda levrek için spin, sakin havalarda ise çipura ve sargoz için dip oltası kullanılması önerilir. Akıntıya dikkat ederek atış yapılması önemlidir.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "15dk önce",
-      "timestamp": "2026-04-01T18:30:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T18:30:00+00:00",
-          "fish": [
-            "Levrek"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T14:30:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura",
-            "Sargoz"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T14:30:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T12:30:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura",
-            "Sargoz"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T12:30:00+00:00",
-          "fish": [
-            "Levrek"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura",
-            "Sargoz"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon Yem"
-        }
-      ],
-      "report_count": 7
-    },
-    {
-      "id": "eaa41ff070f86f",
-      "lat": 39.338785,
-      "lng": 26.647077,
-      "loc": "Cunda Adası",
-      "fish": [
-        "Mırmır",
-        "Sargoz",
-        "Levrek",
-        "Çipura",
-        "Mercan"
-      ],
-      "rod": "Dip oltası",
-      "bait": "Boru kurdu",
-      "note": "Cunda'da son 12 saatte taşlık ve kayalık bölgelerde levrek ve çipura avında artış gözlemlenirken, mırmır, sargoz ve mercan avı da devam etmektedir; hava kararmaya yakın ve gece saatlerinde dip oltası ve LRF teknikleriyle, kayalık bölgelerde dikkatli avlanmak verimi artıracaktır. Akıntının artmasıyla av verimi yükselmektedir.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "15dk önce",
-      "timestamp": "2026-04-01T18:30:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T18:30:00+00:00",
-          "fish": [
-            "Mırmır",
-            "Sargoz"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T14:30:00+00:00",
-          "fish": [
-            "Mırmır",
-            "Sargoz",
-            "Levrek",
-            "Çipura",
-            "Mercan"
-          ],
-          "rod": "Dip Oltası",
-          "bait": "Boru Kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T14:30:00+00:00",
-          "fish": [
-            "Mırmır",
-            "Sargoz"
-          ],
-          "rod": "Dip Oltası",
-          "bait": "Boru Kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T11:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura",
-            "Mercan",
-            "Sargoz",
-            "Mırmır"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T11:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon Yem"
-        },
-        {
-          "timestamp": "2026-04-01T07:30:00+00:00",
-          "fish": [
-            "Mercan",
-            "Sargoz",
-            "Mırmır",
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Karides"
-        },
-        {
-          "timestamp": "2026-04-01T07:30:00+00:00",
-          "fish": [
-            "Mercan",
-            "Sargoz"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Karides"
-        }
-      ],
-      "report_count": 7
-    },
-    {
-      "id": "9e290ac7f5d317",
-      "lat": 41.210498,
-      "lng": 29.13083,
-      "loc": "Poyrazköy",
-      "fish": [
-        "Lüfer",
-        "Sarıkanat",
-        "Sarıkuyruk",
-        "Mezgit",
-        "Barbun"
-      ],
-      "rod": "Surfcasting",
-      "bait": "Zargana",
-      "note": "Poyrazköy'de lüfer ve sarıkanat/kuyruk yüzeye yakın, mezgit ve barbun ise dipte kıyıya yakın hareket ediyor; son raporlar balık hareketliliğinin arttığını gösteriyor. Gece surfcasting ve sakin havada dip oltasıyla kıyıdan avlanmak şu an en verimli yöntemler olup, spin avcıları kayalık bölgelerde dikkatli olmalı.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "15dk önce",
-      "timestamp": "2026-04-01T18:30:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T18:30:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Sarıkanat"
-          ],
-          "rod": "Surfcasting",
-          "bait": "Zargana"
-        },
-        {
-          "timestamp": "2026-04-01T14:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Sarıkuyruk",
-            "Mezgit",
-            "Barbun"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T14:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Sarıkuyruk"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Mezgit",
-            "Barbun",
-            "Lüfer",
-            "Sarıkuyruk"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Mezgit",
-            "Barbun"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Sarıkuyruk",
-            "Mezgit",
-            "Barbun"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Sarıkuyruk"
-          ],
-          "rod": "Spin",
-          "bait": "Silikon"
-        }
-      ],
-      "report_count": 7
-    },
-    {
-      "id": "91743b9b11c3db",
-      "lat": 40.348974,
-      "lng": 26.682831,
-      "loc": "Lapseki",
-      "fish": [
-        "Palamut",
-        "Lüfer"
-      ],
-      "rod": "Uzatma",
-      "bait": "Hamsi",
-      "note": "Lapseki'de palamut göçü başlamış ve lüfer aktivitesi artış gösteriyor; sabah erken saatlerde spin ile lüfer, gün içinde kıyıya yakın trolling ile palamut avı, akıntı takibi ve sırtı/kaşık kullanımı önerilir. Son saatlerdeki hareketlilik göz önüne alındığında, av için en verimli zaman dilimi sabah erken saatler ve gün içidir.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "15dk önce",
-      "timestamp": "2026-04-01T18:30:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T18:30:00+00:00",
-          "fish": [
-            "Palamut"
-          ],
-          "rod": "Uzatma",
-          "bait": "Hamsi"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Palamut",
-            "Lüfer"
-          ],
-          "rod": "Kaşık",
-          "bait": "Maket balık"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Palamut"
-          ],
-          "rod": "Kaşık",
-          "bait": "Maket balık"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Palamut"
-          ],
-          "rod": "Sırtı, Kaşık",
-          "bait": "Rapala, Yemli"
-        }
-      ],
-      "report_count": 4
-    },
-    {
-      "id": "93bf0411f556b3",
-      "lat": 40.966326,
-      "lng": 27.961677,
+      "id": "d4678e8fdb1660",
+      "lat": 40.970581,
+      "lng": 27.960105,
       "loc": "Marmara Ereğlisi",
       "fish": [
+        "Tekir",
+        "Barbun",
+        "Mezgit",
         "İstavrit",
         "Sardalya",
-        "Kolyoz",
-        "Levrek",
-        "Mırmır",
-        "Lüfer"
+        "Kolyoz"
       ],
-      "rod": "Çapari",
-      "bait": "Ekmek içi",
+      "rod": "Surf",
+      "bait": "Boru Kurdu, Mamun",
       "note": "Marmara Ereğlisi'nde balık hareketliliği son dönemde belirgin şekilde arttı, özellikle lüfer ve istavrit yoğunlaşması dikkat çekiyor. Gece ve sabah/akşam saatlerinde dip akıntısına dikkat ederek uzak atışlar yapılması, kumlu zeminlerde dip oltası ve surf kamışlar kullanılması önerilir.",
       "heat": 4,
       "type": "deniz",
-      "time": "30dk önce",
-      "timestamp": "2026-04-01T18:15:00+00:00",
+      "time": "2sa önce",
+      "timestamp": "2026-04-01T19:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T19:00:00+00:00",
+          "fish": [
+            "Tekir",
+            "Barbun",
+            "Mezgit"
+          ],
+          "rod": "Surf",
+          "bait": "Boru Kurdu, Mamun"
+        },
+        {
+          "timestamp": "2026-04-01T18:15:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Sardalya",
+            "Kolyoz",
+            "Levrek",
+            "Mırmır",
+            "Lüfer"
+          ],
+          "rod": "Çapari",
+          "bait": "Ekmek içi"
+        },
         {
           "timestamp": "2026-04-01T18:15:00+00:00",
           "fish": [
@@ -638,32 +313,653 @@
           ],
           "rod": "Olta",
           "bait": "Hamsi"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Tekir",
-            "Barbun",
-            "İstavrit",
-            "Kefal",
-            "Lüfer",
-            "Çinekop"
-          ],
-          "rod": "Surf, Dip Oltası",
-          "bait": "Boru kurdu, Mamun"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Tekir",
-            "Barbun",
-            "İstavrit"
-          ],
-          "rod": "Surf, Dip Oltası",
-          "bait": "Boru kurdu, Mamun"
         }
       ],
       "report_count": 11
+    },
+    {
+      "id": "d62469f6a78ce4",
+      "lat": 40.61335,
+      "lng": 27.110286,
+      "loc": "Şarköy",
+      "fish": [
+        "İstavrit",
+        "Sardalya",
+        "Barbun",
+        "Tekir",
+        "Kolyoz",
+        "Levrek"
+      ],
+      "rod": "Çapari",
+      "bait": "Ekmek içi",
+      "note": "Şarköy'de son 12 saatte balık hareketliliği sabah dip balıklarıyla başlayıp öğleden sonra levrek-kefal avına kayarken, akşam tekrar dip balıklarına yöneliyor; istavrit ve kolyoz gün boyu yakalanabilir durumda. Sabah ve akşam dip oltası, öğleden sonra kayalık bölgelerde LRF/spin veya dalgalı havalarda surf tekniği, palamut için ise trolling önerilir.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "2sa önce",
+      "timestamp": "2026-04-01T19:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T19:00:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Sardalya"
+          ],
+          "rod": "Çapari",
+          "bait": "Ekmek içi"
+        },
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Barbun",
+            "Tekir",
+            "Kolyoz",
+            "Levrek",
+            "Kefal"
+          ],
+          "rod": "Spin",
+          "bait": "Küçük kaşık"
+        },
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "İstavrit"
+          ],
+          "rod": "Spin",
+          "bait": "Küçük kaşık"
+        },
+        {
+          "timestamp": "2026-04-01T12:00:00+00:00",
+          "fish": [
+            "Barbun",
+            "Tekir",
+            "İstavrit",
+            "Kolyoz",
+            "Levrek",
+            "Kefal"
+          ],
+          "rod": "Dip Oltası",
+          "bait": "Boru Kurdu, Mamun"
+        },
+        {
+          "timestamp": "2026-04-01T12:00:00+00:00",
+          "fish": [
+            "Barbun",
+            "Tekir"
+          ],
+          "rod": "Dip Oltası",
+          "bait": "Boru Kurdu, Mamun"
+        }
+      ],
+      "report_count": 5
+    },
+    {
+      "id": "9b68d211dce2fb",
+      "lat": 39.477874,
+      "lng": 26.048849,
+      "loc": "Babakale",
+      "fish": [
+        "Levrek",
+        "Çipura",
+        "Sargoz",
+        "Lahos"
+      ],
+      "rod": "Şamandıralı Olta",
+      "bait": "Canlı Yem",
+      "note": "Babakale'de son dönemde levrek ve çipura avlarında artış gözlemleniyor; levrek için akşam suyu ve şamandıralı/spin olta, çipura/sargoz için sabah erken saatler ve şamandıralı olta, lahos için ise mendirek içi LRF/dip oltası teknikleri önerilir. Mendirek taşlarına dikkat ederek avlanmak önemlidir.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "2sa önce",
+      "timestamp": "2026-04-01T19:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T19:00:00+00:00",
+          "fish": [
+            "Levrek"
+          ],
+          "rod": "Şamandıralı Olta",
+          "bait": "Canlı Yem"
+        },
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Sargoz",
+            "Lahos"
+          ],
+          "rod": "Spin",
+          "bait": "Maket Balık"
+        },
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Levrek"
+          ],
+          "rod": "Spin",
+          "bait": "Maket Balık"
+        }
+      ],
+      "report_count": 3
+    },
+    {
+      "id": "6e166d9ae67423",
+      "lat": 41.018246,
+      "lng": 28.761511,
+      "loc": "Küçükçekmece Gölü",
+      "fish": [
+        "Sazan",
+        "Yayın",
+        "Turna"
+      ],
+      "rod": "Dip oltası",
+      "bait": "Solucan, Mısır",
+      "note": "Küçükçekmece Gölü'nde son 12 saatte sazan ve yayın avı istikrarlı seyrederken, özellikle batı kıyısında turna balığı aktivitesinde artış gözlemleniyor; gün içi avları daha verimli olup, sazan için dip oltası ve yemleme, turna için ise kaşık veya dip oltası kullanımı önerilir.",
+      "heat": 4,
+      "type": "göl",
+      "time": "2sa önce",
+      "timestamp": "2026-04-01T19:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T19:00:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Solucan, Mısır"
+        },
+        {
+          "timestamp": "2026-04-01T17:45:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın",
+            "Turna"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Mısır, Solucan"
+        },
+        {
+          "timestamp": "2026-04-01T17:45:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Mısır, Solucan"
+        },
+        {
+          "timestamp": "2026-04-01T15:00:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın",
+            "Turna"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Mısır, Solucan"
+        },
+        {
+          "timestamp": "2026-04-01T15:00:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Mısır, Solucan"
+        },
+        {
+          "timestamp": "2026-04-01T11:45:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın",
+            "Turna"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Solucan, Mısır"
+        },
+        {
+          "timestamp": "2026-04-01T11:45:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Solucan, Mısır"
+        }
+      ],
+      "report_count": 7
+    },
+    {
+      "id": "d0641369af5f7e",
+      "lat": 40.649561,
+      "lng": 29.829509,
+      "loc": "Gölcük",
+      "fish": [
+        "İstavrit",
+        "Levrek",
+        "Kefal",
+        "Çipura",
+        "Lüfer",
+        "Sardalya"
+      ],
+      "rod": "Çapari",
+      "bait": "Hamur",
+      "note": "Gölcük'te levrek ve lüfer hareketliliği belirgin şekilde artış gösteriyor; sabah erken ve akşam suyu saatlerinde liman içi ve sahil şeridinde spin ve LRF teknikleri ile avlanmak, ışık altında çapari ve taşlık bölgelerde spin avcılığı verimli olacaktır. Son raporlar, çeşitli türlerin (levrek, çipura, kefal, lüfer, istavrit, sardalya) avlanabildiğini gösteriyor.",
+      "heat": 3,
+      "type": "göl",
+      "time": "15dk önce",
+      "timestamp": "2026-04-01T18:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Levrek",
+            "Kefal",
+            "Çipura",
+            "Lüfer",
+            "Sardalya"
+          ],
+          "rod": "Çapari",
+          "bait": "Hamur"
+        },
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "İstavrit"
+          ],
+          "rod": "Çapari",
+          "bait": "Hamur"
+        },
+        {
+          "timestamp": "2026-04-01T15:30:00+00:00",
+          "fish": [
+            "Levrek",
+            "Kefal",
+            "Çipura",
+            "Lüfer",
+            "İstavrit",
+            "Sardalya"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon yem"
+        },
+        {
+          "timestamp": "2026-04-01T15:30:00+00:00",
+          "fish": [
+            "Levrek",
+            "Kefal"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon yem"
+        },
+        {
+          "timestamp": "2026-04-01T11:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Kefal",
+            "Lüfer",
+            "İstavrit",
+            "Sardalya"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon yem"
+        },
+        {
+          "timestamp": "2026-04-01T11:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon yem"
+        }
+      ],
+      "report_count": 6
+    },
+    {
+      "id": "ffba8d2b76c9a1",
+      "lat": 39.834985,
+      "lng": 26.063574,
+      "loc": "Bozcaada",
+      "fish": [
+        "Levrek",
+        "Çipura",
+        "Sargoz"
+      ],
+      "rod": "Spin",
+      "bait": "Silikon Yem",
+      "note": "Bozcaada'da son 12 saatte levrek avı rüzgarlı havalarda spin tekniğiyle artış gösterirken, çipura ve sargoz avı sakin havalarda dip oltasıyla sabah ve akşam suyu hareketliliğinin arttığı saatlerde daha verimli olmuştur. Rüzgarlı havalarda levrek için spin, sakin havalarda ise çipura ve sargoz için dip oltası kullanılması ve akıntıya dikkat ederek atış yapılması önerilir.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "15dk önce",
+      "timestamp": "2026-04-01T18:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Sargoz"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon Yem"
+        },
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Levrek"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon Yem"
+        },
+        {
+          "timestamp": "2026-04-01T14:30:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Sargoz"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon Yem"
+        },
+        {
+          "timestamp": "2026-04-01T14:30:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon Yem"
+        },
+        {
+          "timestamp": "2026-04-01T12:30:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Sargoz"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon Yem"
+        },
+        {
+          "timestamp": "2026-04-01T12:30:00+00:00",
+          "fish": [
+            "Levrek"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon Yem"
+        }
+      ],
+      "report_count": 6
+    },
+    {
+      "id": "eaa41ff070f86f",
+      "lat": 39.338785,
+      "lng": 26.647077,
+      "loc": "Cunda Adası",
+      "fish": [
+        "Mırmır",
+        "Sargoz",
+        "Levrek",
+        "Çipura",
+        "Mercan"
+      ],
+      "rod": "Dip oltası",
+      "bait": "Boru kurdu",
+      "note": "Cunda'da son 12 saatte taşlık ve kayalık bölgelerde levrek ve çipura avında artış gözlemlenirken, mırmır, sargoz ve mercan avı da devam etmektedir; hava kararmaya yakın ve gece saatlerinde dip oltası ve LRF teknikleriyle, kayalık bölgelerde dikkatli avlanmak verimi artıracaktır. Akıntının artmasıyla av verimi yükselmektedir.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "15dk önce",
+      "timestamp": "2026-04-01T18:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Mırmır",
+            "Sargoz",
+            "Levrek",
+            "Çipura",
+            "Mercan"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu"
+        },
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Mırmır",
+            "Sargoz"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu"
+        },
+        {
+          "timestamp": "2026-04-01T14:30:00+00:00",
+          "fish": [
+            "Mırmır",
+            "Sargoz",
+            "Levrek",
+            "Çipura",
+            "Mercan"
+          ],
+          "rod": "Dip Oltası",
+          "bait": "Boru Kurdu"
+        },
+        {
+          "timestamp": "2026-04-01T14:30:00+00:00",
+          "fish": [
+            "Mırmır",
+            "Sargoz"
+          ],
+          "rod": "Dip Oltası",
+          "bait": "Boru Kurdu"
+        },
+        {
+          "timestamp": "2026-04-01T11:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Mercan",
+            "Sargoz",
+            "Mırmır"
+          ],
+          "rod": "LRF",
+          "bait": "Silikon Yem"
+        },
+        {
+          "timestamp": "2026-04-01T11:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura"
+          ],
+          "rod": "LRF",
+          "bait": "Silikon Yem"
+        }
+      ],
+      "report_count": 6
+    },
+    {
+      "id": "9e290ac7f5d317",
+      "lat": 41.210498,
+      "lng": 29.13083,
+      "loc": "Poyrazköy",
+      "fish": [
+        "Lüfer",
+        "Sarıkanat",
+        "Sarıkuyruk",
+        "Mezgit",
+        "Barbun"
+      ],
+      "rod": "Surfcasting",
+      "bait": "Zargana",
+      "note": "Poyrazköy'de balık hareketliliği son raporlara göre artış gösteriyor; lüfer ve sarıkanat/kuyruk yüzeye yakın, mezgit ve barbun ise dipte kıyıya yakın hareket ediyor. Sakin havada gece surfcasting ve dip oltasıyla kıyıdan avlanmak şu an en verimli yöntemler olup, spin avcıları kayalık bölgelerde dikkatli olmalı.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "15dk önce",
+      "timestamp": "2026-04-01T18:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Sarıkanat",
+            "Sarıkuyruk",
+            "Mezgit",
+            "Barbun"
+          ],
+          "rod": "Surfcasting",
+          "bait": "Zargana"
+        },
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Sarıkanat"
+          ],
+          "rod": "Surfcasting",
+          "bait": "Zargana"
+        },
+        {
+          "timestamp": "2026-04-01T14:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Sarıkuyruk",
+            "Mezgit",
+            "Barbun"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon yem"
+        },
+        {
+          "timestamp": "2026-04-01T14:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Sarıkuyruk"
+          ],
+          "rod": "Spin",
+          "bait": "Silikon yem"
+        },
+        {
+          "timestamp": "2026-04-01T12:00:00+00:00",
+          "fish": [
+            "Mezgit",
+            "Barbun",
+            "Lüfer",
+            "Sarıkuyruk"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu"
+        },
+        {
+          "timestamp": "2026-04-01T12:00:00+00:00",
+          "fish": [
+            "Mezgit",
+            "Barbun"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu"
+        }
+      ],
+      "report_count": 6
+    },
+    {
+      "id": "91743b9b11c3db",
+      "lat": 40.348974,
+      "lng": 26.682831,
+      "loc": "Lapseki",
+      "fish": [
+        "Palamut",
+        "Lüfer",
+        "Çinekop",
+        "Sarıkanat"
+      ],
+      "rod": "Uzatma",
+      "bait": "Hamsi",
+      "note": "Lapseki'de palamut göçü başlamış ve lüfer aktivitesi artış gösteriyor; sabah erken saatlerde spin ile lüfer, gün içinde kıyıya yakın trolling ile palamut avı, akıntı takibi ve sırtı/kaşık kullanımı önerilir. Son raporlar, sabah erken saatler ve gün içini av için en verimli zaman dilimi olarak işaret ediyor, ancak akıntıya dikkat etmek önemlidir.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "15dk önce",
+      "timestamp": "2026-04-01T18:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Palamut",
+            "Lüfer"
+          ],
+          "rod": "Uzatma",
+          "bait": "Hamsi"
+        },
+        {
+          "timestamp": "2026-04-01T18:30:00+00:00",
+          "fish": [
+            "Palamut"
+          ],
+          "rod": "Uzatma",
+          "bait": "Hamsi"
+        },
+        {
+          "timestamp": "2026-04-01T14:00:00+00:00",
+          "fish": [
+            "Çinekop",
+            "Sarıkanat"
+          ],
+          "rod": "Olta",
+          "bait": "Hamsi, Sardalya"
+        },
+        {
+          "timestamp": "2026-04-01T12:00:00+00:00",
+          "fish": [
+            "Palamut",
+            "Lüfer"
+          ],
+          "rod": "Kaşık",
+          "bait": "Maket balık"
+        },
+        {
+          "timestamp": "2026-04-01T12:00:00+00:00",
+          "fish": [
+            "Palamut"
+          ],
+          "rod": "Kaşık",
+          "bait": "Maket balık"
+        }
+      ],
+      "report_count": 5
     },
     {
       "id": "2a8b6152f8dd9a",
@@ -680,7 +976,7 @@
       ],
       "rod": "Dip oltası",
       "bait": "Boru kurdu",
-      "note": "Anadolu Kavağı'nda son 12 saatte balık hareketliliği belirgin şekilde arttı, özellikle lüfer ve çinekop avları çeşitliliği yükseltiyor. Sabah suyu lüfer için ideal, öğleden sonra açıkta sırtı ile palamut-torik avı ve akıntıyla spin avı önerilir, dip oltası da istavrit ve mezgit için garanti yöntemdir.",
+      "note": "Anadolu Kavağı'nda son 12 saatte balık hareketliliği belirgin şekilde arttı, özellikle lüfer ve çinekop avları çeşitliliği yükseltiyor. Sabah suyu lüfer için ideal, öğleden sonra açıkta sırtı ile palamut-torik avı ve akıntıyla spin avı önerilirken, dip oltası istavrit ve mezgit için garanti yöntemdir; akıntıya karşı ağır kurşun kullanılması tavsiye edilir.",
       "heat": 3,
       "type": "deniz",
       "time": "30dk önce",
@@ -690,6 +986,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:15:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Mezgit",
+            "Lüfer",
+            "Palamut",
+            "Çinekop",
+            "Torik"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu"
+        },
         {
           "timestamp": "2026-04-01T18:15:00+00:00",
           "fish": [
@@ -743,7 +1052,7 @@
           "bait": "Rapala"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "083b76b49a96d4",
@@ -758,7 +1067,7 @@
       ],
       "rod": "Olta",
       "bait": "Ekmek, Kurt",
-      "note": "Üsküdar'da son dönemde balık hareketliliği artıyor, özellikle istavrit ve izmarit avı aktif seyrederken, uskumru da gözlemleniyor ve ara sıra çinekop da yakalanabiliyor. Sabah erken saatlerde Kız Kulesi manzarası eşliğinde olta ve at-çek dip oltası teknikleriyle sahil şeridinde avlanmak verimli olabilir.",
+      "note": "Üsküdar'da son dönemde balık hareketliliği artış gösteriyor; özellikle istavrit ve izmarit avı aktif seyrederken, uskumru da gözlemleniyor ve ara sıra çinekop da yakalanabiliyor. Sabah erken saatlerde Kız Kulesi manzarası eşliğinde olta ve at-çek dip oltası teknikleriyle sahil şeridinde avlanmak verimli olabilir.",
       "heat": 3,
       "type": "deniz",
       "time": "30dk önce",
@@ -768,6 +1077,17 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:15:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Uskumru",
+            "İzmarit",
+            "Çinekop"
+          ],
+          "rod": "Olta",
+          "bait": "Ekmek, Kurt"
+        },
         {
           "timestamp": "2026-04-01T18:15:00+00:00",
           "fish": [
@@ -815,28 +1135,9 @@
           ],
           "rod": "Olta",
           "bait": "Hamsi"
-        },
-        {
-          "timestamp": "2026-04-01T08:45:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru",
-            "İzmarit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi, Solucan"
-        },
-        {
-          "timestamp": "2026-04-01T08:45:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi, Solucan"
         }
       ],
-      "report_count": 7
+      "report_count": 6
     },
     {
       "id": "0ccadb609cc21b",
@@ -862,6 +1163,18 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:15:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Çinekop",
+            "İstavrit",
+            "Levrek",
+            "Çipura"
+          ],
+          "rod": "Spin",
+          "bait": "Kaşık, Silikon"
+        },
         {
           "timestamp": "2026-04-01T18:15:00+00:00",
           "fish": [
@@ -911,30 +1224,9 @@
           ],
           "rod": "Olta",
           "bait": "Ekmek içi"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Çinekop",
-            "İstavrit",
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "Spin",
-          "bait": "Kaşık, Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Çinekop"
-          ],
-          "rod": "Spin",
-          "bait": "Kaşık, Silikon yem"
         }
       ],
-      "report_count": 7
+      "report_count": 6
     },
     {
       "id": "07aaf89f1e6f62",
@@ -961,6 +1253,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:15:00+00:00",
+          "fish": [
+            "İstavrit",
+            "İzmarit",
+            "Levrek",
+            "Kefal",
+            "Lüfer",
+            "Çipura"
+          ],
+          "rod": "Şamandıralı olta",
+          "bait": "Ekmek içi, Kurt"
+        },
         {
           "timestamp": "2026-04-01T18:15:00+00:00",
           "fish": [
@@ -1015,7 +1320,7 @@
           "bait": "Silikon Yem"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "5c714cc9554d81",
@@ -1032,7 +1337,7 @@
       ],
       "rod": "Spin",
       "bait": "Kaşık, Silikon Yem",
-      "note": "Boğaz'da lüfer ve palamut akını başlamış olup, çinekop, sarıkanat, istavrit, kolyoz ve uskumru da bu akını desteklemektedir; özellikle sabah ve gece saatlerinde akıntıya dikkat ederek at-çek/trolling ve spin avları ile sürü takibi yaparak, akıntıya uygun yem seçimi ve hızlı sarım teknikleri önerilir. Kıyıdan istavrit ve kolyoz avı için de uygun koşullar mevcuttur.",
+      "note": "Boğaz'da lüfer ve palamut akını başlamış olup, çinekop, sarıkanat, istavrit, kolyoz ve uskumru da bu akını desteklemektedir; özellikle sabah ve gece saatlerinde akıntıya dikkat ederek at-çek/trolling ve spin avları ile sürü takibi yaparak, akıntıya uygun yem seçimi ve hızlı sarım teknikleri önerilir. Gece avlarında istavrit ve hamsi de olta ile yakalanabilir.",
       "heat": 4,
       "type": "deniz",
       "time": "45dk önce",
@@ -1042,6 +1347,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "İstavrit",
+            "Çinekop",
+            "Sarıkanat",
+            "Palamut",
+            "Kolyoz"
+          ],
+          "rod": "Spin",
+          "bait": "Kaşık, Silikon Yem"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1114,22 +1432,9 @@
           ],
           "rod": "Spin, Şamandıralı Olta",
           "bait": "Küçük yemler, Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T09:57:46.247253+00:00",
-          "fish": [
-            "Lüfer",
-            "Sarıkanat",
-            "Çinekop",
-            "İstavrit",
-            "Palamut",
-            "Uskumru"
-          ],
-          "rod": "Spin",
-          "bait": "Kaşık, Silikon Yem"
         }
       ],
-      "report_count": 10
+      "report_count": 9
     },
     {
       "id": "06d2062275e222",
@@ -1146,7 +1451,7 @@
       ],
       "rod": "Şamandıralı olta",
       "bait": "Ekmek içi, Hamur",
-      "note": "Tekirdağ'da son raporlara göre balık hareketliliği yüksek, özellikle akşam saatlerinde dip oltasıyla tekir ve barbun, sabah erken saatlerde ise sırtı tekniğiyle uskumru ve palamut avı verimli görünüyor. Akıntı ile birlikte hareketli olan sürüleri takip ederek, şamandıralı olta veya LRF teknikleriyle istavrit ve diğer türleri avlayabilirsiniz.",
+      "note": "Tekirdağ'da balık hareketliliği yüksek seyrediyor; özellikle dip oltasıyla tekir ve barbun avı sabah erken saatlerde daha verimli olup, akşam saatlerinde de devam ediyor. Akıntı takibiyle şamandıralı olta veya LRF teknikleriyle istavrit avı yapılabilirken, sabah erken saatlerde sırtı tekniğiyle uskumru ve palamut denenebilir.",
       "heat": 4,
       "type": "deniz",
       "time": "45dk önce",
@@ -1156,6 +1461,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Kefal",
+            "Tekir",
+            "Barbun",
+            "İstavrit",
+            "Hamsi",
+            "Uskumru"
+          ],
+          "rod": "Şamandıralı olta",
+          "bait": "Ekmek içi, Hamur"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1225,22 +1543,9 @@
           ],
           "rod": "LRF",
           "bait": "Micro Jig, Silikon Kurtçuk"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.712877+00:00",
-          "fish": [
-            "Barbun",
-            "İstavrit",
-            "Mezgit",
-            "Uskumru",
-            "Palamut",
-            "Hamsi"
-          ],
-          "rod": "Surf, Spin",
-          "bait": "Boru kurdu, Küçük kaşık"
         }
       ],
-      "report_count": 9
+      "report_count": 8
     },
     {
       "id": "aa0eda8c0024fa",
@@ -1257,7 +1562,7 @@
       ],
       "rod": "Trolling",
       "bait": "Yüzen Rapala",
-      "note": "Kuzey Ege'de levrek ve çipura avında belirgin bir artış gözlemlenirken, kolyoz, uskumru, palamut ve torik sürüleri de aktif durumda; sabah erken saatlerde adalar çevresi ve kayalıklarda LRF, spin veya trolling teknikleri ile avlanmak, barbun ve mercan için ise kayalık zeminlerde dip oltası kullanmak verimli olacaktır. Tekne ile açılmak, dip oltasıyla barbun ve mercan avı için daha iyi sonuç verebilir.",
+      "note": "Kuzey Ege'de son dönemde levrek ve çipura avında belirgin bir artış gözlemlenirken, kolyoz, uskumru, palamut ve torik sürüleri de aktif durumda; sabah erken saatlerde adalar çevresi ve kayalıklarda LRF, spin veya trolling teknikleri ile avlanmak, barbun ve mercan için ise kayalık zeminlerde dip oltası kullanmak verimli olacaktır. Taşlık bölgelerde LRF avcılığı denenebilir, tekne ile açılmak dip oltasıyla barbun ve mercan avı için daha iyi sonuç verebilir.",
       "heat": 4,
       "type": "deniz",
       "time": "45dk önce",
@@ -1267,6 +1572,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Kefal",
+            "Sargoz",
+            "Kolyoz",
+            "Uskumru"
+          ],
+          "rod": "Trolling",
+          "bait": "Yüzen Rapala"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1321,44 +1639,9 @@
           ],
           "rod": "LRF, Spin",
           "bait": "Silikon yem, Küçük kaşık"
-        },
-        {
-          "timestamp": "2026-04-01T08:30:00+00:00",
-          "fish": [
-            "Kolyoz",
-            "Uskumru",
-            "Çipura",
-            "Levrek",
-            "Barbun",
-            "Mercan"
-          ],
-          "rod": "Trolling, Spin",
-          "bait": "Küçük rapala, kaşık"
-        },
-        {
-          "timestamp": "2026-04-01T08:30:00+00:00",
-          "fish": [
-            "Kolyoz",
-            "Uskumru"
-          ],
-          "rod": "Trolling, Spin",
-          "bait": "Küçük rapala, kaşık"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.710870+00:00",
-          "fish": [
-            "Çipura",
-            "Levrek",
-            "Barbun",
-            "Mercan",
-            "Kefal",
-            "Sargoz"
-          ],
-          "rod": "Trolling, Spin",
-          "bait": "Rapala, Silikon yem"
         }
       ],
-      "report_count": 9
+      "report_count": 6
     },
     {
       "id": "12aa31e517393c",
@@ -1375,7 +1658,7 @@
       ],
       "rod": "LRF",
       "bait": "Silikon kurtçuk, Micro Jig",
-      "note": "Saros Körfezi'nde levrek ve çipura avı istikrarlı seyrederken, kalkan avında artış gözlemleniyor; sabah ve akşam saatlerinde kıyıya yakın LRF/Spin ile levrek, kumlu dip bölgelerinde ise surf/dip oltası ile kalkan avı denenebilir, açık denizde trolling ile kolyoz ve palamut avı için sabah erken saatler daha verimli olacaktır, dip akıntısına dikkat edilmeli.",
+      "note": "Saros Körfezi'nde levrek ve çipura avı istikrarlı seyrederken, kalkan avında artış gözlemleniyor; sabah ve akşam saatlerinde kıyıya yakın LRF/Spin ile levrek, kumlu dip bölgelerinde ise surf/dip oltası ile kalkan avı denenebilir, açık denizde trolling ile kolyoz ve palamut avı için sabah erken saatler daha verimli olacaktır. Dip akıntısına dikkat edilmeli.",
       "heat": 4,
       "type": "deniz",
       "time": "45dk önce",
@@ -1385,6 +1668,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Levrek",
+            "Çipura",
+            "Kalkan",
+            "Barbun",
+            "Kolyoz",
+            "Palamut"
+          ],
+          "rod": "LRF",
+          "bait": "Silikon kurtçuk, Micro Jig"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1455,18 +1751,9 @@
           ],
           "rod": "Surf, LRF",
           "bait": "Yemli dip oltası, Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T11:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon yem"
         }
       ],
-      "report_count": 11
+      "report_count": 9
     },
     {
       "id": "fd1bf436568f97",
@@ -1483,7 +1770,7 @@
       ],
       "rod": "Trolling",
       "bait": "Derin dalarlı Rapala",
-      "note": "Çanakkale Boğazı'nda balık hareketliliği belirgin şekilde artış gösteriyor; palamut ve lüfer sürüleri Ege'den Marmara'ya doğru sardalya ve istavrit akınını takip ediyor. Akşam suyu kıyı avcılığında ağır jigler, derin sularda ise dikey jigging ve akıntıya karşı trolling teknikleri ile av verimliliği artırılabilir.",
+      "note": "Çanakkale Boğazı'nda balık hareketliliği belirgin şekilde artış gösteriyor; palamut ve lüfer sürüleri Ege'den Marmara'ya doğru sardalya ve istavrit akınını takip ediyor. Akşam suyu kıyı avcılığında ağır jigler, derin sularda ise dikey jigging ve akıntıya karşı trolling teknikleri ile av verimliliği artırılabilir; akıntıya karşı dikkatli olunmalı.",
       "heat": 4,
       "type": "deniz",
       "time": "45dk önce",
@@ -1493,6 +1780,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Palamut",
+            "Lüfer",
+            "Sardalya",
+            "İstavrit",
+            "Torik",
+            "Çinekop"
+          ],
+          "rod": "Trolling",
+          "bait": "Derin dalarlı Rapala"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1568,22 +1868,9 @@
           ],
           "rod": "Jigging",
           "bait": "Metal Jig"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.709270+00:00",
-          "fish": [
-            "Palamut",
-            "Torik",
-            "Çinekop",
-            "Sarıkanat",
-            "Levrek",
-            "Sardalya"
-          ],
-          "rod": "Trolling",
-          "bait": "Derin dalarlı rapala"
         }
       ],
-      "report_count": 9
+      "report_count": 8
     },
     {
       "id": "47c90fc1a52282",
@@ -1596,7 +1883,7 @@
       ],
       "rod": "Dip oltası",
       "bait": "Solucan, Mısır",
-      "note": "Meriç Nehri'nde su seviyesinin yüksek ve bulanık olduğu bu dönemde yayın ve sazan avı dip oltasıyla yoğunlaşmakta, özellikle sabah erken saatler ve gece avları verimli geçmektedir. Şu an için dip oltasıyla sazan avına odaklanmak en iyi strateji olacaktır.",
+      "note": "Meriç Nehri'nde su seviyesinin yüksek ve bulanık seyrettiği bu dönemde, yayın ve sazan avı dip oltasıyla başarılı bir şekilde yapılmaktadır. Özellikle sabah erken saatler ve gece avları verimli olup, dip oltasıyla sazan avına odaklanmak şu an için en iyi stratejidir.",
       "heat": 3,
       "type": "nehir",
       "time": "45dk önce",
@@ -1623,18 +1910,9 @@
           ],
           "rod": "Dip oltası",
           "bait": "Solucan, Mısır"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Sazan",
-            "Yayın"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Solucan, Mısır"
         }
       ],
-      "report_count": 3
+      "report_count": 2
     },
     {
       "id": "cc2223d3732267",
@@ -1651,7 +1929,7 @@
       ],
       "rod": "Spin olta",
       "bait": "Kaşık, Silikon yem",
-      "note": "Riva'da son 12 saatte levrek avında belirgin bir artış gözlemleniyor; gündüz kayalık bölgelerde spin ve surfcasting, dere ağzında şamandıralı olta ile levrek avı için ideal. Akşam suyunda lüfer denemesi spin olta ile yapılabilir, gece ise dip oltasıyla mezgit veya LRF tekniği denenebilir.",
+      "note": "Riva'da son 12 saatte levrek avında belirgin bir artış gözlemlenirken, lüfer ve palamut açıkta sürü hareketliliğiyle kendini gösteriyor. Gündüz levrek için kayalık bölgelerde spin/surfcasting, dere ağzında şamandıralı olta; akşam lüfer için spin, gece ise mezgit için dip oltası veya LRF tekniği önerilir.",
       "heat": 3,
       "type": "deniz",
       "time": "45dk önce",
@@ -1661,6 +1939,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Sarıkanat",
+            "Levrek",
+            "İstavrit",
+            "Çipura",
+            "Mezgit"
+          ],
+          "rod": "Spin olta",
+          "bait": "Kaşık, Silikon yem"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1714,7 +2005,7 @@
           "bait": "Yemlik balık, Karides"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "8ee51a935eea63",
@@ -1739,6 +2030,17 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "İstavrit",
+            "İzmarit",
+            "Sardalya",
+            "Uskumru"
+          ],
+          "rod": "Olta",
+          "bait": "Ekmek, Kurt"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1786,29 +2088,9 @@
           ],
           "rod": "Olta",
           "bait": "Ekmek"
-        },
-        {
-          "timestamp": "2026-04-01T09:15:00+00:00",
-          "fish": [
-            "İstavrit",
-            "İzmarit",
-            "Sardalya",
-            "Uskumru"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi, Karides"
-        },
-        {
-          "timestamp": "2026-04-01T09:15:00+00:00",
-          "fish": [
-            "İstavrit",
-            "İzmarit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi, Karides"
         }
       ],
-      "report_count": 7
+      "report_count": 6
     },
     {
       "id": "efbc8515dd1323",
@@ -1825,7 +2107,7 @@
       ],
       "rod": "LRF",
       "bait": "Silikon yem",
-      "note": "Erdek'te son dönemde hamsi ve sardalya popülasyonundaki artış, levrek ve çipura avını canlandırmış durumda. Sabah saatlerinde çapari ile hamsi-izmarit avı ve yemli dip oltası ile kıyıdan avcılık verimli olacaktır; kayalık ve taşlık bölgelerde LRF ve yemli dip oltası teknikleri ile levrek ve çipura avı denenebilir.",
+      "note": "Erdek'te son dönemde hamsi ve sardalya popülasyonundaki artış, levrek ve çipura avını canlandırmış durumda. Gece çapari ile hamsi-sardalya avı, sabah ise çapari ile hamsi-izmarit avı ve yemli dip oltası ile kıyıdan avcılık verimli olacaktır; kayalık ve taşlık bölgelerde LRF ve yemli dip oltası teknikleri ile levrek ve çipura avı denenebilir.",
       "heat": 4,
       "type": "deniz",
       "time": "45dk önce",
@@ -1835,6 +2117,19 @@
       "hot": true,
       "alarm": 3,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Çipura",
+            "Levrek",
+            "Kefal",
+            "Sardalya",
+            "Hamsi",
+            "Kolyoz"
+          ],
+          "rod": "LRF",
+          "bait": "Silikon yem"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -1896,31 +2191,9 @@
           ],
           "rod": "Fanyalı ağ",
           "bait": "Yok"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Sardalya",
-            "Hamsi",
-            "Kolyoz",
-            "İstavrit",
-            "İzmarit",
-            "Çipura"
-          ],
-          "rod": "Torik Ağı",
-          "bait": "Yok"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Sardalya",
-            "Hamsi"
-          ],
-          "rod": "Torik Ağı",
-          "bait": "Yok"
         }
       ],
-      "report_count": 8
+      "report_count": 7
     },
     {
       "id": "6b70c676459d6a",
@@ -1947,6 +2220,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Palamut",
+            "Torik",
+            "İstavrit",
+            "Uskumru",
+            "Lüfer",
+            "Çinekop"
+          ],
+          "rod": "Trolling",
+          "bait": "Rapala"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -2001,7 +2287,7 @@
           "bait": "Hamur"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "168d2869e5a441",
@@ -2014,7 +2300,7 @@
       ],
       "rod": "Şamandıralı olta",
       "bait": "Mısır, Hamur",
-      "note": "Gala Gölü'nde son raporlar, özellikle sığ bölgelerde sazan aktivitesinin yüksek olduğunu ve yayın balığının da yakalandığını gösteriyor. Şamandıralı ve dip oltası teknikleri şu an için en etkili yöntemler olup, son saatlerdeki artan aktivite balık tutmak için ideal bir zaman diliminin başladığını işaret ediyor.",
+      "note": "Gala Gölü'nde son raporlar, özellikle sığ bölgelerde sazan aktivitesinin arttığını ve yayın balığının da yakalandığını gösteriyor; bu durum, şamandıralı ve dip oltası teknikleriyle balık tutmak için ideal bir zaman diliminin başladığını işaret ediyor. Sabah erken saatlerdeki hareketliliğe ek olarak son saatlerdeki artış, balık avı için uygun koşulların devam ettiğini gösteriyor.",
       "heat": 3,
       "type": "göl",
       "time": "45dk önce",
@@ -2024,6 +2310,15 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Sazan",
+            "Yayın"
+          ],
+          "rod": "Şamandıralı olta",
+          "bait": "Mısır, Hamur"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -2048,26 +2343,9 @@
           ],
           "rod": "Şamandıralı olta",
           "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Sazan",
-            "Yayın"
-          ],
-          "rod": "Şamandıralı olta",
-          "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Sazan"
-          ],
-          "rod": "Şamandıralı olta",
-          "bait": "Hamur"
         }
       ],
-      "report_count": 5
+      "report_count": 4
     },
     {
       "id": "05a3016e771c2c",
@@ -2092,8 +2370,21 @@
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": true,
-      "alarm": 1,
+      "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Kolyoz",
+            "Sardalya",
+            "Sargoz",
+            "Melanurya",
+            "İstavrit"
+          ],
+          "rod": "At-çek",
+          "bait": "Suni yem"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -2103,6 +2394,15 @@
           "bait": "Suni yem"
         },
         {
+          "timestamp": "2026-04-01T15:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Palamut"
+          ],
+          "rod": "Sırtı, Spin",
+          "bait": "Rapala, Kaşık"
+        },
+        {
           "timestamp": "2026-04-01T12:15:00+00:00",
           "fish": [
             "Kolyoz",
@@ -2122,124 +2422,6 @@
           ],
           "rod": "Çapari",
           "bait": "Balık derisi"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Kolyoz",
-            "Sardalya",
-            "Sargoz",
-            "Melanurya",
-            "İstavrit",
-            "Mercan"
-          ],
-          "rod": "Çapari",
-          "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Kolyoz",
-            "Sardalya"
-          ],
-          "rod": "Çapari",
-          "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Kolyoz"
-          ],
-          "rod": "Çapari",
-          "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Sardalya"
-          ],
-          "rod": "Şamandıralı",
-          "bait": "Ekmek içi"
-        }
-      ],
-      "report_count": 7
-    },
-    {
-      "id": "d7417b10728867",
-      "lat": 40.610734,
-      "lng": 27.108856,
-      "loc": "Şarköy",
-      "fish": [
-        "İstavrit",
-        "Barbun",
-        "Tekir",
-        "Kolyoz",
-        "Levrek",
-        "Kefal"
-      ],
-      "rod": "Spin",
-      "bait": "Küçük kaşık",
-      "note": "Şarköy'de son 12 saatte balık hareketliliği sabah dip balıklarıyla başlayıp öğleden sonra levrek-kefal avına kayarken, akşam tekrar dip balıklarına yöneliyor; istavrit ve kolyoz gün boyu yakalanabilir durumda. Sabah ve akşam dip oltası, öğleden sonra kayalık bölgelerde LRF/spin veya dalgalı havalarda surf tekniği, palamut için ise trolling önerilir.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "45dk önce",
-      "timestamp": "2026-04-01T18:00:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T18:00:00+00:00",
-          "fish": [
-            "İstavrit"
-          ],
-          "rod": "Spin",
-          "bait": "Küçük kaşık"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Barbun",
-            "Tekir",
-            "İstavrit",
-            "Kolyoz",
-            "Levrek",
-            "Kefal"
-          ],
-          "rod": "Dip Oltası",
-          "bait": "Boru Kurdu, Mamun"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Barbun",
-            "Tekir"
-          ],
-          "rod": "Dip Oltası",
-          "bait": "Boru Kurdu, Mamun"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.711837+00:00",
-          "fish": [
-            "İstavrit",
-            "Kolyoz",
-            "Levrek",
-            "Kefal",
-            "Tekir",
-            "Barbun"
-          ],
-          "rod": "Spin, Şamandıralı olta",
-          "bait": "Küçük balık parçaları, Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.711837+00:00",
-          "fish": [
-            "İstavrit",
-            "Kolyoz"
-          ],
-          "rod": "Spin, Şamandıralı olta",
-          "bait": "Küçük balık parçaları, Hamur"
         }
       ],
       "report_count": 5
@@ -2269,6 +2451,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T18:00:00+00:00",
+          "fish": [
+            "Sargoz",
+            "Melanur",
+            "İzmarit",
+            "Karagöz",
+            "Kalamar",
+            "Mırmır"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu, Mamun"
+        },
         {
           "timestamp": "2026-04-01T18:00:00+00:00",
           "fish": [
@@ -2321,84 +2516,9 @@
           ],
           "rod": "LRF",
           "bait": "Silikon yem"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Sargoz",
-            "Melanur",
-            "Karagöz",
-            "Kalamar",
-            "Mırmır",
-            "İzmarit"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon yem, Canlı yem"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Sargoz",
-            "Melanur"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon yem, Canlı yem"
         }
       ],
-      "report_count": 7
-    },
-    {
-      "id": "8a68f4d45f5fbf",
-      "lat": 39.480042,
-      "lng": 26.050195,
-      "loc": "Babakale",
-      "fish": [
-        "Levrek",
-        "Çipura",
-        "Sargoz",
-        "Lahos"
-      ],
-      "rod": "Spin",
-      "bait": "Maket Balık",
-      "note": "Babakale'de son dönemde levrek ve çipura avlarında gözle görülür bir artış var; levrek için akşam suyu, çipura ve sargoz için sabah erken saatler ideal. Levrek için spin ve şamandıralı olta, çipura ve sargoz için şamandıralı olta, lahos için ise mendirek içinde LRF ve dip oltası teknikleri önerilir; mendirek taşlarına dikkat edilmeli.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "45dk önce",
-      "timestamp": "2026-04-01T18:00:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T18:00:00+00:00",
-          "fish": [
-            "Levrek"
-          ],
-          "rod": "Spin",
-          "bait": "Maket Balık"
-        },
-        {
-          "timestamp": "2026-04-01T09:30:00+00:00",
-          "fish": [
-            "Çipura",
-            "Sargoz",
-            "Levrek",
-            "Lahos"
-          ],
-          "rod": "Şamandıralı olta",
-          "bait": "Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T09:30:00+00:00",
-          "fish": [
-            "Çipura"
-          ],
-          "rod": "Şamandıralı olta",
-          "bait": "Boru kurdu"
-        }
-      ],
-      "report_count": 3
+      "report_count": 6
     },
     {
       "id": "49e9f8568de786",
@@ -2411,7 +2531,7 @@
       ],
       "rod": "Çaparili olta",
       "bait": "Yem gerekmiyor",
-      "note": "Işık altında toplanıyorlar",
+      "note": "Akçay'da son raporlara göre, özellikle iskele civarında ışık altında toplanan istavrit ve uskumru sürüleri mevcut. Çaparili olta ile avcılıkta son 45 dakikada artış gözlemlenirken, en verimli zaman dilimi gece saatleri gibi duruyor.",
       "heat": 3,
       "type": "deniz",
       "time": "45dk önce",
@@ -2447,7 +2567,7 @@
       ],
       "rod": "Olta",
       "bait": "Ekmek",
-      "note": "Karaköy'de son saatlerde uskumru hareketliliğinin artması ve hamsi görülmesiyle birlikte istavrit ve uskumru avı devam etmektedir; köprü ayakları ve gölgelik alanlarda, rüzgarlı havalarda çapari veya gezer kurşunlu, sakin havalarda ise klasik olta kullanılması önerilir.",
+      "note": "Karaköy'de son 12 saatte istavrit ve uskumru avı devam ederken, son saatte uskumru hareketliliğinde artış ve hamsi görülmesi dikkat çekiyor. Köprü ayakları ve gölgelik alanlarda rüzgarlı havalarda çapari veya gezer kurşunlu, sakin havalarda ise klasik olta kullanılması önerilir.",
       "heat": 3,
       "type": "deniz",
       "time": "1sa önce",
@@ -2460,14 +2580,6 @@
         {
           "timestamp": "2026-04-01T17:45:00+00:00",
           "fish": [
-            "İstavrit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek"
-        },
-        {
-          "timestamp": "2026-04-01T15:15:00+00:00",
-          "fish": [
             "İstavrit",
             "Uskumru",
             "Çinekop",
@@ -2477,147 +2589,56 @@
           "rod": "Olta",
           "bait": "Ekmek"
         },
-        {
-          "timestamp": "2026-04-01T15:15:00+00:00",
-          "fish": [
-            "İstavrit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek"
-        },
-        {
-          "timestamp": "2026-04-01T12:30:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru",
-            "Çinekop",
-            "İzmarit",
-            "Hamsi"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek"
-        },
-        {
-          "timestamp": "2026-04-01T12:30:00+00:00",
-          "fish": [
-            "İstavrit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek"
-        },
-        {
-          "timestamp": "2026-04-01T09:30:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru",
-            "Çinekop",
-            "İzmarit",
-            "Hamsi"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi"
-        },
-        {
-          "timestamp": "2026-04-01T09:30:00+00:00",
-          "fish": [
-            "İstavrit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi"
-        }
-      ],
-      "report_count": 7
-    },
-    {
-      "id": "f57730ab3c5c04",
-      "lat": 41.021247,
-      "lng": 28.757559,
-      "loc": "Küçükçekmece Gölü",
-      "fish": [
-        "Sazan",
-        "Yayın",
-        "Turna"
-      ],
-      "rod": "Dip oltası",
-      "bait": "Mısır, Solucan",
-      "note": "Küçükçekmece Gölü'nde son 12 saatte sazan ve yayın avı istikrarlı seyrederken, özellikle batı kıyısında turna balığı aktivitesinde artış gözlemleniyor; gün içi avları daha verimli olup, sazan için dip oltası ve yemleme, turna için ise kaşık veya dip oltası kullanımı önerilir. Gölün sığ bölgelerinde sazan hareketliliği devam etmektedir.",
-      "heat": 4,
-      "type": "göl",
-      "time": "1sa önce",
-      "timestamp": "2026-04-01T17:45:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
         {
           "timestamp": "2026-04-01T17:45:00+00:00",
           "fish": [
-            "Sazan",
-            "Yayın"
+            "İstavrit"
           ],
-          "rod": "Dip oltası",
-          "bait": "Mısır, Solucan"
+          "rod": "Olta",
+          "bait": "Ekmek"
         },
         {
-          "timestamp": "2026-04-01T15:00:00+00:00",
+          "timestamp": "2026-04-01T15:15:00+00:00",
           "fish": [
-            "Sazan",
-            "Yayın",
-            "Turna"
+            "İstavrit",
+            "Uskumru",
+            "Çinekop",
+            "İzmarit",
+            "Hamsi"
           ],
-          "rod": "Dip oltası",
-          "bait": "Mısır, Solucan"
+          "rod": "Olta",
+          "bait": "Ekmek"
         },
         {
-          "timestamp": "2026-04-01T15:00:00+00:00",
+          "timestamp": "2026-04-01T15:15:00+00:00",
           "fish": [
-            "Sazan",
-            "Yayın"
+            "İstavrit"
           ],
-          "rod": "Dip oltası",
-          "bait": "Mısır, Solucan"
+          "rod": "Olta",
+          "bait": "Ekmek"
         },
         {
-          "timestamp": "2026-04-01T11:45:00+00:00",
+          "timestamp": "2026-04-01T12:30:00+00:00",
           "fish": [
-            "Sazan",
-            "Yayın",
-            "Turna"
+            "İstavrit",
+            "Uskumru",
+            "Çinekop",
+            "İzmarit",
+            "Hamsi"
           ],
-          "rod": "Dip oltası",
-          "bait": "Solucan, Mısır"
+          "rod": "Olta",
+          "bait": "Ekmek"
         },
         {
-          "timestamp": "2026-04-01T11:45:00+00:00",
+          "timestamp": "2026-04-01T12:30:00+00:00",
           "fish": [
-            "Sazan",
-            "Yayın"
+            "İstavrit"
           ],
-          "rod": "Dip oltası",
-          "bait": "Solucan, Mısır"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Sazan",
-            "Yayın",
-            "Turna"
-          ],
-          "rod": "Dip Oltası",
-          "bait": "Solucan, Mısır"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Sazan",
-            "Yayın"
-          ],
-          "rod": "Dip Oltası",
-          "bait": "Solucan, Mısır"
+          "rod": "Olta",
+          "bait": "Ekmek"
         }
       ],
-      "report_count": 7
+      "report_count": 6
     },
     {
       "id": "a068facc8b75a5",
@@ -2644,6 +2665,19 @@
       "hot": true,
       "alarm": 3,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:45:00+00:00",
+          "fish": [
+            "İstavrit",
+            "İzmarit",
+            "Hamsi",
+            "Uskumru",
+            "Mırmır",
+            "Palamut"
+          ],
+          "rod": "Olta",
+          "bait": "Ekmek, Karides"
+        },
         {
           "timestamp": "2026-04-01T17:45:00+00:00",
           "fish": [
@@ -2698,7 +2732,7 @@
           "bait": "Ekmek içi, Karides"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "c06c23e2c7cf21",
@@ -2723,6 +2757,17 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:30:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Uskumru",
+            "Çinekop",
+            "Hamsi"
+          ],
+          "rod": "Olta",
+          "bait": "Ekmek, Kurt"
+        },
         {
           "timestamp": "2026-04-01T17:30:00+00:00",
           "fish": [
@@ -2779,29 +2824,9 @@
           ],
           "rod": "Olta",
           "bait": "Ekmek, Solucan"
-        },
-        {
-          "timestamp": "2026-04-01T09:00:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru",
-            "Çinekop",
-            "Hamsi"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi, Solucan"
-        },
-        {
-          "timestamp": "2026-04-01T09:00:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi, Solucan"
         }
       ],
-      "report_count": 8
+      "report_count": 7
     },
     {
       "id": "9cd7ce88a1565a",
@@ -2815,7 +2840,7 @@
       ],
       "rod": "Olta",
       "bait": "Ekmek içi, Solucan",
-      "note": "Kadıköy'de son raporlara göre istavrit akını yaşanmakla birlikte uskumru ve izmarit de avlanabilmektedir; sabah saatlerinde şamandıralı ve gezer kurşunlu olta teknikleriyle av verimliliği daha yüksek olup, akşam üzeri gezer kurşunlu olta ile istavrit akını beklenebilir. Sabah erken saatlerde avlanmak, günün diğer zamanlarına kıyasla daha avantajlı olacaktır.",
+      "note": "Kadıköy'de son raporlara göre istavrit akını yaşanmakta, uskumru ve izmarit de avlanabilmektedir. Sabah saatlerinde şamandıralı ve gezer kurşunlu olta teknikleri, akşam üzeri ise gezer kurşunlu olta ile istavrit avı için ideal olup, sabah erken saatlerde avlanmak daha verimli olacaktır.",
       "heat": 3,
       "type": "deniz",
       "time": "1sa önce",
@@ -2825,6 +2850,16 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:30:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Uskumru",
+            "İzmarit"
+          ],
+          "rod": "Olta",
+          "bait": "Ekmek içi, Solucan"
+        },
         {
           "timestamp": "2026-04-01T17:30:00+00:00",
           "fish": [
@@ -2873,7 +2908,7 @@
           "bait": "Ekmek içi, Solucan"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "81e99d282244ff",
@@ -2887,7 +2922,7 @@
       ],
       "rod": "Spin",
       "bait": "Kaşık",
-      "note": "Sarıyer'de son 12 saatte lüfer, palamut ve uskumru avı yapıldığı, özellikle sabah ve akşam sularında yüzey hareketliliğiyle lüfer ve palamut avının arttığı gözlemleniyor. Sabah erken saatlerde trolling ile palamut sürülerini takip etmek, akşamları ise spin avı yapmak başarılı sonuçlar verebilir.",
+      "note": "Sarıyer'de son 12 saatte lüfer ve palamut avı yapıldığı, sabah erken saatlerdeki palamut akını ve yüzey hareketliliğiyle avın arttığı gözlemleniyor. Sabah trolling ve akşam spin avı, başarılı sonuçlar verebilir.",
       "heat": 3,
       "type": "deniz",
       "time": "1sa önce",
@@ -2897,6 +2932,16 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:30:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Uskumru",
+            "Palamut"
+          ],
+          "rod": "Spin",
+          "bait": "Kaşık"
+        },
         {
           "timestamp": "2026-04-01T17:30:00+00:00",
           "fish": [
@@ -2945,7 +2990,7 @@
           "bait": "Rapala"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "fb1d21721af936",
@@ -2962,7 +3007,7 @@
       ],
       "rod": "Şamandıralı",
       "bait": "Ekmek içi",
-      "note": "Ayvalık'ta sardalya akını devam ederken, öğleden sonra istavrit hareketliliği artıyor; özellikle akşam üzeri şamandıralı olta ile istavrit avı verimli olacaktır. Levrek ve çipura için sığ sularda sabah ve akşam spin avı, büyük balık için derin ve kayalık bölgelerde jigging ve dip oltası gün boyu etkili olabilir; kayalık bölgelerde LRF ve Surf Casting teknikleri ile Sargoz, Melanur, Karagöz gibi çeşitli türler de yakalanabilir.",
+      "note": "Ayvalık'ta sardalya akını sürerken, istavrit hareketliliği öğleden sonra artış gösteriyor; özellikle akşam üzeri şamandıralı olta ile istavrit avı verimli olacaktır. Levrek ve çipura için sığ sularda sabah ve akşam spin avı, büyük balık için derin ve kayalık bölgelerde jigging ve dip oltası gün boyu etkili olabilir; kayalık bölgelerde LRF ve Surf Casting teknikleri ile Sargoz, Melanur, Karagöz gibi çeşitli türler de yakalanabilir.",
       "heat": 4,
       "type": "deniz",
       "time": "1sa önce",
@@ -2972,6 +3017,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:00:00+00:00",
+          "fish": [
+            "İstavrit",
+            "Sardalya",
+            "Barbun",
+            "Mercan",
+            "Sargoz",
+            "Melanur"
+          ],
+          "rod": "Şamandıralı",
+          "bait": "Ekmek içi"
+        },
         {
           "timestamp": "2026-04-01T17:00:00+00:00",
           "fish": [
@@ -3029,29 +3087,17 @@
           "bait": "Ekmek"
         },
         {
-          "timestamp": "2026-04-01T12:30:00+00:00",
+          "timestamp": "2026-04-01T14:00:00+00:00",
           "fish": [
-            "İstavrit",
             "Sardalya",
-            "Sargoz",
-            "Melanur",
-            "Karagöz",
-            "Akya"
-          ],
-          "rod": "Şamandıralı Olta",
-          "bait": "Ekmek İçi"
-        },
-        {
-          "timestamp": "2026-04-01T12:30:00+00:00",
-          "fish": [
             "İstavrit",
-            "Sardalya"
+            "Uskumru"
           ],
           "rod": "Şamandıralı Olta",
-          "bait": "Ekmek İçi"
+          "bait": "Ekmek İçi, Hamur"
         }
       ],
-      "report_count": 11
+      "report_count": 10
     },
     {
       "id": "0222bcf31538a5",
@@ -3076,6 +3122,17 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Çinekop",
+            "Sarıkuyruk",
+            "Sarıkanat"
+          ],
+          "rod": "Olta",
+          "bait": "Hamsi"
+        },
         {
           "timestamp": "2026-04-01T17:00:00+00:00",
           "fish": [
@@ -3125,7 +3182,7 @@
           "bait": "Kaşık"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "639958cdd7cf3a",
@@ -3142,7 +3199,7 @@
       ],
       "rod": "Şamandıralı",
       "bait": "Ekmek içi, Kurt",
-      "note": "Gemlik'te son dönemde izmarit akını yaşanırken, akşam saatlerinde sardalya akını da yoğunlaşıyor. Sabah erken saatlerde levrek ve çipura spin ile, kefal şamandıralı olta ile avlanabilir; öğleden sonra artan balık hareketliliğinden faydalanmak için şamandıralı olta gün boyu, akşam suyunda ise dip oltasıyla mırmır avcılığı önerilir.",
+      "note": "Gemlik'te son dönemde izmarit akını yaşanırken, sardalya akını da akşam saatlerinde yoğunlaşıyor. Sabah erken saatlerde levrek ve çipura spin ile, kefal şamandıralı olta ile avlanabilir; öğleden sonra artan balık hareketliliğinden faydalanmak için şamandıralı olta gün boyu, akşam suyunda ise dip oltasıyla mırmır avcılığı önerilir.",
       "heat": 3,
       "type": "deniz",
       "time": "1sa önce",
@@ -3152,6 +3209,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:00:00+00:00",
+          "fish": [
+            "İzmarit",
+            "Kefal",
+            "Sardalya",
+            "Mırmır",
+            "Levrek",
+            "Çipura"
+          ],
+          "rod": "Şamandıralı",
+          "bait": "Ekmek içi, Kurt"
+        },
         {
           "timestamp": "2026-04-01T17:00:00+00:00",
           "fish": [
@@ -3184,7 +3254,7 @@
           "bait": "Ekmek içi, Kurt"
         }
       ],
-      "report_count": 3
+      "report_count": 4
     },
     {
       "id": "3ebe784afae416",
@@ -3210,6 +3280,18 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:00:00+00:00",
+          "fish": [
+            "İzmarit",
+            "Kefal",
+            "Levrek",
+            "Çipura",
+            "Gümüş"
+          ],
+          "rod": "Şamandıralı",
+          "bait": "Ekmek içi, Kurt"
+        },
         {
           "timestamp": "2026-04-01T17:00:00+00:00",
           "fish": [
@@ -3262,7 +3344,7 @@
           "bait": "Ekmek içi, Kurt"
         }
       ],
-      "report_count": 5
+      "report_count": 6
     },
     {
       "id": "f4a607190aeb42",
@@ -3279,7 +3361,7 @@
       ],
       "rod": "Spin",
       "bait": "Kaşık, Silikon",
-      "note": "Gelibolu'da palamut göçüyle lüfer akını devam ederken, açık denizde trolling avcılığı şu an en verimli yöntem. Levrek ve çipura popülasyonundaki artışla birlikte sabah ve akşam saatlerinde kayalık bölgelerde LRF/spin veya surf teknikleri önerilir.",
+      "note": "Gelibolu'da palamut göçüyle birlikte lüfer akını devam ederken, levrek ve çipura popülasyonundaki artış dikkat çekiyor; bu nedenle açık denizde trolling, kayalık bölgelerde ise sabah ve akşam saatlerinde LRF/spin veya surf teknikleri ile avcılık yapmak en verimli sonuçları verecektir. İstavrit ve hamsi için de kayalık bölgeler LRF ile denenebilir.",
       "heat": 4,
       "type": "deniz",
       "time": "1sa önce",
@@ -3289,6 +3371,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T17:00:00+00:00",
+          "fish": [
+            "Lüfer",
+            "Kolyoz",
+            "Levrek",
+            "Çipura",
+            "Kefal",
+            "Kalkan"
+          ],
+          "rod": "Spin",
+          "bait": "Kaşık, Silikon"
+        },
         {
           "timestamp": "2026-04-01T17:00:00+00:00",
           "fish": [
@@ -3328,40 +3423,9 @@
           ],
           "rod": "Sırtı",
           "bait": "Rapala"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.710249+00:00",
-          "fish": [
-            "Kalkan",
-            "Palamut",
-            "Lüfer",
-            "Levrek",
-            "Çipura",
-            "Kolyoz"
-          ],
-          "rod": "Surf",
-          "bait": "Canlı yem"
-        },
-        {
-          "timestamp": "2026-04-01T07:06:57.710249+00:00",
-          "fish": [
-            "Kalkan"
-          ],
-          "rod": "Surf",
-          "bait": "Canlı yem"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Palamut",
-            "Lüfer",
-            "Kolyoz"
-          ],
-          "rod": "Sırtı, Kaşık",
-          "bait": "Rapala, Yemli"
         }
       ],
-      "report_count": 7
+      "report_count": 5
     },
     {
       "id": "20259199f48c4d",
@@ -3397,6 +3461,73 @@
       "report_count": 1
     },
     {
+      "id": "baecdde1696732",
+      "lat": 40.090841,
+      "lng": 26.392192,
+      "loc": "Kepez",
+      "fish": [
+        "Sardalya",
+        "İstavrit",
+        "Palamut",
+        "Lüfer",
+        "Kolyoz"
+      ],
+      "rod": "Dip oltası",
+      "bait": "Ekmek, Solucan",
+      "note": "Kepez'de son dönemde balık hareketliliği belirgin şekilde artış gösteriyor; özellikle palamut ve lüfer avı açıkta trolling/spin ile, sardalya ve istavrit ise liman içinde dip oltası/şamandıralı takımlarla gün boyu verimli olabilirken, gece avında dip oltası ile kolyoz denenebilir. Av verimliliği gün boyu devam ettiğinden, her saat potansiyel taşıyor.",
+      "heat": 3,
+      "type": "deniz",
+      "time": "4sa önce",
+      "timestamp": "2026-04-01T17:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-01T17:00:00+00:00",
+          "fish": [
+            "Sardalya",
+            "İstavrit"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Ekmek, Solucan"
+        },
+        {
+          "timestamp": "2026-04-01T11:45:00+00:00",
+          "fish": [
+            "Palamut",
+            "Lüfer",
+            "Sardalya",
+            "İstavrit",
+            "Kolyoz"
+          ],
+          "rod": "Sırtı",
+          "bait": "Rapala"
+        },
+        {
+          "timestamp": "2026-04-01T11:45:00+00:00",
+          "fish": [
+            "Palamut",
+            "Lüfer",
+            "Sardalya",
+            "İstavrit"
+          ],
+          "rod": "Sırtı",
+          "bait": "Rapala"
+        },
+        {
+          "timestamp": "2026-04-01T11:45:00+00:00",
+          "fish": [
+            "Palamut"
+          ],
+          "rod": "Sırtı",
+          "bait": "Rapala"
+        }
+      ],
+      "report_count": 4
+    },
+    {
       "id": "4b94c867a44fd5",
       "lat": 40.602154,
       "lng": 27.576834,
@@ -3411,7 +3542,7 @@
       ],
       "rod": "Sırtı",
       "bait": "Rapala",
-      "note": "Marmara Adası'nda son raporlara göre açık sularda palamut ve torik sürüleri hareket halinde, sırtı çekerek avlanmak etkili olabilir. Taşlık bölgelerde ise mercan ve barbun avında artış gözlemleniyor; dip oltasıyla derin suları hedeflemek ve levrek için sabah/akşam saatlerinde surf/LRF yöntemlerini denemek başarılı sonuçlar verebilir.",
+      "note": "Marmara Adası'nda son raporlara göre açık sularda palamut ve torik sürüleri hareket halinde, sırtı çekerek avlanmak etkili olabilirken, taşlık bölgelerde mercan ve barbun avında artış gözlemleniyor; sabah erken saatlerde spin avı ile kolyoz ve istavrit yakalama şansı yüksek. Dip oltasıyla derin suları hedeflemek ve levrek için sabah/akşam saatlerinde surf/LRF yöntemlerini denemek başarılı sonuçlar verebilir.",
       "heat": 4,
       "type": "deniz",
       "time": "2sa önce",
@@ -3421,6 +3552,19 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T16:45:00+00:00",
+          "fish": [
+            "Palamut",
+            "Torik",
+            "Mercan",
+            "Barbun",
+            "Sargoz",
+            "Karagöz"
+          ],
+          "rod": "Sırtı",
+          "bait": "Rapala"
+        },
         {
           "timestamp": "2026-04-01T16:45:00+00:00",
           "fish": [
@@ -3474,40 +3618,9 @@
           ],
           "rod": "Surf",
           "bait": "Boru Kurdu, Mamun"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Mercan",
-            "Barbun"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Karides, Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Mercan",
-            "Barbun",
-            "Sargoz",
-            "Karagöz",
-            "Kefal",
-            "Levrek"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Karides, Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Mercan",
-            "Barbun"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Karides, Boru kurdu"
         }
       ],
-      "report_count": 8
+      "report_count": 6
     },
     {
       "id": "986b4c1a78d123",
@@ -3524,7 +3637,7 @@
       ],
       "rod": "LRF",
       "bait": "Silikon Kurtçuk",
-      "note": "Silivri'de son raporlara göre levrek ve lüfer avında artış trendi gözlemleniyor; sabah levrek, akşam lüfer için spin ve surf casting teknikleriyle uzak atışlar ve hızlı sarım önerilirken, istavrit ve izmarit gün boyu LRF ile dip avında yavaş hareketlerle yakalanabilir.",
+      "note": "Silivri'de son raporlara göre levrek ve lüfer avında artış trendi gözlemleniyor; sabah levrek, akşam lüfer için spin ve surf casting teknikleriyle uzak atışlar ve hızlı sarım önerilirken, istavrit ve izmarit gün boyu LRF ile dip avında yavaş hareketlerle yakalanabilir. Sabah erken saatler levrek ve lüfer için ideal, akşam ise istavrit bereketi yaşanıyor.",
       "heat": 4,
       "type": "deniz",
       "time": "1dk önce",
@@ -3577,32 +3690,9 @@
           ],
           "rod": "Surf, Şamandıralı Olta",
           "bait": "Ekmek, Yemli Olta"
-        },
-        {
-          "timestamp": "2026-04-01T07:07:07.653978+00:00",
-          "fish": [
-            "Levrek",
-            "Lüfer",
-            "İstavrit",
-            "Mezgit",
-            "İzmarit",
-            "Palamut"
-          ],
-          "rod": "Spin",
-          "bait": "Maket Balık"
-        },
-        {
-          "timestamp": "2026-04-01T07:07:07.653978+00:00",
-          "fish": [
-            "Levrek",
-            "Lüfer",
-            "İstavrit"
-          ],
-          "rod": "Spin",
-          "bait": "Maket Balık"
         }
       ],
-      "report_count": 6
+      "report_count": 4
     },
     {
       "id": "5698c0f3d3363c",
@@ -3618,7 +3708,7 @@
       ],
       "rod": "Jigging",
       "bait": "Metal Jig",
-      "note": "Adalar bölgesinde son raporlara göre hem pelajik hem de dip balıklarının aktif olduğu görülüyor. Palamut ve torik için derin sularda jigging, çipura, sargoz ve mırmır için ise dip avı ve surf casting yöntemleri günün her saatinde denenebilir; sonar kullanımı ve uzak atışlar av verimliliğini artırabilir.",
+      "note": "Adalar bölgesinde hem pelajik (Palamut, Torik) hem de dip balıklarının (Çipura, Sargoz, Mırmır) aktif olduğu, son raporlara göre balık hareketliliğinin arttığı görülüyor. Derin sularda jigging, kıyıdan ise dip avı ve surf casting yöntemleri günün her saatinde denenebilir; sonar kullanımı ve uzak atışlar av verimliliğini artırabilir.",
       "heat": 4,
       "type": "deniz",
       "time": "1dk önce",
@@ -3648,63 +3738,9 @@
           ],
           "rod": "Jigging",
           "bait": "Metal Jig"
-        },
-        {
-          "timestamp": "2026-04-01T07:07:07.655009+00:00",
-          "fish": [
-            "Palamut",
-            "Torik",
-            "Çipura",
-            "Sargoz",
-            "Mırmır"
-          ],
-          "rod": "Jigging",
-          "bait": "Metal Jig"
-        },
-        {
-          "timestamp": "2026-04-01T07:07:07.655009+00:00",
-          "fish": [
-            "Palamut",
-            "Torik"
-          ],
-          "rod": "Jigging",
-          "bait": "Metal Jig"
         }
       ],
-      "report_count": 4
-    },
-    {
-      "id": "662a4d19a9c0c7",
-      "lat": 40.348429,
-      "lng": 27.974897,
-      "loc": "Bandırma",
-      "fish": [
-        "Kefal",
-        "İstavrit"
-      ],
-      "rod": "Olta",
-      "bait": "Ekmek, Hamur, Yemlik",
-      "note": "Kefal için liman içi ve mendirekler ideal. İstavrit için yemli olta denenebilir.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "1dk önce",
-      "timestamp": "2026-04-01T16:00:55.368271+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 0,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T16:00:55.368271+00:00",
-          "fish": [
-            "Kefal",
-            "İstavrit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek, Hamur, Yemlik"
-        }
-      ],
-      "report_count": 1
+      "report_count": 2
     },
     {
       "id": "034143a46cb696",
@@ -3714,11 +3750,12 @@
       "fish": [
         "Sargoz",
         "Çipura",
-        "Levrek"
+        "Levrek",
+        "Kefal"
       ],
       "rod": "Dip oltası",
       "bait": "Karides",
-      "note": "Gökçeada'da son dönemde sargoz, çipura ve levrek hareketliliği belirgin şekilde artış gösteriyor. Sabah erken saatlerde taşlık/kayalık bölgelerde yemli dip oltası veya spin avı, liman içinde ise dip oltası sargoz için ideal; rüzgarlı havalarda levrek için yüzey sahtesi denenebilir.",
+      "note": "Gökçeada'da son dönemde sargoz, çipura ve levrek hareketliliği belirgin şekilde artış gösteriyor; sabah erken saatlerde taşlık/kayalık bölgelerde yemli dip oltası veya spin avı, rüzgarlı havalarda ise levrek için yüzey sahtesi denenebilir. Rüzgarlı havalarda surf avı yapacakların dikkatli olması önerilir.",
       "heat": 3,
       "type": "deniz",
       "time": "2dk önce",
@@ -3784,7 +3821,7 @@
       ],
       "rod": "Çapari",
       "bait": "Yok",
-      "note": "Çınarcık'ta son dönemde istavrit akını yaşanırken, avcı balıklar özellikle akşam saatlerinde aktifleşiyor; sardalya da akşam üstü ışık altında yoğunlaşıyor. Sabah erken saatlerde at-çek ile lüfer/palamut, dip oltasıyla levrek/mırmır, öğleden sonra çapari ile istavrit avı önerilir.",
+      "note": "Çınarcık'ta son dönemde istavrit akını yaşanırken, avcı balıklar özellikle akşam saatlerinde aktifleşiyor; sabah erken saatlerde at-çek ile lüfer/palamut, dip oltasıyla levrek/mırmır, öğleden sonra çapari ile istavrit avı önerilir. Sardalya ve hamsi için tekneyle açılmak ve akşam üstü ışık altında avlanmak verimli olacaktır.",
       "heat": 3,
       "type": "deniz",
       "time": "2dk önce",
@@ -3831,7 +3868,7 @@
       ],
       "rod": "Şamandıralı",
       "bait": "Boru kurdu",
-      "note": "Eceabat'ta son 12 saatte Kolyoz avı akıntılı bölgelerde yoğunlaşmış ve artış trendi göstermektedir; çapari ve yemleme ile dip oltası kullanımı tavsiye edilir. Sabah erken saatlerde ise Lüfer ve Palamut için sırtı ve kaşıkla avlanmak daha verimli olacaktır.",
+      "note": "Eceabat'ta son 12 saatte Kolyoz avı akıntılı bölgelerde artış gösterirken, sabah erken saatlerde Lüfer ve Palamut için sırtı ve kaşıkla avlanmak, Kolyoz için ise çapari ve yemlemeyle dip oltası kullanmak verimli olacaktır. Balık hareketleri incelendiğinde, Kolyoz'un akıntıya bağlı olarak yoğunlaştığı, Lüfer ve Palamut'un ise sabah saatlerinde yüzeye yakın olduğu anlaşılmaktadır.",
       "heat": 3,
       "type": "deniz",
       "time": "2sa önce",
@@ -3841,6 +3878,16 @@
       "hot": true,
       "alarm": 2,
       "reports": [
+        {
+          "timestamp": "2026-04-01T16:00:00+00:00",
+          "fish": [
+            "Kolyoz",
+            "Lüfer",
+            "Palamut"
+          ],
+          "rod": "Şamandıralı",
+          "bait": "Boru kurdu"
+        },
         {
           "timestamp": "2026-04-01T16:00:00+00:00",
           "fish": [
@@ -3866,27 +3913,9 @@
           ],
           "rod": "Çapari",
           "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Kolyoz",
-            "Lüfer",
-            "Palamut"
-          ],
-          "rod": "Çapari",
-          "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Kolyoz"
-          ],
-          "rod": "Çapari",
-          "bait": "Hamur"
         }
       ],
-      "report_count": 5
+      "report_count": 4
     },
     {
       "id": "d8942bd098844c",
@@ -3899,7 +3928,7 @@
       ],
       "rod": "Spin, LRF",
       "bait": "Silikon yem, Yengeç",
-      "note": "Enez sahilinde son raporlara göre hem levrek hem de çipura avı için uygun bir zaman dilimindeyiz. Öğleden sonra başlayan çipura hareketliliği dip oltasıyla avlanmak için idealdir, akşam suyunda ise levrek avı için spin ve LRF teknikleri kayalık bölgelerde verimli sonuçlar verebilir.",
+      "note": "Enez Sahili'nde son raporlara göre hem levrek hem de çipura avı için uygun bir zaman dilimindeyiz; çipura hareketliliği öğleden sonra dip oltasıyla, levrek avı ise akşam suyunda kayalık bölgelerde spin ve LRF teknikleriyle verimli sonuçlar verebilir. Levrek avı son 7 saatte de devam ettiğinden, bu trendin sürdüğü söylenebilir.",
       "heat": 3,
       "type": "deniz",
       "time": "32dk önce",
@@ -3919,6 +3948,14 @@
           "bait": "Silikon yem, Yengeç"
         },
         {
+          "timestamp": "2026-04-01T14:00:00+00:00",
+          "fish": [
+            "Levrek"
+          ],
+          "rod": "Spin",
+          "bait": "Maket balık"
+        },
+        {
           "timestamp": "2026-04-01T12:00:00+00:00",
           "fish": [
             "Çipura",
@@ -3936,49 +3973,7 @@
           "bait": "Boru kurdu"
         }
       ],
-      "report_count": 3
-    },
-    {
-      "id": "134ec9fe43a015",
-      "lat": 40.492814,
-      "lng": 29.313063,
-      "loc": "Orhangazi",
-      "fish": [
-        "Yayın",
-        "Sazan"
-      ],
-      "rod": "Dip oltası",
-      "bait": "Mısır, Solucan",
-      "note": "Orhangazi'de yayın ve sazan hareketliliği gece saatlerinde artış gösteriyor. Özellikle sığ sularda dip oltası tekniğiyle avlanmak, gece avlarında başarı şansını yükseltecektir.",
-      "heat": 3,
-      "type": "göl",
-      "time": "32dk önce",
-      "timestamp": "2026-04-01T15:30:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T15:30:00+00:00",
-          "fish": [
-            "Yayın",
-            "Sazan"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Mısır, Solucan"
-        },
-        {
-          "timestamp": "2026-04-01T12:00:00+00:00",
-          "fish": [
-            "Yayın",
-            "Sazan"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Solucan, Mısır"
-        }
-      ],
-      "report_count": 2
+      "report_count": 4
     },
     {
       "id": "90d5b9459b2db2",
@@ -3995,7 +3990,7 @@
       ],
       "rod": "Şamandıralı Olta",
       "bait": "Sülünez",
-      "note": "Altınoluk'ta son raporlar, gündüz saatlerinde tekneyle trolling yöntemiyle palamut ve torik avının verimli olduğunu, bu trendin devam ettiğini gösteriyor. Gece avında ise surfcasting ile levrek ve kefal yakalamak mümkün; zargana ve istavrit için ise ışık altında şamandıralı olta kullanmak ideal.",
+      "note": "Altınoluk'ta son raporlar, gündüz tekneyle trolling ile palamut ve torik avının verimli olduğunu, gece ise surfcasting ile levrek ve kefal avının mümkün olduğunu gösteriyor. Zargana ve istavrit için ışık altında şamandıralı olta kullanmak, özellikle sabah erken saatlerde kefal avı için şamandıralı olta tercih etmek idealdir.",
       "heat": 3,
       "type": "deniz",
       "time": "32dk önce",
@@ -4026,31 +4021,9 @@
           ],
           "rod": "Şamandıralı Olta",
           "bait": "Sülünez"
-        },
-        {
-          "timestamp": "2026-04-01T09:30:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru",
-            "Palamut",
-            "Torik",
-            "İzmarit",
-            "Zargana"
-          ],
-          "rod": "Çapari",
-          "bait": "Ham yem"
-        },
-        {
-          "timestamp": "2026-04-01T09:30:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Uskumru"
-          ],
-          "rod": "Çapari",
-          "bait": "Ham yem"
         }
       ],
-      "report_count": 4
+      "report_count": 2
     },
     {
       "id": "5f20aed84ea0d8",
@@ -4113,47 +4086,9 @@
           ],
           "rod": "Surfcasting",
           "bait": "Hamsi, Sardalya"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Palamut",
-            "Levrek"
-          ],
-          "rod": "Surfcasting",
-          "bait": "Hamsi, Sardalya"
-        },
-        {
-          "timestamp": "2026-04-01T08:00:00+00:00",
-          "fish": [
-            "Lüfer",
-            "Palamut"
-          ],
-          "rod": "Surfcasting",
-          "bait": "Hamsi, Sardalya"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Lüfer",
-            "Palamut"
-          ],
-          "rod": "Spin, Surfcasting",
-          "bait": "Yemli kaşık, Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Lüfer"
-          ],
-          "rod": "Spin, Surfcasting",
-          "bait": "Yemli kaşık, Boru kurdu"
         }
       ],
-      "report_count": 8
+      "report_count": 4
     },
     {
       "id": "252d299646d232",
@@ -4166,7 +4101,7 @@
       ],
       "rod": "Spin",
       "bait": "Kaşık, Silikon yem",
-      "note": "Büyükçekmece Gölü'nün kuzey kesimlerinde son raporlara göre turna ve sudak avı aktif durumda. Özellikle spin ve kaşık gibi yapay yemlerle yapılan avcılıkta başarı sağlanabilir; avın yoğunluğu son saatlerde artış gösteriyor gibi duruyor.",
+      "note": "Büyükçekmece Gölü'nün kuzeyinde turna ve sudak avı son saatlerde yoğunlaşmış durumda, özellikle spin ve kaşık gibi yapay yemlerle yapılan avcılıkta başarı şansı yüksek. Sabah saatlerinde başlayan turna avı aktivitesinin gün içinde artış gösterdiği ve sürdüğü görülmektedir.",
       "heat": 3,
       "type": "göl",
       "time": "1sa önce",
@@ -4255,7 +4190,7 @@
       ],
       "rod": "Dip oltası",
       "bait": "Karides, Boru kurdu",
-      "note": "Şile'de son 12 saatte palamut ve lüfer avında belirgin bir artış gözlemlenirken, özellikle sabah saatlerinde açık denizde sırtı tekniğiyle avlanmak en verimli sonucu verecektir. Liman içinde istavrit için dip oltası ve çapari, kayalık bölgelerde ise barbun ve mercan için dip oltası kullanılması önerilir.",
+      "note": "Şile'de son 12 saatte palamut ve lüfer avında belirgin artış gözlemlenirken, özellikle sabah saatlerinde açık denizde sırtı tekniğiyle avlanmak en verimli sonucu verecektir. Liman içinde istavrit için dip oltası ve çapari, kayalık bölgelerde ise barbun ve mercan için dip oltası kullanılması önerilir.",
       "heat": 3,
       "type": "deniz",
       "time": "2sa önce",
@@ -4286,31 +4221,9 @@
           ],
           "rod": "Dip oltası",
           "bait": "Karides, Boru kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T09:00:00+00:00",
-          "fish": [
-            "Barbun",
-            "İstavrit",
-            "Palamut",
-            "Lüfer",
-            "Mezgit",
-            "Mercan"
-          ],
-          "rod": "Dip Oltası, Çapari",
-          "bait": "Karides, Ekmek"
-        },
-        {
-          "timestamp": "2026-04-01T09:00:00+00:00",
-          "fish": [
-            "Barbun",
-            "İstavrit"
-          ],
-          "rod": "Dip Oltası, Çapari",
-          "bait": "Karides, Ekmek"
         }
       ],
-      "report_count": 4
+      "report_count": 2
     },
     {
       "id": "c203d5042afd11",
@@ -4318,18 +4231,20 @@
       "lng": 26.799088,
       "loc": "Edremit Körfezi",
       "fish": [
-        "Palamut"
+        "Palamut",
+        "Mercan",
+        "Barbun"
       ],
       "rod": "Trolling",
       "bait": "Rapala",
-      "note": "Sürüler halinde geçişler var.",
-      "heat": 2,
+      "note": "Edremit Körfezi'nde son raporlara göre palamut sürüleri geçiş yapmakta, bu nedenle trolling yöntemiyle avcılık şu an için daha verimli olabilir. Dip balıkları için ise tekneyle açılıp dip oltası kullanmak gerekiyor, ancak palamut hareketliliği göz önüne alındığında öncelik palamut avına verilebilir.",
+      "heat": 3,
       "type": "deniz",
       "time": "2sa önce",
       "timestamp": "2026-04-01T14:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
-      "hot": false,
+      "hot": true,
       "alarm": 2,
       "reports": [
         {
@@ -4358,7 +4273,7 @@
       ],
       "rod": "LRF",
       "bait": "Silikon yem",
-      "note": "Heybeliada'da son 12 saatte avcı balık popülasyonunda belirgin bir artış gözlemleniyor; özellikle levrek, lüfer ve çipura hareketliliği dikkat çekiyor. Rüzgarlı havalarda yemli dip oltası, spin, LRF ve tekneyle sırtı avcılığı, kalamar için ise Eging yöntemleri şu an en verimli seçenekler olarak öne çıkıyor; günün her saati avcı balık hareketliliği mevcut.",
+      "note": "Heybeliada'da son 12 saatte avcı balık popülasyonunda belirgin bir artış gözlemleniyor; özellikle levrek, lüfer ve çipura hareketliliği dikkat çekiyor. Rüzgarlı havalarda yemli dip oltası, spin, LRF ve tekneyle sırtı avcılığı, kalamar için ise Eging yöntemleri günün her saati verimli olabilirken, derin sularda parakete ile barbun ve mercan denenebilir.",
       "heat": 3,
       "type": "deniz",
       "time": "2sa önce",
@@ -4410,31 +4325,9 @@
           ],
           "rod": "Olta",
           "bait": "Karides"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura",
-            "Kalamar",
-            "Lüfer",
-            "Kofana",
-            "Sargoz"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon Yem, Yengeç Taklidi"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Levrek",
-            "Çipura"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon Yem, Yengeç Taklidi"
         }
       ],
-      "report_count": 6
+      "report_count": 4
     },
     {
       "id": "3be92e4af6a0f5",
@@ -4447,7 +4340,7 @@
       ],
       "rod": "Sırtı",
       "bait": "Canlı Yem",
-      "note": "Assos bölgesinde son raporlara göre Lahos avı hareketliliği artış gösteriyor, Sargoz da yakalanmış durumda. Özellikle kayalık ve taşlık alanlarda dip sırtısı tekniğiyle öğleden sonraki birkaç saat av için uygun olup, dip oltası kullanırken dikkatli olunması önerilir.",
+      "note": "Assos bölgesinde son dönemde lahos avı hareketliliği artış gösterirken, sargoz da yakalanmaya devam ediyor. Özellikle kayalık ve taşlık alanlarda dip sırtısı tekniğiyle öğleden sonraki birkaç saat av için uygun olup, dip oltası kullanırken dikkatli olunması önerilir.",
       "heat": 2,
       "type": "deniz",
       "time": "3sa önce",
@@ -4490,17 +4383,9 @@
           ],
           "rod": "Dip Oltası",
           "bait": "Boru Kurdu"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Lahos"
-          ],
-          "rod": "Dip sırtısı",
-          "bait": "Canlı yem"
         }
       ],
-      "report_count": 5
+      "report_count": 4
     },
     {
       "id": "74f958249e603c",
@@ -4540,11 +4425,13 @@
       "loc": "Kilitbahir",
       "fish": [
         "Lüfer",
-        "Çinekop"
+        "Çinekop",
+        "Levrek",
+        "Çipura"
       ],
       "rod": "Spin",
       "bait": "Metal jig",
-      "note": "Kilitbahir'de lüfer ve çinekop hareketliliği son raporlara göre artış gösteriyor; özellikle akşam suyu ve derin sularda surfcasting ve spin avları verimli. Kayalık bölgelerde dikkatli olunarak, akşam suyunu değerlendirmek ve derin sularda spin tekniğini kullanmak faydalı olacaktır.",
+      "note": "Kilitbahir'de son raporlara göre lüfer ve çinekop hareketliliği artış gösteriyor, özellikle akşam suyu ve derin sularda spin ve surfcasting avları verimli olacaktır. Taşlık alanlarda levrek ve çipura için LRF ve spin teknikleri denenebilir, kayalık bölgelerde dikkatli olunmalıdır.",
       "heat": 3,
       "type": "deniz",
       "time": "19dk önce",
@@ -4656,239 +4543,37 @@
           ],
           "rod": "Şamandıralı olta",
           "bait": "Hamur"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Turna",
-            "Yayın",
-            "Sudak",
-            "Sazan"
-          ],
-          "rod": "Kaşık, Sahte yem",
-          "bait": "Kurbağa imitasyonu"
-        },
-        {
-          "timestamp": "2026-04-01T07:00:00+00:00",
-          "fish": [
-            "Turna",
-            "Yayın"
-          ],
-          "rod": "Kaşık, Sahte yem",
-          "bait": "Kurbağa imitasyonu"
-        }
-      ],
-      "report_count": 4
-    },
-    {
-      "id": "a8fabebfe5a8ce",
-      "lat": 40.089016,
-      "lng": 26.390264,
-      "loc": "Kepez",
-      "fish": [
-        "Palamut",
-        "Lüfer",
-        "Sardalya",
-        "İstavrit",
-        "Kolyoz"
-      ],
-      "rod": "Sırtı",
-      "bait": "Rapala",
-      "note": "Kepez'de son dönemde balık hareketliliği artıyor, özellikle palamut ve lüfer avı gün içinde açıkta trolling ve spin ile, sardalya ve istavrit ise liman içinde dip oltası veya şamandıralı takımlarla verimli olabilir; gece avında ise dip oltası ile kolyoz denenebilir. Av verimliliği gün boyu devam ettiğinden, her saat potansiyel taşıyor.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "1sa önce",
-      "timestamp": "2026-04-01T11:45:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T11:45:00+00:00",
-          "fish": [
-            "Palamut",
-            "Lüfer",
-            "Sardalya",
-            "İstavrit"
-          ],
-          "rod": "Sırtı",
-          "bait": "Rapala"
-        },
-        {
-          "timestamp": "2026-04-01T11:45:00+00:00",
-          "fish": [
-            "Palamut"
-          ],
-          "rod": "Sırtı",
-          "bait": "Rapala"
         }
       ],
       "report_count": 2
     },
     {
-      "id": "e9a45cd899a439",
-      "lat": 40.184305,
-      "lng": 29.068478,
-      "loc": "Bursa",
+      "id": "b55845151a264d",
+      "lat": 40.528807,
+      "lng": 28.832831,
+      "loc": "Armutlu",
       "fish": [
-        "Lüfer"
+        "Mırmır",
+        "Sargoz"
       ],
-      "rod": "Trolling",
-      "bait": "",
-      "note": "Bursa'da son raporlara göre lüfer hareketliliği gözlemleniyor, ancak siyasi içerikli paylaşımlar balıkçılık raporlarını gölgeliyor. Son 1 saat içinde artan lüfer yakalama sıklığı, sabah erken saatlerin av için uygun olabileceğine işaret ediyor.",
-      "heat": 2,
-      "type": "deniz",
-      "time": "41dk önce",
-      "timestamp": "2026-04-01T09:17:41+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": false,
-      "alarm": 1,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T09:17:41+00:00",
-          "fish": [
-            "Lüfer"
-          ],
-          "rod": "Trolling",
-          "bait": ""
-        }
-      ],
-      "report_count": 1
-    },
-    {
-      "id": "7c822b781aba3c",
-      "lat": 41.044531,
-      "lng": 29.00413,
-      "loc": "Beşiktaş",
-      "fish": [
-        "İstavrit"
-      ],
-      "rod": "Olta",
-      "bait": "Ekmek içi",
-      "note": "Vapur iskelesi yakınında yoğunluk var",
-      "heat": 2,
-      "type": "deniz",
-      "time": "59dk önce",
-      "timestamp": "2026-04-01T09:00:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": false,
-      "alarm": 0,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T09:00:00+00:00",
-          "fish": [
-            "İstavrit"
-          ],
-          "rod": "Olta",
-          "bait": "Ekmek içi"
-        }
-      ],
-      "report_count": 1
-    },
-    {
-      "id": "cc65f2bf990d3d",
-      "lat": 39.649828,
-      "lng": 27.881284,
-      "loc": "Balıkesir",
-      "fish": [
-        "Sardalya"
-      ],
-      "rod": "Şamandıralı Olta",
-      "bait": "Ekmek",
-      "note": "Liman içinde yoğunluk var",
-      "heat": 2,
-      "type": "deniz",
-      "time": "59dk önce",
-      "timestamp": "2026-04-01T09:00:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": false,
-      "alarm": 1,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T09:00:00+00:00",
-          "fish": [
-            "Sardalya"
-          ],
-          "rod": "Şamandıralı Olta",
-          "bait": "Ekmek"
-        }
-      ],
-      "report_count": 1
-    },
-    {
-      "id": "8e76e37ce18316",
-      "lat": 40.906196,
-      "lng": 29.184025,
-      "loc": "Kartal",
-      "fish": [
-        "İstavrit",
-        "Kefal"
-      ],
-      "rod": "Şamandıralı olta",
-      "bait": "Ekmek, Mısır",
-      "note": "Liman içi sakin sularda",
+      "rod": "Dip oltası",
+      "bait": "Boru kurdu",
+      "note": "Taşlık alanlarda mırmır olasılığı yüksek",
       "heat": 3,
       "type": "deniz",
-      "time": "2sa önce",
-      "timestamp": "2026-04-01T07:30:00+00:00",
+      "time": "16sa önce",
+      "timestamp": "2026-04-01T05:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": true,
       "alarm": 1,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T07:30:00+00:00",
-          "fish": [
-            "İstavrit",
-            "Kefal"
-          ],
-          "rod": "Şamandıralı olta",
-          "bait": "Ekmek, Mısır"
-        }
-      ],
-      "report_count": 1
-    },
-    {
-      "id": "06885e54165243",
-      "lat": 41.006745,
-      "lng": 28.947252,
-      "loc": "Yenikapı Sahili",
-      "fish": [
-        "İstavrit",
-        "İzmarit"
-      ],
-      "rod": "LRF",
-      "bait": "Silikon Kurtçuk",
-      "note": "Yenikapı'da son 24 saatte liman içi sakin sularda istavrit ve izmarit avı LRF tekniğiyle başarılı şekilde yapılmıştır. Balık hareketlerinde belirgin bir artış veya azalış gözlemlenmemekle birlikte, gün içinde her zaman diliminde benzer av verimliliği beklenmektedir.",
-      "heat": 3,
-      "type": "deniz",
-      "time": "1dk önce",
-      "timestamp": "2026-04-01T07:07:07.655506+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 1,
-      "reports": [
-        {
-          "timestamp": "2026-04-01T07:07:07.655506+00:00",
-          "fish": [
-            "İstavrit",
-            "İzmarit"
-          ],
-          "rod": "LRF",
-          "bait": "Silikon Kurtçuk"
-        }
-      ],
-      "report_count": 1
+      "reports": [],
+      "report_count": 0
     },
     {
       "id": "b0463e2336b38c",
-      "lat": 41.052117,
-      "lng": 29.028017,
+      "lat": 41.051409,
+      "lng": 29.026418,
       "loc": "Ortaköy",
       "fish": [
         "Palamut"
@@ -4898,7 +4583,7 @@
       "note": "Sabah erken saatlerde akıntı ile birlikte palamut akını",
       "heat": 2,
       "type": "deniz",
-      "time": "14sa önce",
+      "time": "17sa önce",
       "timestamp": "2026-04-01T04:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
@@ -4908,43 +4593,21 @@
       "report_count": 0
     },
     {
-      "id": "cd72d319043686",
-      "lat": 39.54607,
-      "lng": 26.616536,
-      "loc": "Küçükkuyu",
+      "id": "440c42e065024f",
+      "lat": 41.22759,
+      "lng": 29.110383,
+      "loc": "Rumeli Feneri",
       "fish": [
-        "Çipura"
+        "İstavrit",
+        "Uskumru"
       ],
-      "rod": "Şamandıralı Olta",
-      "bait": "Karides",
-      "note": "Rüzgar hafif esiyor",
-      "heat": 2,
-      "type": "deniz",
-      "time": "23sa önce",
-      "timestamp": "2026-03-31T19:15:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": false,
-      "alarm": 1,
-      "reports": [],
-      "report_count": 0
-    },
-    {
-      "id": "09020be4ac462b",
-      "lat": 39.503598,
-      "lng": 26.975903,
-      "loc": "Burhaniye",
-      "fish": [
-        "Levrek",
-        "Çipura"
-      ],
-      "rod": "Spin",
-      "bait": "Silikon yem",
-      "note": "Dalgalı havada daha verimli",
+      "rod": "Çapari",
+      "bait": "Hamur",
+      "note": "Gece avı daha verimli.",
       "heat": 3,
       "type": "deniz",
-      "time": "23sa önce",
-      "timestamp": "2026-03-31T19:00:00+00:00",
+      "time": "21sa önce",
+      "timestamp": "2026-04-01T00:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": true,
