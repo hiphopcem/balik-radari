@@ -1,7 +1,90 @@
 {
-  "last_updated": "2026-04-29T19:06:19.365607+00:00",
-  "total": 8,
+  "last_updated": "2026-04-29T21:51:22.241687+00:00",
+  "total": 18,
   "reports": [
+    {
+      "id": "5afbcf93cdc2da",
+      "lat": 41.078223,
+      "lng": 29.050684,
+      "loc": "Boğaz",
+      "fish": [
+        "Hamsi",
+        "İstavrit",
+        "Lüfer"
+      ],
+      "rod": "Gırgır, Çapari",
+      "bait": "Yok",
+      "note": "Gece avı için uygun, hamsi sürüsü takip edilebilir | Akıntı ile birlikte at-çek yapmak etkili",
+      "heat": 3,
+      "type": "deniz",
+      "time": "51dk önce",
+      "timestamp": "2026-04-29T21:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [
+        {
+          "timestamp": "2026-04-29T21:00:00+00:00",
+          "fish": [
+            "Hamsi",
+            "İstavrit"
+          ],
+          "rod": "Gırgır, Çapari",
+          "bait": "Yok"
+        },
+        {
+          "timestamp": "2026-04-29T14:00:00+00:00",
+          "fish": [
+            "Lüfer"
+          ],
+          "rod": "Spin",
+          "bait": "Metal jig"
+        }
+      ],
+      "report_count": 2
+    },
+    {
+      "id": "b651b7bc0f62b2",
+      "lat": 40.612532,
+      "lng": 27.113158,
+      "loc": "Şarköy",
+      "fish": [
+        "Barbun",
+        "Tekir"
+      ],
+      "rod": "Surf",
+      "bait": "Deniz solucanı",
+      "note": "Sakin havalarda daha verimli | Akşam üzeri hareketlenme başladı",
+      "heat": 3,
+      "type": "deniz",
+      "time": "3sa önce",
+      "timestamp": "2026-04-29T18:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [
+        {
+          "timestamp": "2026-04-29T18:00:00+00:00",
+          "fish": [
+            "Barbun"
+          ],
+          "rod": "Surf",
+          "bait": "Deniz solucanı"
+        },
+        {
+          "timestamp": "2026-04-29T15:30:00+00:00",
+          "fish": [
+            "Tekir",
+            "Barbun"
+          ],
+          "rod": "Dip oltası",
+          "bait": "Boru kurdu"
+        }
+      ],
+      "report_count": 2
+    },
     {
       "id": "a62633cd4150b3",
       "lat": 40.966045,
@@ -31,39 +114,6 @@
           ],
           "rod": "Çapari",
           "bait": "Ekmek içi"
-        }
-      ],
-      "report_count": 1
-    },
-    {
-      "id": "ae5b7adc7eba81",
-      "lat": 40.612905,
-      "lng": 27.112292,
-      "loc": "Şarköy",
-      "fish": [
-        "Tekir",
-        "Barbun"
-      ],
-      "rod": "Dip oltası",
-      "bait": "Boru kurdu",
-      "note": "Akşam üzeri hareketlenme başladı",
-      "heat": 3,
-      "type": "deniz",
-      "time": "54dk önce",
-      "timestamp": "2026-04-29T15:30:00+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "",
-      "hot": true,
-      "alarm": 1,
-      "reports": [
-        {
-          "timestamp": "2026-04-29T15:30:00+00:00",
-          "fish": [
-            "Tekir",
-            "Barbun"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Boru kurdu"
         }
       ],
       "report_count": 1
@@ -171,19 +221,21 @@
       "lng": 27.039116,
       "loc": "Ören",
       "fish": [
-        "Yayın"
+        "Yayın",
+        "İstavrit",
+        "Kefal"
       ],
       "rod": "",
       "bait": "",
       "note": "Rusya'dan dikkat çeken 'Zafer Günü' kararı! 20 yıllık gelenek rafa kalktı, kritik değişiklik",
-      "heat": 2,
+      "heat": 3,
       "type": "deniz",
       "time": "47dk önce",
       "timestamp": "2026-04-29T10:00:21+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
-      "hot": false,
-      "alarm": 1,
+      "hot": true,
+      "alarm": 2,
       "reports": [
         {
           "timestamp": "2026-04-29T10:00:21+00:00",
@@ -197,66 +249,255 @@
       "report_count": 1
     },
     {
-      "id": "499f537779893c",
-      "lat": 39.490145,
-      "lng": 26.337084,
-      "loc": "Assos",
+      "id": "f6b02d1ebc277c",
+      "lat": 40.002676,
+      "lng": 26.002964,
+      "loc": "Kuzey Ege",
       "fish": [
-        "Lahos"
+        "Palamut"
       ],
-      "rod": "Sırtı",
-      "bait": "Canlı yem",
-      "note": "Kayalık bölgelerde dikkatli olun",
+      "rod": "Trolling",
+      "bait": "Rapala",
+      "note": "Sürü takibi önemli, sonar kullanmak faydalı",
       "heat": 2,
       "type": "deniz",
-      "time": "1sa önce",
-      "timestamp": "2026-04-29T09:00:00+00:00",
+      "time": "15sa önce",
+      "timestamp": "2026-04-29T06:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": false,
       "alarm": 2,
-      "reports": [
-        {
-          "timestamp": "2026-04-29T09:00:00+00:00",
-          "fish": [
-            "Lahos"
-          ],
-          "rod": "Sırtı",
-          "bait": "Canlı yem"
-        }
-      ],
-      "report_count": 1
+      "reports": [],
+      "report_count": 0
     },
     {
-      "id": "6bb7d2b20de466",
-      "lat": 39.548586,
-      "lng": 26.617654,
-      "loc": "Küçükkuyu",
+      "id": "b3cb7fa9d7439d",
+      "lat": 40.979783,
+      "lng": 27.514332,
+      "loc": "Tekirdağ",
       "fish": [
-        "Çipura"
+        "Kefal"
       ],
-      "rod": "Dip oltası",
-      "bait": "Sülünez",
-      "note": "Sabah erken saatlerde daha iyi",
+      "rod": "Şamandıralı olta",
+      "bait": "Ekmek, Hamur",
+      "note": "Liman içlerinde ve mendireklerde yoğunlaşma",
       "heat": 2,
       "type": "deniz",
-      "time": "2sa önce",
-      "timestamp": "2026-04-29T08:00:00+00:00",
+      "time": "17sa önce",
+      "timestamp": "2026-04-29T04:00:00+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
       "hot": false,
-      "alarm": 1,
-      "reports": [
-        {
-          "timestamp": "2026-04-29T08:00:00+00:00",
-          "fish": [
-            "Çipura"
-          ],
-          "rod": "Dip oltası",
-          "bait": "Sülünez"
-        }
+      "alarm": 0,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "9d4ce74cf647d9",
+      "lat": 40.415843,
+      "lng": 26.674709,
+      "loc": "Gelibolu",
+      "fish": [
+        "İstavrit",
+        "Kolyoz"
       ],
-      "report_count": 1
+      "rod": "Spin",
+      "bait": "Kaşık, Spinner",
+      "note": "Sabah erken saatlerde yüzeye yakın avlanma",
+      "heat": 3,
+      "type": "deniz",
+      "time": "18sa önce",
+      "timestamp": "2026-04-29T03:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "85fa1ea63d4c11",
+      "lat": 39.557478,
+      "lng": 26.740125,
+      "loc": "Altınoluk",
+      "fish": [
+        "Palamut",
+        "Torik"
+      ],
+      "rod": "Trolling",
+      "bait": "Rapala",
+      "note": "Tekne ile açılmak gerekiyor",
+      "heat": 3,
+      "type": "deniz",
+      "time": "18sa önce",
+      "timestamp": "2026-04-29T03:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "a2e332550f25af",
+      "lat": 40.598533,
+      "lng": 27.58114,
+      "loc": "Marmara Adası",
+      "fish": [
+        "Çipura",
+        "Levrek"
+      ],
+      "rod": "LRF",
+      "bait": "Silikon yemler, Yengeç taklidi",
+      "note": "Taşlık bölgelerde dikkatli avlanma",
+      "heat": 3,
+      "type": "deniz",
+      "time": "18sa önce",
+      "timestamp": "2026-04-29T03:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "96855da48d187c",
+      "lat": 40.15148,
+      "lng": 26.401471,
+      "loc": "Çanakkale Boğazı",
+      "fish": [
+        "Lüfer",
+        "Palamut"
+      ],
+      "rod": "Trolling",
+      "bait": "Rapala",
+      "note": "Akıntıya karşı avlanmak önemli",
+      "heat": 3,
+      "type": "deniz",
+      "time": "19sa önce",
+      "timestamp": "2026-04-29T02:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 0,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "e8f27472fd836e",
+      "lat": 39.56857,
+      "lng": 26.917949,
+      "loc": "Akçay",
+      "fish": [
+        "Sardalya",
+        "Hamsi"
+      ],
+      "rod": "Çapariz",
+      "bait": "Yok",
+      "note": "Işık altında toplanan balıklar",
+      "heat": 3,
+      "type": "deniz",
+      "time": "20sa önce",
+      "timestamp": "2026-04-29T01:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "47cc08f21d0172",
+      "lat": 39.49984,
+      "lng": 26.978266,
+      "loc": "Burhaniye",
+      "fish": [
+        "Levrek",
+        "Çipura"
+      ],
+      "rod": "Spin Olta",
+      "bait": "Silikon Yem",
+      "note": "Dalgalı havada daha aktif",
+      "heat": 3,
+      "type": "deniz",
+      "time": "21sa önce",
+      "timestamp": "2026-04-29T00:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "cc28ea3d993747",
+      "lat": 39.3402,
+      "lng": 26.648134,
+      "loc": "Cunda Adası",
+      "fish": [
+        "Mırmır",
+        "Sargoz"
+      ],
+      "rod": "Dip Oltası",
+      "bait": "Karides",
+      "note": "Ay ışığı az, şans yüksek",
+      "heat": 3,
+      "type": "deniz",
+      "time": "22sa önce",
+      "timestamp": "2026-04-28T23:30:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 2,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "228046ce1f797f",
+      "lat": 40.550173,
+      "lng": 26.602553,
+      "loc": "Saros Körfezi",
+      "fish": [
+        "Kalkan",
+        "Barbun"
+      ],
+      "rod": "Surf",
+      "bait": "Boru kurdu, Yengeç",
+      "note": "Kumluk zeminlerde etkili",
+      "heat": 3,
+      "type": "deniz",
+      "time": "22sa önce",
+      "timestamp": "2026-04-28T23:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [],
+      "report_count": 0
+    },
+    {
+      "id": "5a9f11126cf5a9",
+      "lat": 39.315279,
+      "lng": 26.696562,
+      "loc": "Ayvalık",
+      "fish": [
+        "Sardalya",
+        "İstavrit"
+      ],
+      "rod": "Şamandıralı Olta",
+      "bait": "Ekmek İçi",
+      "note": "Gece avı için uygun, sakin hava",
+      "heat": 3,
+      "type": "deniz",
+      "time": "23sa önce",
+      "timestamp": "2026-04-28T22:00:00+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
+      "alarm": 1,
+      "reports": [],
+      "report_count": 0
     }
   ]
 }
