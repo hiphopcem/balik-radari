@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-07-02T21:57:40.500219+00:00",
-  "total": 2,
+  "last_updated": "2026-07-03T01:29:47.066802+00:00",
+  "total": 1,
   "reports": [
     {
       "id": "266ebc50a11460",
@@ -23,6 +23,15 @@
       "hot": true,
       "alarm": 3,
       "reports": [
+        {
+          "timestamp": "2026-07-02T19:56:07+00:00",
+          "fish": [
+            "Kalkan",
+            "Alabalık"
+          ],
+          "rod": "Trolling",
+          "bait": "Ekmek"
+        },
         {
           "timestamp": "2026-07-02T19:56:07+00:00",
           "fish": [
@@ -66,38 +75,7 @@
           "bait": ""
         }
       ],
-      "report_count": 5
-    },
-    {
-      "id": "7b07f07ab2bae3",
-      "lat": 41.006982,
-      "lng": 28.978512,
-      "loc": "Istanbul",
-      "fish": [
-        "Palamut"
-      ],
-      "rod": "",
-      "bait": "",
-      "note": "İstanbul'a Trabzon Palamudu - Haber61",
-      "heat": 2,
-      "type": "deniz",
-      "time": "11sa önce",
-      "timestamp": "2026-07-02T10:03:03+00:00",
-      "source": "Sihirli Zoka Radar",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1JQS1EZVB2NW1tYWR6OUYtUW1VRDNnRmtpU3V2MDRmV25Fb2FxeDc1SFVZekNQTkM2RVJQaU1nbUpJcmhZRm9TSEpmU3pzejVxV2F0azUxUzlLQWM2dkYxYUFENG5hQ0o0QmttOFZvUlViaTjSAXhBVV95cUxOaDVZMzFsWnBWYkFNWXdZdExma1hWT0daZ1FRX0tTMEk2RDl0aUw5Q1ZvSEJpRmJRYnA0bGxxSWlBbHFTeUdUMFEyc1NVMlI1Y044d2phbFYtZmtRbU1pbF9aQ0pFblBGc1kxLVg5VmpMWXdsMl9oYWs?oc=5",
-      "hot": false,
-      "alarm": 0,
-      "reports": [
-        {
-          "timestamp": "2026-07-02T10:03:03+00:00",
-          "fish": [
-            "Palamut"
-          ],
-          "rod": "",
-          "bait": ""
-        }
-      ],
-      "report_count": 1
+      "report_count": 6
     }
   ]
 }
