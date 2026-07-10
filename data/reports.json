@@ -1,27 +1,70 @@
 {
-  "last_updated": "2026-07-10T13:51:01.400837+00:00",
-  "total": 1,
+  "last_updated": "2026-07-10T16:51:31.712149+00:00",
+  "total": 2,
   "reports": [
     {
-      "id": "b0d3972ce8206e",
-      "lat": 41.177069,
-      "lng": 29.61081,
-      "loc": "Şile",
+      "id": "ec47d9f9492af5",
+      "lat": 41.120443,
+      "lng": 29.102616,
+      "loc": "Beykoz",
       "fish": [
+        "Kefal",
         "Yayın"
       ],
-      "rod": "",
-      "bait": "",
-      "note": "Son dakika... Rusya'dan Türkiye'deki S-400 füzeleriyle ilgili açıklama",
-      "heat": 2,
+      "rod": "Spin, Trolling",
+      "bait": "Kaşık",
+      "note": "Bolu Belediyesi'ne yönelik 'irtikap' soruşturması: Tanju Özcan hakkında karar verildi",
+      "heat": 3,
       "type": "nehir",
-      "time": "45dk önce",
-      "timestamp": "2026-07-10T10:56:14+00:00",
+      "time": "7dk önce",
+      "timestamp": "2026-07-10T16:43:42+00:00",
       "source": "Sihirli Zoka Radar",
       "url": "",
-      "hot": false,
+      "hot": true,
+      "alarm": 1,
+      "reports": [
+        {
+          "timestamp": "2026-07-10T16:43:42+00:00",
+          "fish": [
+            "Kefal",
+            "Yayın"
+          ],
+          "rod": "Spin, Trolling",
+          "bait": "Kaşık"
+        }
+      ],
+      "report_count": 1
+    },
+    {
+      "id": "05ff83245257f8",
+      "lat": 41.17825,
+      "lng": 29.608904,
+      "loc": "Şile",
+      "fish": [
+        "Yayın",
+        "Tekir"
+      ],
+      "rod": "Trolling",
+      "bait": "",
+      "note": "Uyuşturucu soruşturmasında iddianame kabul edildi! Mehmet Akif Ersoy'a 266 yıl hapis istemi | Son dakika... Rusya'dan Türkiye'deki S-400 füzeleriyle ilgili açıklama",
+      "heat": 3,
+      "type": "nehir",
+      "time": "48dk önce",
+      "timestamp": "2026-07-10T16:02:52+00:00",
+      "source": "Sihirli Zoka Radar",
+      "url": "",
+      "hot": true,
       "alarm": 3,
       "reports": [
+        {
+          "timestamp": "2026-07-10T16:02:52+00:00",
+          "fish": [
+            "Yayın",
+            "Tekir"
+          ],
+          "rod": "Trolling",
+          "bait": ""
+        },
         {
           "timestamp": "2026-07-10T10:56:14+00:00",
           "fish": [
@@ -31,7 +74,7 @@
           "bait": ""
         }
       ],
-      "report_count": 1
+      "report_count": 2
     }
   ]
 }
